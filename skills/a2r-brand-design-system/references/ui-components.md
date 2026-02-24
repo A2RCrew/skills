@@ -29,6 +29,21 @@ Three variants, all using Plus Jakarta Sans Medium in UPPERCASE.
 ### Button Shape
 - Pill/capsule shape with fully rounded ends (same as tags but filled)
 
+### Production Implementation
+
+The A2R website uses CVA (class-variance-authority) for type-safe button variants.
+Ghost buttons in dark mode switch to white border + white text.
+Default transition duration: 250ms.
+Border radius: `0.625rem` base with `sm/md/lg/xl` scale variants.
+
+### Phosphor Icons in Next.js
+
+Use the SSR-compatible import for server-rendered pages:
+```tsx
+import { ArrowRight } from '@phosphor-icons/react/ssr';
+```
+Default size: 16/24/32px. Default weight: Light.
+
 ## Social Media
 
 ### LinkedIn

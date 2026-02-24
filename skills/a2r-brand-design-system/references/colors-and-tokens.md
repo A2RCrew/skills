@@ -20,6 +20,18 @@
 | Silver Gray 500 | `#C6C6CA` | 198, 198, 202 | 2%, 2%, 0%, 21% |
 | Silver Gray 800 | `#35363B` | 53, 54, 59 | 10%, 8%, 0%, 77% |
 
+## Extended Gray Scale (Production)
+
+Additional gray values used in the A2R website. These interpolate between the brand book values for finer UI control.
+
+| Name | HEX | Source |
+|------|------|--------|
+| Silver Gray 400 | `#D0D0D4` | Website production |
+| Silver Gray 600 | `#9F9FA4` | Website production |
+| Silver Gray 700 | `#6F6F75` | Website production |
+| Silver Gray 900 | `#1E1F24` | Website production |
+| Silver Gray 950 | `#121316` | Website production |
+
 ## Accent Colors
 
 Use sparingly. Maximum ONE accent color per visual to prevent clutter. Exception: attention-grabbing banners may use accents as predominant tones.
@@ -63,8 +75,13 @@ Apply to all brand communication: website, landing pages, social media, ads, pre
     "pure-white": { "value": "#FFFFFF" },
     "silver-gray-200": { "value": "#F1F1F1" },
     "silver-gray-300": { "value": "#E6E6E9" },
+    "silver-gray-400": { "value": "#D0D0D4" },
     "silver-gray-500": { "value": "#C6C6CA" },
+    "silver-gray-600": { "value": "#9F9FA4" },
+    "silver-gray-700": { "value": "#6F6F75" },
     "silver-gray-800": { "value": "#35363B" },
+    "silver-gray-900": { "value": "#1E1F24" },
+    "silver-gray-950": { "value": "#121316" },
     "fresh-green": { "value": "#A1E8C9" },
     "bright-yellow": { "value": "#F7FF8E" },
     "warm-orange": { "value": "#FFCDBF" }
@@ -113,4 +130,28 @@ module.exports = {
     },
   },
 };
+```
+
+## Tailwind v4 Theme Block
+
+For Tailwind v4 projects using CSS-first configuration with `@theme`:
+
+```css
+@theme {
+  --color-primary: #2764f4;
+  --color-gray-200: #f1f1f1;
+  --color-gray-300: #e6e6e9;
+  --color-gray-400: #d0d0d4;
+  --color-gray-500: #c6c6ca;
+  --color-gray-600: #9f9fa4;
+  --color-gray-700: #6f6f75;
+  --color-gray-800: #35363b;
+  --color-gray-900: #1e1f24;
+  --color-gray-950: #121316;
+  --color-background: #fbfcfd;
+  --color-foreground: #111218;
+  --color-accent-green: #a1e8c9;
+  --color-accent-yellow: #f7ff8e;
+  --color-accent-orange: #ffcdbf;
+}
 ```

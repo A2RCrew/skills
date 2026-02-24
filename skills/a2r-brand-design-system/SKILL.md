@@ -27,7 +27,7 @@ description: >
 
 ## Quick Reference: Design Tokens
 
-### Colors (11 values)
+### Colors (16 values)
 
 ```json
 {
@@ -37,8 +37,13 @@ description: >
   "pure-white":      "#FFFFFF",
   "silver-gray-200": "#F1F1F1",
   "silver-gray-300": "#E6E6E9",
+  "silver-gray-400": "#D0D0D4",
   "silver-gray-500": "#C6C6CA",
+  "silver-gray-600": "#9F9FA4",
+  "silver-gray-700": "#6F6F75",
   "silver-gray-800": "#35363B",
+  "silver-gray-900": "#1E1F24",
+  "silver-gray-950": "#121316",
   "fresh-green":     "#A1E8C9",
   "bright-yellow":   "#F7FF8E",
   "warm-orange":     "#FFCDBF"
@@ -82,6 +87,12 @@ description: >
 3. Apply typography (Faculty Glyphic for headlines, PJS for body) → `references/typography.md`
 4. Add expanding shapes and/or flow textures → `references/imagery-and-shapes.md`
 5. Use display icons for visual accents (NOT UI) → `references/photography-and-iconography.md`
+
+**Hero Section / WebGL Shader Background**
+1. Read `references/webgl-hero-shader.md` for complete source code and integration guide
+2. Choose route-based color preset or define custom colorMultiplier/colorAddition
+3. Set up raw-loader for .frag/.vert imports
+4. Apply useShader hook with canvas + content overlay pattern
 
 **Design Token / CSS Generation**
 1. Copy JSON tokens from `references/colors-and-tokens.md`
@@ -248,6 +259,7 @@ When reviewing or producing any A2R artifact, verify:
 | `references/photography-and-iconography.md` | Photo style, display icons, Phosphor fallback | Selecting photos, choosing icon approach |
 | `references/ui-components.md` | Tags, buttons, email signatures, social media | Building UI components, social media assets |
 | `references/light-dark-mode.md` | Consolidated light/dark theming guide | Implementing theme switching, CSS variables |
+| `references/webgl-hero-shader.md` | WebGL hero shader source, configs, integration | Creating hero sections with procedural animation |
 
 ---
 
@@ -257,7 +269,7 @@ When reviewing or producing any A2R artifact, verify:
 
 **Request**: "Create a hero section for the A2R website"
 
-**Expected behavior**: Use Silver Gray (`#FBFCFD`) background. Large Display headline in Faculty Glyphic Regular 72px. Overline in Plus Jakarta Sans Medium 18px uppercase. Core Blue CTA button (pill shape, PJS Medium uppercase). LogoMark_SolidBlack in header with clear space. Optional: expanding blue shapes as decorative elements (L-to-R direction).
+**Expected behavior**: Use Silver Gray (`#FBFCFD`) background. Large Display headline in Faculty Glyphic Regular 72px. Overline in Plus Jakarta Sans Medium 18px uppercase. Core Blue CTA button (pill shape, PJS Medium uppercase). LogoMark_SolidBlack in header with clear space. Optional: expanding blue shapes as decorative elements (L-to-R direction). Optional: For an animated WebGL hero background, see `references/webgl-hero-shader.md` for the procedural fluid shader with mouse interaction.
 
 ### Example 2: Dark mode dashboard
 
@@ -288,3 +300,4 @@ When reviewing or producing any A2R artifact, verify:
 | Social Media | p. 54 |
 | Email Signatures | p. 55 |
 | Light/Dark Mode | Synthesized from pp. 20-21, 29-30, 48 |
+| WebGL Hero Shader | A2R website source code (brand-approved implementation) |
