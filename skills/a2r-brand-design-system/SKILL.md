@@ -90,9 +90,11 @@ description: >
 
 **Hero Section / WebGL Shader Background**
 1. Read `references/webgl-hero-shader.md` for complete source code and integration guide
-2. Choose route-based color preset or define custom colorMultiplier/colorAddition
-3. Set up raw-loader for .frag/.vert imports
-4. Apply useShader hook with canvas + content overlay pattern
+2. Set section background to `#2764f4` (Core Blue) — same in light and dark mode
+3. Default shader: `colorMultiplier: [1,1,1]`, `colorAddition: [0,0,0]`
+4. Choose route-based color preset or define custom colorMultiplier/colorAddition
+5. Set up raw-loader for .frag/.vert imports
+6. Apply useShader hook with canvas (`alpha: true`) + content overlay pattern
 
 **Design Token / CSS Generation**
 1. Copy JSON tokens from `references/colors-and-tokens.md`
@@ -159,8 +161,10 @@ description: >
 | Display icons | Solid Black variant | White variant |
 | Surface (cards) | `#FFFFFF` or `#F1F1F1` | `#35363B` |
 | Ghost button | Black border + text | White border + text |
+| Hero section bg | `#2764F4` Core Blue | `#2764F4` Core Blue (same) |
 
 **Mode decision**: Web/app = both modes; print = light; email signatures = light.
+**Exception**: The hero section background is always `#2764F4` Core Blue in both modes — it does not participate in theme switching.
 
 → Full details in `references/light-dark-mode.md`
 
@@ -245,6 +249,7 @@ When reviewing or producing any A2R artifact, verify:
 - [ ] **Co-branding**: 0.25X gap? "x" separator? Partner logo not taller than A2R?
 - [ ] **Buttons**: Pill shape? Uppercase PJS Medium? Correct fill variant?
 - [ ] **Tags**: Pill shape? Uppercase PJS? Thin border? Transparent fill?
+- [ ] **Boxes/Cards**: Corner-square border style? (4 small squares at corners, NOT applied to lists or tables)
 
 ---
 

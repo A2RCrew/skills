@@ -174,6 +174,42 @@ void main() {
 
 ---
 
+## Hero Background Color
+
+The hero section background is **always Core Blue `#2764f4`**, regardless of light or dark mode. This is a deliberate brand decision — the hero does not participate in theme switching.
+
+The color is applied as an **inline CSS `backgroundColor`** on the `<section>` element. The WebGL canvas renders on top with `alpha: true`, so the section color shows through transparent areas of the shader output.
+
+```tsx
+// Hero.tsx — background color from shader config, fallback to Core Blue
+const backgroundColor = shaderConfig?.backgroundColor || '#2764f4';
+
+<section style={{ backgroundColor }}>
+  {/* content at z-10 */}
+  <canvas className="absolute inset-0 z-0 h-full w-full" />
+</section>
+```
+
+**Important**: When replicating the hero, always set the container background to `#2764f4`. The canvas alone is not enough — the background color is visible during loading and through transparent shader regions.
+
+---
+
+## Default Shader Settings (Home Page)
+
+These are the initial values used on the home/index route. Always use these as the starting point:
+
+```typescript
+{
+  backgroundColor: '#2764f4',       // Core Blue — section background
+  colorMultiplier: [1, 1, 1],       // No color shift (identity)
+  colorAddition: [0, 0, 0],         // No color offset
+}
+```
+
+The shader's base color palette (blues encoded in the fragment shader's `vec4 z = o = vec4(0.152, 0.39, 0.95, 0.2)`) combined with `colorMultiplier: [1,1,1]` produces the brand's signature blue fluid animation.
+
+---
+
 ## Route-Based Color Presets
 
 From `src/lib/shaderConfigs.ts`:
@@ -188,13 +224,13 @@ interface ShaderConfig {
 
 | Route | colorMultiplier | colorAddition | Visual Effect |
 |-------|----------------|---------------|---------------|
-| `default` (home) | `[1, 1, 1]` | `[0, 0, 0]` | Core Blue base |
+| `default` (home) | `[1, 1, 1]` | `[0, 0, 0]` | Core Blue base (identity) |
 | `projects` | `[0.54, 1.01, 0.42]` | `[0, 0, 0]` | Green tint |
 | `solutions` | `[1.08, 1.1, 0.42]` | `[0, 0, 0]` | Yellow tint |
 | `technology` | `[0.0, 1.13, 2.0]` | `[0, 0, 0]` | Cyan/teal tint |
 | `about` | `[1, 0.482, 0.368]` | `[0, 0, 0]` | Orange/warm tint |
 
-All routes use `backgroundColor: '#2764f4'` (Core Blue) as the WebGL clear color.
+All routes share `backgroundColor: '#2764f4'` (Core Blue). The hero background color is the **same in light and dark mode** — it does not change with theme.
 
 ---
 
