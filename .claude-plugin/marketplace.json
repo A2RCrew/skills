@@ -1,0 +1,19 @@
+{
+  "name": "a2r-skills",
+  "owner": {
+    "name": "A2RCrew"
+  },
+  "metadata": {
+    "description": "A2R team agent skills for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "a2r-skills",
+      "description": "A2R team agent skills collection",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/a2r-brand-design-system"]
+    }
+  ]
+}
