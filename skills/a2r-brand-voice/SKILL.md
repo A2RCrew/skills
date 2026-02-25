@@ -65,12 +65,27 @@ Never use these in A2R copy:
 - **Fear-based messaging**: "don't get left behind", "the future won't wait", "your competitors are already...", "you can't afford to miss..."
 - **"Empower"**: replace with → **unlock**, **unleash**, **ignite**, **activate**, **amplify**
 
+### No-Emoji Rule (HIGH severity)
+
+No emojis in any A2R communication. Emojis undermine the authority and precision of A2R's voice. They signal casualness that conflicts with our expert-rebel tone. Convey energy through strong word choice, sentence rhythm, and punctuation — never through symbols.
+
 ### Brand Lexicon
 
 Build and reuse A2R-coined terms to create recognizable brand language:
 
 - **Cognitive Democracy** — the principle that every learner deserves an adaptive, personalized path
 - Additional coined terms should follow the same pattern: evocative + concrete, grounded in education
+
+### Product Terminology
+
+A2R uses specific codenames for its models and products. Always use the exact capitalization and spelling below — never paraphrase, abbreviate, or translate these names.
+
+- **A2R Products**: Framework, GoProject, AION, Cerebro, OpenGraph
+- **LLM Models**: Antelope, Astra, Beluga, Bretta, Cornifer, Cronus, Flare, Dragonfly, Elephat, Gazelle, Hermes, Hornet, Impala, Iselda, Leviathan, Lynx, Mammoth, Orca, Pixie, Pulsar, Quark, Quasar, Raptor, Tyrant, Whalle, Zaphod
+- **Image Generation**: Realism, Rembrandt, Bluejay, Kestrel, Hummingbird
+- **Voice Generation**: Antelope Voice, Beluga Voice, Cornifer Voice, Dragonfly Voice, Elephat Voice, Gazelle Voice, Hermes Voice, Hornet Voice, Impala Voice, Lynx Voice
+- **Vectorization**: Antelope Embed, Beluga Embed, Cornifer Embed, Dragonfly Embed, Elephat Embed, Gazelle Embed
+- **Speech-to-Text**: Antelope STT, Beluga STT
 
 > Full details: `references/language-rules.md`
 
@@ -215,6 +230,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **Emotional takeaway**: Will the reader feel "inspired possibility"?
 - [ ] **Tone match**: Is the tone appropriate for the content type? (See modulation table)
 - [ ] **Banned language**: Free of corporate buzzwords, fear-based messaging, and "empower"?
+- [ ] **No emojis**: Free of all emojis? Strong words used instead of symbols?
 - [ ] **Sentence style**: Short and punchy (English) or hybrid punchy (Spanish)?
 - [ ] **Formatting**: Clean prose? No excessive bullets, bold tricks, or formatting gimmicks? Em dashes not overused (parentheses for asides)?
 - [ ] **Trailing periods**: No period at the end of headlines, titles, or hero messages (unless multi-sentence)?
@@ -225,6 +241,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **Soundbites**: Used only in appropriate contexts (keynotes, hero, brand campaigns)?
 - [ ] **CTA alignment**: CTA style matches funnel stage? Not generic or fear-based?
 - [ ] **Brand lexicon**: A2R-coined terms used where relevant and consistent?
+- [ ] **Product terminology**: A2R product and model names spelled correctly with exact capitalization?
 - [ ] **ASAR rule**: No internal mythology in customer-facing copy?
 - [ ] **Spanish (if applicable)**: Hybrid punchy style? Personality preserved? Using "tú" (only "usted" in legal/regulatory)? Brand lexicon translated ("Democracia Cognitiva")?
 
