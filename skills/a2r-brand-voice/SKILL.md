@@ -55,6 +55,7 @@ A2R's personality lives in five pillars. Every piece of copy should reflect at l
 | **Uppercase** | Only for overlines and buttons (visual design) | Same |
 | **Technical depth** | Layered: lead simple, go deep when the reader signals readiness | Same |
 | **Humor** | Playful in social media; serious in formal materials | Same, calibrated to cultural register |
+| **Em dashes (—)** | Use sparingly; prefer parentheses for asides and clarifications | Same |
 
 ### Banned Language
 
@@ -215,7 +216,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **Tone match**: Is the tone appropriate for the content type? (See modulation table)
 - [ ] **Banned language**: Free of corporate buzzwords, fear-based messaging, and "empower"?
 - [ ] **Sentence style**: Short and punchy (English) or hybrid punchy (Spanish)?
-- [ ] **Formatting**: Clean prose? No excessive bullets, bold tricks, or formatting gimmicks?
+- [ ] **Formatting**: Clean prose? No excessive bullets, bold tricks, or formatting gimmicks? Em dashes not overused (parentheses for asides)?
 - [ ] **Trailing periods**: No period at the end of headlines, titles, or hero messages (unless multi-sentence)?
 - [ ] **AI personification**: AI described as a collaborator with agency, not a passive tool?
 - [ ] **Evidence blend**: Uses at least two evidence types (stats, narrative, logic)?

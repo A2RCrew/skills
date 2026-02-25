@@ -131,8 +131,12 @@ If asked to include ASAR or internal mythology references in external copy, decl
 ### Customer-Facing Copy
 - **Flowing prose**: Paragraphs over bullet lists
 - **Minimal formatting tricks**: No excessive bolding, no ALL CAPS for emphasis (except visual design overlines/buttons per the design system), no exclamation marks for energy
+- **Em dashes (—) with restraint**: AI-generated text tends to overuse em dashes. In A2R copy, prefer **parentheses** for asides, clarifications, and secondary information. Reserve the em dash for moments of genuine dramatic pause or contrast. If a sentence has more than one em dash pair, rewrite it.
+  - Parentheses: "Our platform (built over 15 years of R&D) adapts to each learner."
+  - Em dash (acceptable): "We don't automate education — we reinvent it."
+  - Overuse (avoid): "Our platform — built over 15 years — adapts to each learner — in real time."
 - **Short paragraphs**: 2-4 sentences per paragraph
-- **White space**: Let the text breathe — prefer shorter blocks with generous spacing
+- **White space**: Let the text breathe; prefer shorter blocks with generous spacing
 
 ### Internal / Technical Content
 - Bullet lists, numbered steps, and structured formatting are all appropriate
