@@ -33,9 +33,9 @@ A2R Spanish is a hybrid — shorter than traditional Spanish marketing prose, bu
 
 - **Shorter than traditional**: Where traditional Spanish marketing uses 25-30 word sentences, A2R aims for 15-20.
 - **Same personality**: The rebel edge, warmth, and boldness must survive translation. Do not soften.
-- **Cultural register**: Always **"tú"** — never "usted", regardless of channel or formality level. A2R's tone is warm and close, and "tú" reinforces that proximity.
+- **Cultural register**: Always **"tú"** in all marketing, website, social, and customer-facing content. A2R's tone is warm and close, and "tú" reinforces that proximity. **Exception**: legal and regulatory texts (terms of service, privacy policies, contracts) may use "usted" where required by convention or legal standards.
 - **Implied subject**: Use Spanish's implied subject naturally — "Creamos" not "Nosotros creamos" (unless emphasis requires it).
-- **Brand lexicon in English**: Coined terms like "Cognitive Democracy" stay in English unless an official Spanish equivalent is established.
+- **Brand lexicon in Spanish**: Coined terms use their official Spanish equivalent when one exists. "Cognitive Democracy" → **"Democracia Cognitiva"**. Terms without an established translation stay in English.
 
 ### Example: English → Spanish
 
@@ -102,9 +102,9 @@ A2R builds a proprietary vocabulary — coined terms that become associated with
 
 ### Active Terms
 
-| Term | Meaning | Use In |
-|------|---------|--------|
-| **Cognitive Democracy** | The principle that every learner deserves an adaptive, personalized learning path regardless of background | Website, keynotes, thought leadership, brand campaigns |
+| Term | Spanish | Meaning | Use In |
+|------|---------|---------|--------|
+| **Cognitive Democracy** | **Democracia Cognitiva** | The principle that every learner deserves an adaptive, personalized learning path regardless of background | Website, keynotes, thought leadership, brand campaigns |
 
 ### Coining New Terms
 

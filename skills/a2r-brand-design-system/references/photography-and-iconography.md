@@ -8,7 +8,7 @@ The photographic direction for A2R focuses on:
 
 - **Contemporary, clean spaces**: Modern, minimalist, well-designed environments reflecting innovation and trust
 - **Natural and realistic ambiance**: Authentic photos showcasing collaboration and learning, highlighting human interaction and technology
-- **Collaboration and creativity**: People in action, working together or individually, conveying the synergy between AI and human creativity
+- **Collaboration and creativity**: People in action, working together or individually, conveying the collaboration between AI and human creativity
 - **Modern workspaces**: Professional and educational environments representing A2R's progressive approach
 - **Subtle technology integration**: Technology shown discreetly, emphasizing AI benefits without overshadowing the human element
 

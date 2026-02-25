@@ -13,9 +13,9 @@ description: >
 
 ## Brand Identity Overview
 
-**Vision**: To empower educational partners with AI, enabling them to create adaptive, personalized learning experiences that expand access and maximize student impact.
+**Vision**: To unlock the potential of educational partners with AI, enabling them to create adaptive, personalized learning experiences that expand access and maximize student impact.
 
-**Mission**: To pioneer a future where education is dynamic, deeply personalized, and borderless, continuously reinvented by the synergy of AI and human creativity.
+**Mission**: To pioneer a future where education is dynamic, deeply personalized, and borderless, continuously reinvented by the collaboration of AI and human creativity.
 
 **Purpose**: To harness advanced AI, enabling educational publishers and universities to revolutionize learning by delivering truly personalized and adaptive experiences at scale.
 
@@ -49,7 +49,7 @@ A2R's personality lives in five pillars. Every piece of copy should reflect at l
 |-----------|---------|---------|
 | **Sentence style** | Short, punchy, Hemingway-esque | Hybrid "punchy Spanish" — shorter than traditional, longer than English |
 | **Perspective** | Always collective "we" | Always collective "nosotros" (often implied) |
-| **Register (2nd person)** | "you" (no distinction) | Always **"tú"** — never "usted" |
+| **Register (2nd person)** | "you" (no distinction) | Always **"tú"** — "usted" only in legal/regulatory texts |
 | **Formatting** | Clean flowing prose; minimal bullet points and bold tricks | Same — clean prose; avoid bulleted lists in customer-facing copy |
 | **Trailing periods** | No period at the end of headlines, hero messages, or single-sentence titles. Use period only when the text contains more than one sentence. | Same |
 | **Uppercase** | Only for overlines and buttons (visual design) | Same |
@@ -122,8 +122,8 @@ Build and reuse A2R-coined terms to create recognizable brand language:
 1. Read `references/language-rules.md` for the hybrid "punchy Spanish" rules
 2. Sentences are slightly longer than English but still shorter than traditional Spanish
 3. Maintain the same personality pillars — do not soften the rebel edge
-4. Cultural register: warm, professional, always "tú" — never "usted" in any context
-5. Brand lexicon terms stay in English unless an official Spanish equivalent exists
+4. Cultural register: warm, professional, always "tú" — "usted" only permitted in legal/regulatory texts (terms of service, privacy policies, contracts)
+5. Brand lexicon terms use their official Spanish equivalent when one exists (e.g., "Democracia Cognitiva")
 
 > Full workflow details with examples: `references/examples-and-patterns.md`
 
@@ -225,7 +225,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **CTA alignment**: CTA style matches funnel stage? Not generic or fear-based?
 - [ ] **Brand lexicon**: A2R-coined terms used where relevant and consistent?
 - [ ] **ASAR rule**: No internal mythology in customer-facing copy?
-- [ ] **Spanish (if applicable)**: Hybrid punchy style? Personality preserved? Using "tú" (never "usted")?
+- [ ] **Spanish (if applicable)**: Hybrid punchy style? Personality preserved? Using "tú" (only "usted" in legal/regulatory)? Brand lexicon translated ("Democracia Cognitiva")?
 
 ---
 
@@ -265,7 +265,7 @@ When writing or reviewing any A2R copy, verify:
 
 **Request**: "Translate this A2R hero copy into Spanish"
 
-**Expected behavior**: Apply hybrid "punchy Spanish" — shorter than traditional Spanish but slightly longer than English. Preserve the rebel edge and personality pillars. Always use "tú" register — never "usted". Keep brand lexicon terms in English (e.g., "Cognitive Democracy"). Do not soften the bold claims. Run through the compliance checklist.
+**Expected behavior**: Apply hybrid "punchy Spanish" — shorter than traditional Spanish but slightly longer than English. Preserve the rebel edge and personality pillars. Use "tú" register ("usted" only in legal/regulatory texts). Use official Spanish brand lexicon (e.g., "Democracia Cognitiva"). Do not soften the bold claims. Run through the compliance checklist.
 
 ---
 

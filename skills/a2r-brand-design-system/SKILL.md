@@ -13,9 +13,9 @@ description: >
 
 ## Brand Identity Overview
 
-**Vision**: To empower educational partners with AI, enabling them to create adaptive, personalized learning experiences that expand access and maximize student impact.
+**Vision**: To unlock the potential of educational partners with AI, enabling them to create adaptive, personalized learning experiences that expand access and maximize student impact.
 
-**Mission**: To pioneer a future where education is dynamic, deeply personalized, and borderless, continuously reinvented by the synergy of AI and human creativity.
+**Mission**: To pioneer a future where education is dynamic, deeply personalized, and borderless, continuously reinvented by the collaboration of AI and human creativity.
 
 **Purpose**: To harness advanced AI, enabling educational publishers and universities to revolutionize learning by delivering truly personalized and adaptive experiences at scale.
 
