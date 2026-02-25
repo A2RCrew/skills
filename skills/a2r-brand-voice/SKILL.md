@@ -49,7 +49,9 @@ A2R's personality lives in five pillars. Every piece of copy should reflect at l
 |-----------|---------|---------|
 | **Sentence style** | Short, punchy, Hemingway-esque | Hybrid "punchy Spanish" — shorter than traditional, longer than English |
 | **Perspective** | Always collective "we" | Always collective "nosotros" (often implied) |
+| **Register (2nd person)** | "you" (no distinction) | Always **"tú"** — never "usted" |
 | **Formatting** | Clean flowing prose; minimal bullet points and bold tricks | Same — clean prose; avoid bulleted lists in customer-facing copy |
+| **Trailing periods** | No period at the end of headlines, hero messages, or single-sentence titles. Use period only when the text contains more than one sentence. | Same |
 | **Uppercase** | Only for overlines and buttons (visual design) | Same |
 | **Technical depth** | Layered: lead simple, go deep when the reader signals readiness | Same |
 | **Humor** | Playful in social media; serious in formal materials | Same, calibrated to cultural register |
@@ -81,10 +83,11 @@ Build and reuse A2R-coined terms to create recognizable brand language:
 1. Lead with a bold, provocative headline — rebel pillar first
 2. Follow immediately with a grounding sentence — expert backs it up
 3. Use short, punchy sentences (Hemingway style)
-4. Personify AI where relevant ("it adapts", "it learns")
-5. CTA: provocative or invitational (top of funnel) → see `references/cta-and-positioning.md`
-6. Soundbites are allowed here — poetic, visually rhythmic phrases
-7. Core feeling check: does this inspire possibility?
+4. No trailing period on headlines or hero messages unless they contain more than one sentence
+5. Personify AI where relevant ("it adapts", "it learns")
+6. CTA: provocative or invitational (top of funnel) → see `references/cta-and-positioning.md`
+7. Soundbites are allowed here — poetic, visually rhythmic phrases
+8. Core feeling check: does this inspire possibility?
 
 **Sales Proposal / Demo Script**
 1. Open with the prospect's specific challenge — speak their language
@@ -119,7 +122,7 @@ Build and reuse A2R-coined terms to create recognizable brand language:
 1. Read `references/language-rules.md` for the hybrid "punchy Spanish" rules
 2. Sentences are slightly longer than English but still shorter than traditional Spanish
 3. Maintain the same personality pillars — do not soften the rebel edge
-4. Cultural register: warm, professional, not overly formal ("usted" by default in marketing; "tú" acceptable in social media)
+4. Cultural register: warm, professional, always "tú" — never "usted" in any context
 5. Brand lexicon terms stay in English unless an official Spanish equivalent exists
 
 > Full workflow details with examples: `references/examples-and-patterns.md`
@@ -213,6 +216,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **Banned language**: Free of corporate buzzwords, fear-based messaging, and "empower"?
 - [ ] **Sentence style**: Short and punchy (English) or hybrid punchy (Spanish)?
 - [ ] **Formatting**: Clean prose? No excessive bullets, bold tricks, or formatting gimmicks?
+- [ ] **Trailing periods**: No period at the end of headlines, titles, or hero messages (unless multi-sentence)?
 - [ ] **AI personification**: AI described as a collaborator with agency, not a passive tool?
 - [ ] **Evidence blend**: Uses at least two evidence types (stats, narrative, logic)?
 - [ ] **Competitor stance**: Philosophical contrast only? No competitors named?
@@ -221,7 +225,7 @@ When writing or reviewing any A2R copy, verify:
 - [ ] **CTA alignment**: CTA style matches funnel stage? Not generic or fear-based?
 - [ ] **Brand lexicon**: A2R-coined terms used where relevant and consistent?
 - [ ] **ASAR rule**: No internal mythology in customer-facing copy?
-- [ ] **Spanish (if applicable)**: Hybrid punchy style? Personality preserved? Cultural register correct?
+- [ ] **Spanish (if applicable)**: Hybrid punchy style? Personality preserved? Using "tú" (never "usted")?
 
 ---
 
@@ -261,7 +265,7 @@ When writing or reviewing any A2R copy, verify:
 
 **Request**: "Translate this A2R hero copy into Spanish"
 
-**Expected behavior**: Apply hybrid "punchy Spanish" — shorter than traditional Spanish but slightly longer than English. Preserve the rebel edge and personality pillars. Use "usted" register for marketing. Keep brand lexicon terms in English (e.g., "Cognitive Democracy"). Do not soften the bold claims. Run through the compliance checklist.
+**Expected behavior**: Apply hybrid "punchy Spanish" — shorter than traditional Spanish but slightly longer than English. Preserve the rebel edge and personality pillars. Always use "tú" register — never "usted". Keep brand lexicon terms in English (e.g., "Cognitive Democracy"). Do not soften the bold claims. Run through the compliance checklist.
 
 ---
 

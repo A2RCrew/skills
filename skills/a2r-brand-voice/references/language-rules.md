@@ -33,7 +33,7 @@ A2R Spanish is a hybrid — shorter than traditional Spanish marketing prose, bu
 
 - **Shorter than traditional**: Where traditional Spanish marketing uses 25-30 word sentences, A2R aims for 15-20.
 - **Same personality**: The rebel edge, warmth, and boldness must survive translation. Do not soften.
-- **Cultural register**: "Usted" by default in marketing and formal content. "Tú" is acceptable in social media and highly informal channels.
+- **Cultural register**: Always **"tú"** — never "usted", regardless of channel or formality level. A2R's tone is warm and close, and "tú" reinforces that proximity.
 - **Implied subject**: Use Spanish's implied subject naturally — "Creamos" not "Nosotros creamos" (unless emphasis requires it).
 - **Brand lexicon in English**: Coined terms like "Cognitive Democracy" stay in English unless an official Spanish equivalent is established.
 

@@ -1,5 +1,6 @@
 ---
 name: a2r-brand-design-system
+icon: https://a2r.com/icon0.svg?icon0.314e8152.svg
 description: >
   A2R brand design system reference and enforcement guide. Provides color palettes, typography rules,
   logo usage, imagery patterns, UI component specs, and light/dark mode theming. Use when creating,
