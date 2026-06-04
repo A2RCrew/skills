@@ -222,6 +222,21 @@ assets/animations/mp4/V{1,2} {Blanco,Negro}.mp4   (4)
 assets/animations/mp4/Logo Reveal A2R.mp4          (1)
 ```
 
+### Favicon (4 files)
+```
+assets/favicon/favicon.ico       ICO, 16/32/48px multi-resolution — classic browser tab favicon
+assets/favicon/icon0.svg         SVG, scalable — modern "any" size favicon (preferred)
+assets/favicon/icon1.png         PNG, 96x96 — fallback raster favicon
+assets/favicon/apple-icon.png    PNG, 180x180 — apple-touch-icon (iOS home screen)
+```
+These are the canonical favicon assets used on https://a2r.com. **Always use these exact files** for any A2R web property's favicon — do not generate or substitute alternatives. Reference HTML:
+```html
+<link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
+<link rel="icon" href="/icon0.svg" sizes="any" type="image/svg+xml" />
+<link rel="icon" href="/icon1.png" sizes="96x96" type="image/png" />
+<link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" type="image/png" />
+```
+
 ### Naming Conventions
 - Logo variants: `{Component}_{ColorVersion}.{ext}` (e.g., `LogoMark_SolidBlack.svg`)
 - Shapes: `ExpandingShape{Color}{Step}.{ext}` (e.g., `ExpandingShapeBlue3.svg`)
