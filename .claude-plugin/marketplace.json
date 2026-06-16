@@ -13,7 +13,7 @@
       "description": "A2R team agent skills collection",
       "source": "./",
       "strict": false,
-      "skills": ["./skills/a2r-brand-design-system", "./skills/a2r-brand-voice", "./skills/a2r-docx-template", "./skills/senior-code-reviewer"]
+      "skills": ["./skills/a2r-brand-design-system", "./skills/a2r-brand-voice", "./skills/a2r-discord-threads", "./skills/a2r-docx-template", "./skills/senior-code-reviewer"]
     }
   ]
 }
