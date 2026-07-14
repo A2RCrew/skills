@@ -1,0 +1,9 @@
+{
+  "name": "a2r-docx-template",
+  "description": "Convierte Markdown en un documento Word (.docx) con la plantilla corporativa de A2R: portada, indice automatico, cuerpo maquetado y contraportada.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "docx", "word", "plantilla", "markdown"]
+}

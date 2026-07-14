@@ -1,0 +1,9 @@
+{
+  "name": "codex-computer-use",
+  "description": "Delegate local app verification that needs computer use (browser automation, simulators, screenshots, app launching) to Codex CLI (gpt-5.6).",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["codex", "gpt-5.6", "computer-use", "verification", "automation"]
+}

@@ -3,16 +3,35 @@
 ## Project structure
 
 ```
-skills/          — Agent skills (each in its own subdirectory)
+skills/          — Agent skills; each subdirectory is also its own plugin
+  <skill>/
+    SKILL.md                     — the skill (auto-discovered at plugin root)
+    .claude-plugin/plugin.json   — plugin manifest for this skill
 template/        — SKILL.md template for creating new skills
-.claude-plugin/  — Marketplace configuration
+.claude-plugin/  — Marketplace configuration (marketplace.json)
 ```
+
+## Marketplace model
+
+This repo is a Claude Code plugin marketplace. Each skill is packaged as an
+independently installable plugin (one plugin = one skill), so users can install
+just the skills they need:
+
+```
+/plugin marketplace add A2RCrew/skills
+/plugin install <skill-name>@a2r-skills
+```
+
+Each `skills/<skill>/` directory is a plugin root. Its `SKILL.md` lives at the
+plugin root and is auto-discovered (no nested `skills/` folder needed). The
+`.claude-plugin/plugin.json` manifest carries the plugin metadata.
 
 ## Creating a new skill
 
 1. Copy `template/SKILL.md` into `skills/<skill-name>/SKILL.md`
 2. The directory name MUST match the `name` field in frontmatter
 3. Fill in all required frontmatter fields and replace placeholder content
+4. Add `skills/<skill-name>/.claude-plugin/plugin.json` (see below)
 
 ## Naming conventions
 
@@ -30,12 +49,36 @@ Every SKILL.md must have at minimum:
 - `name` — matches directory name, follows naming rules above
 - `description` — non-empty, max 1024 chars, explains what the skill does AND when to use it
 
-## When adding skills to marketplace
+## Plugin manifest (`plugin.json`)
 
-After creating a new skill, add its path to `.claude-plugin/marketplace.json` in the `skills` array:
+Each skill needs `skills/<skill-name>/.claude-plugin/plugin.json`:
 
 ```json
-"skills": ["./skills/my-new-skill"]
+{
+  "name": "my-new-skill",
+  "description": "Short summary of what the skill does.",
+  "version": "1.0.0",
+  "author": { "name": "A2RCrew" },
+  "keywords": ["a2r", "..."]
+}
+```
+
+- `name` MUST match the skill directory name and the SKILL.md frontmatter `name`.
+- Do NOT add a `skills` field here — the root `SKILL.md` is auto-discovered.
+
+## When adding skills to marketplace
+
+After creating a new skill and its `plugin.json`, register it as a plugin in
+`.claude-plugin/marketplace.json` by adding an entry to the `plugins` array:
+
+```json
+{
+  "name": "my-new-skill",
+  "source": "./skills/my-new-skill",
+  "description": "Short summary of what the skill does.",
+  "category": "development",
+  "tags": ["a2r"]
+}
 ```
 
 ## Language

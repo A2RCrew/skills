@@ -1,19 +1,69 @@
 {
   "name": "a2r-skills",
   "owner": {
-    "name": "A2RCrew"
+    "name": "A2RCrew",
+    "email": "nacho@a2r.com"
   },
   "metadata": {
-    "description": "A2R team agent skills for Claude Code",
+    "description": "A2R team agent skills for Claude Code and Cowork",
     "version": "1.0.0"
   },
   "plugins": [
     {
-      "name": "a2r-skills",
-      "description": "A2R team agent skills collection",
-      "source": "./",
-      "strict": false,
-      "skills": ["./skills/a2r-brand-design-system", "./skills/a2r-brand-voice", "./skills/a2r-discord-threads", "./skills/a2r-docx-template", "./skills/codex-computer-use", "./skills/codex-implementation", "./skills/codex-review", "./skills/senior-code-reviewer"]
+      "name": "a2r-brand-design-system",
+      "source": "./skills/a2r-brand-design-system",
+      "description": "A2R brand design system: color palettes, typography, logo usage, UI component specs, design tokens, and light/dark theming for any A2R visual or UI work.",
+      "category": "design",
+      "tags": ["a2r", "brand", "design-system", "ui"]
+    },
+    {
+      "name": "a2r-brand-voice",
+      "source": "./skills/a2r-brand-voice",
+      "description": "A2R brand voice and writing style guide (English and Spanish): tone rules, personality pillars, CTA patterns, and voice compliance checks for any customer-facing copy.",
+      "category": "writing",
+      "tags": ["a2r", "brand", "voice", "copywriting"]
+    },
+    {
+      "name": "a2r-discord-threads",
+      "source": "./skills/a2r-discord-threads",
+      "description": "Extrae los hilos de los foros de asistencia del Discord de A2R en un rango de fechas y los devuelve como tabla Cliente | Titulo | Etiqueta | URL.",
+      "category": "productivity",
+      "tags": ["a2r", "discord", "soporte", "asistencia"]
+    },
+    {
+      "name": "a2r-docx-template",
+      "source": "./skills/a2r-docx-template",
+      "description": "Convierte Markdown en un documento Word (.docx) con la plantilla corporativa de A2R: portada, indice automatico, cuerpo maquetado y contraportada.",
+      "category": "documents",
+      "tags": ["a2r", "docx", "word", "plantilla"]
+    },
+    {
+      "name": "codex-computer-use",
+      "source": "./skills/codex-computer-use",
+      "description": "Delegate local app verification that needs computer use (browser automation, simulators, screenshots, app launching) to Codex CLI (gpt-5.6).",
+      "category": "development",
+      "tags": ["codex", "gpt-5.6", "computer-use", "verification"]
+    },
+    {
+      "name": "codex-implementation",
+      "source": "./skills/codex-implementation",
+      "description": "Delegate scoped code changes in the current repository to Codex CLI (gpt-5.6), then inspect the resulting diff and verification.",
+      "category": "development",
+      "tags": ["codex", "gpt-5.6", "implementation", "coding"]
+    },
+    {
+      "name": "codex-review",
+      "source": "./skills/codex-review",
+      "description": "Get an independent code review of uncommitted changes, a branch diff, a commit, or a specific implementation from Codex CLI (gpt-5.6).",
+      "category": "development",
+      "tags": ["codex", "gpt-5.6", "code-review", "audit"]
+    },
+    {
+      "name": "senior-code-reviewer",
+      "source": "./skills/senior-code-reviewer",
+      "description": "Staff/Principal-level code review of PRs, diffs, and changesets for correctness, security, performance, and design.",
+      "category": "development",
+      "tags": ["code-review", "senior", "pull-request", "quality"]
     }
   ]
 }
