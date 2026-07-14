@@ -8,14 +8,14 @@ Agent skills for [Claude Code](https://claude.com/claude-code) by the A2R team.
 
 ```
 /plugin marketplace add A2RCrew/skills
-/plugin install <skill-name>@a2r-skills
+/plugin install <skill-name>@a2r
 ```
 
 Each skill is its own plugin, so install only the ones you need — for example:
 
 ```
-/plugin install a2r-brand-voice@a2r-skills
-/plugin install senior-code-reviewer@a2r-skills
+/plugin install a2r-brand-voice@a2r
+/plugin install senior-code-reviewer@a2r
 ```
 
 ### Via npx skills CLI
