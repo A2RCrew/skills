@@ -1,0 +1,9 @@
+{
+  "name": "a2r-brand-voice",
+  "description": "A2R brand voice and writing style guide (English and Spanish): tone rules, personality pillars, CTA patterns, and voice compliance checks for any customer-facing copy.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "brand", "voice", "copywriting", "tone"]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "a2r-discord-threads",
+  "description": "Extrae los hilos de los foros de asistencia del Discord de A2R en un rango de fechas y los devuelve como tabla Cliente | Titulo | Etiqueta | URL.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "discord", "soporte", "asistencia", "hilos"]
+}
