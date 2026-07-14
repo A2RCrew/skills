@@ -8,7 +8,14 @@ Agent skills for [Claude Code](https://claude.com/claude-code) by the A2R team.
 
 ```
 /plugin marketplace add A2RCrew/skills
-/plugin install a2r-skills@a2r-skills
+/plugin install <skill-name>@a2r-skills
+```
+
+Each skill is its own plugin, so install only the ones you need — for example:
+
+```
+/plugin install a2r-brand-voice@a2r-skills
+/plugin install senior-code-reviewer@a2r-skills
 ```
 
 ### Via npx skills CLI
@@ -48,25 +55,43 @@ cp -r template/SKILL.md skills/my-new-skill/SKILL.md
    - Write a clear `description`
    - Replace all placeholder sections
 
-3. Register it in `.claude-plugin/marketplace.json`:
+3. Add a plugin manifest at `skills/my-new-skill/.claude-plugin/plugin.json`:
 
 ```json
-"skills": ["./skills/my-new-skill"]
+{
+  "name": "my-new-skill",
+  "description": "Short summary of what the skill does.",
+  "version": "1.0.0",
+  "author": { "name": "A2RCrew" }
+}
 ```
 
-4. Commit and push.
+4. Register it as a plugin in `.claude-plugin/marketplace.json` by adding an
+   entry to the `plugins` array:
+
+```json
+{
+  "name": "my-new-skill",
+  "source": "./skills/my-new-skill",
+  "description": "Short summary of what the skill does."
+}
+```
+
+5. Commit and push.
 
 ## Skill structure
 
-Each skill lives in its own directory under `skills/`:
+Each skill lives in its own directory under `skills/` and is also its own plugin:
 
 ```
 skills/
 └── my-skill/
-    ├── SKILL.md          # Required — frontmatter + instructions
-    ├── scripts/          # Optional — helper scripts
-    ├── references/       # Optional — additional docs
-    └── assets/           # Optional — templates, data files
+    ├── SKILL.md                     # Required — frontmatter + instructions
+    ├── .claude-plugin/
+    │   └── plugin.json              # Required — plugin manifest
+    ├── scripts/                     # Optional — helper scripts
+    ├── references/                  # Optional — additional docs
+    └── assets/                      # Optional — templates, data files
 ```
 
 ### SKILL.md format

@@ -1,0 +1,9 @@
+{
+  "name": "senior-code-reviewer",
+  "description": "Staff/Principal-level code review of PRs, diffs, and changesets for correctness, security, performance, and design.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["code-review", "senior", "pull-request", "security", "quality"]
+}

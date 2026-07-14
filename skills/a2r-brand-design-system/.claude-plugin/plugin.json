@@ -1,0 +1,9 @@
+{
+  "name": "a2r-brand-design-system",
+  "description": "A2R brand design system: color palettes, typography, logo usage, UI component specs, design tokens, and light/dark theming for any A2R visual or UI work.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "brand", "design-system", "ui", "design-tokens"]
+}
