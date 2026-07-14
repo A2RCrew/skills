@@ -19,7 +19,7 @@ just the skills they need:
 
 ```
 /plugin marketplace add A2RCrew/skills
-/plugin install <skill-name>@a2r-skills
+/plugin install <skill-name>@a2r
 ```
 
 Each `skills/<skill>/` directory is a plugin root. Its `SKILL.md` lives at the
