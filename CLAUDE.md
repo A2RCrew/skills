@@ -11,6 +11,31 @@ template/        — SKILL.md template for creating new skills
 .claude-plugin/  — Marketplace configuration (marketplace.json)
 ```
 
+## Public repo + private mirror
+
+This marketplace lives in TWO repos that must stay in sync:
+
+- `A2RCrew/skills` (public, remote `origin`) — source of truth; all PRs and
+  development happen here.
+- `A2RCrew/a2r` (private, remote `private`) — read-only mirror consumed by the
+  claude.ai organization marketplace sync (claude.ai only accepts private or
+  internal repos). Never commit directly to it.
+
+**IMPORTANT — after every merge to `main`, sync the mirror:**
+
+```bash
+git checkout main && git pull origin main && git push private main
+```
+
+If the `private` remote is missing locally, add it first:
+
+```bash
+git remote add private git@github.com:A2RCrew/a2r.git
+```
+
+Skipping this step leaves the claude.ai marketplace stale even though the
+public repo shows the change as merged.
+
 ## Marketplace model
 
 This repo is a Claude Code plugin marketplace. Each skill is packaged as an
@@ -80,6 +105,19 @@ After creating a new skill and its `plugin.json`, register it as a plugin in
   "tags": ["a2r"]
 }
 ```
+
+Then validate before committing:
+
+```bash
+claude plugin validate . && claude plugin validate skills/my-new-skill/
+```
+
+## Publishing checklist
+
+1. Branch off `main`, make changes, open a PR against `A2RCrew/skills`
+2. Run `claude plugin validate .` (and per-plugin validation if manifests changed)
+3. Merge the PR
+4. Sync the private mirror: `git checkout main && git pull origin main && git push private main`
 
 ## Language
 
