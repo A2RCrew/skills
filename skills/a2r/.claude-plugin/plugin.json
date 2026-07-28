@@ -1,0 +1,9 @@
+{
+  "name": "a2r",
+  "description": "A2R project management methodology on Linear: create, triage, estimate and report issues from Claude Code, through the Linear MCP or linear-cli.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "linear", "linear-cli", "linear-mcp", "issues", "metodologia"]
+}

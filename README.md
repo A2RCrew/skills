@@ -210,6 +210,32 @@ skills/
     └── assets/                      # Optional — templates, data files
 ```
 
+### Namespaced bundles (multi-skill plugins)
+
+One plugin per skill is the default. The exception is a family of skills that
+share a namespace in their invocation: Claude Code derives the slash command
+from the plugin name, so a skill `<skill>` inside plugin `<plugin>` is invoked
+as `/<plugin>:<skill>`. Skill names cannot contain a colon, so the namespace has
+to come from the plugin name.
+
+The `a2r` plugin is the current bundle — the A2R Linear methodology skills,
+invoked as `/a2r:create-issue`, `/a2r:my-issues`, … Its skills live one level
+deeper, under a nested `skills/` folder:
+
+```
+skills/
+└── a2r/
+    ├── .claude-plugin/
+    │   └── plugin.json              # name: "a2r"
+    └── skills/
+        └── create-issue/
+            ├── SKILL.md             # name: create-issue → /a2r:create-issue
+            └── references/
+```
+
+Use a bundle only when the skills form one installable family with a shared
+prefix — installing the plugin installs all of them.
+
 ### SKILL.md format
 
 ```yaml
