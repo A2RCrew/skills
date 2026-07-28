@@ -7,6 +7,9 @@ skills/          — Agent skills; each subdirectory is also its own plugin
   <skill>/
     SKILL.md                     — the skill (auto-discovered at plugin root)
     .claude-plugin/plugin.json   — plugin manifest for this skill
+  <bundle>/                      — namespaced bundle (see below)
+    .claude-plugin/plugin.json   — plugin manifest for the bundle
+    skills/<skill>/SKILL.md      — one skill per subdirectory
 template/        — SKILL.md template for creating new skills
 .claude-plugin/  — Marketplace configuration (marketplace.json)
 ```
@@ -50,6 +53,31 @@ just the skills they need:
 Each `skills/<skill>/` directory is a plugin root. Its `SKILL.md` lives at the
 plugin root and is auto-discovered (no nested `skills/` folder needed). The
 `.claude-plugin/plugin.json` manifest carries the plugin metadata.
+
+### Exception: namespaced bundles (multi-skill plugins)
+
+One plugin per skill is the default. The exception is a **family of skills that
+share a namespace in their invocation**, because Claude Code derives the slash
+command from the plugin name: a skill `<skill>` inside plugin `<plugin>` is
+invoked as `/<plugin>:<skill>`. Skill names cannot contain a colon, so the
+namespace has to come from the plugin name.
+
+The `a2r` plugin is the current bundle: it carries the A2R Linear methodology
+skills, invoked as `/a2r:create-issue`, `/a2r:my-issues`, `/a2r:plan-cycle`, …
+Their upstream source is the `a2r-linear-strategy` repo.
+
+```
+skills/a2r/
+  .claude-plugin/plugin.json       — name: "a2r"
+  skills/
+    create-issue/
+      SKILL.md                     — name: create-issue  →  /a2r:create-issue
+      references/
+```
+
+Reach for a bundle only when the skills genuinely form one installable family
+with a shared prefix. Otherwise use a standalone plugin: a bundle forces users
+to install every skill in it.
 
 ## Creating a new skill
 

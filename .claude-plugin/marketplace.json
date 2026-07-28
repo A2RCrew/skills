@@ -10,6 +10,13 @@
   },
   "plugins": [
     {
+      "name": "a2r",
+      "source": "./skills/a2r",
+      "description": "A2R project management methodology on Linear: create, triage, estimate and report issues from Claude Code, through the Linear MCP or linear-cli. Provides /a2r:create-issue.",
+      "category": "productivity",
+      "tags": ["a2r", "linear", "linear-cli", "linear-mcp", "issues", "metodologia"]
+    },
+    {
       "name": "a2r-brand-design-system",
       "source": "./skills/a2r-brand-design-system",
       "description": "A2R brand design system: color palettes, typography, logo usage, UI component specs, design tokens, and light/dark theming for any A2R visual or UI work.",
