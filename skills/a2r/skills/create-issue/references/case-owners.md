@@ -7,6 +7,10 @@
 > **Snapshot tomado:** 2026-07-27, contra el workspace real de Linear y el reparto acordado en
 > [A2R-18](https://linear.app/a2r/issue/A2R-18). Si la fecha queda lejos, avisa al usuario de que
 > conviene refrescarlo.
+>
+> **Actualizado 2026-08-03:** `Traducciones` pasa de TBD a `miguel` (Miguel Robles González), que
+> ya tiene cuenta en el workspace. Cambio hecho solo en este snapshot — la tabla maestra sigue
+> pendiente de actualizar.
 
 ## Modelo
 
@@ -32,12 +36,12 @@ Owner se indica con el **username de Linear** (el que acepta `--assignee`), porq
 | 8 | Evaluaciones | `luis` (Luis Anaya) | TBD | `Evaluaciones` |
 | 9 | Generación de preguntas y contenido | `luis` | TBD | `Generación de preguntas` |
 | 10 | SDC (Schema Driven Chatbot) | **TBD** | TBD | `SDC` |
-| 11 | Traducciones | **TBD** — trabajo de Miguel, sin cuenta en Linear | TBD | `Traducciones` |
+| 11 | Traducciones | `miguel` (Miguel Robles González) | TBD | `Traducciones` |
 | 12 | Text To Speech + Speech To Text | `jesus` (Jesús Macías) | TBD | `TTS-STT` |
 | 13 | Autenticación y usuarios | `jordi` | TBD | `Auth` |
 | 14 | Transversal / Infra | `marcos` | TBD | `Transversal` |
 
-Reparto: `ivan` 3 · `lguisado` 3 · `luis` 2 · `alex` 1 · `jesus` 1 · `jordi` 1 · `marcos` 1 · TBD 2.
+Reparto: `ivan` 3 · `lguisado` 3 · `luis` 2 · `alex` 1 · `jesus` 1 · `jordi` 1 · `marcos` 1 · `miguel` 1 · TBD 1.
 
 ### Cuidado con los nombres
 
@@ -47,7 +51,7 @@ Reparto: `ivan` 3 · `lguisado` 3 · `luis` 2 · `alex` 1 · `jesus` 1 · `jordi
 
 ### Casos sin owner (TBD)
 
-`SDC` y `Traducciones` no tienen owner asignado. Para esos casos: aplica el label del caso y deja la issue **sin asignar** — no adivines una persona. Dilo en la preview.
+`SDC` no tiene owner asignado. Para ese caso: aplica el label del caso y deja la issue **sin asignar** — no adivines una persona. Dilo en la preview.
 
 Cuando el caso en sí no está claro, aplica `Transversal` (cola de Marcos) y que el equipo lo resuelva en la sesión del lunes.
 
