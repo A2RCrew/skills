@@ -45,6 +45,13 @@
       "tags": ["a2r", "docx", "word", "plantilla"]
     },
     {
+      "name": "a2r-product-video",
+      "source": "./skills/a2r-product-video",
+      "description": "Genera videos de demostracion de producto con el formato estandar de A2R: graba un modulo con Playwright (viewport limpio, sin navegador, con cursor) y lo monta en Remotion con la marca A2R (intro, rotulos por paso, interstitial de proceso, scroll de documentos, cierre), 1920x1080 y sin audio.",
+      "category": "design",
+      "tags": ["a2r", "video", "demo", "playwright", "remotion", "screencast"]
+    },
+    {
       "name": "codex-computer-use",
       "source": "./skills/codex-computer-use",
       "description": "Delegate local app verification that needs computer use (browser automation, simulators, screenshots, app launching) to Codex CLI (gpt-5.6).",
