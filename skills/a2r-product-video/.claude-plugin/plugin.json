@@ -1,0 +1,10 @@
+{
+  "name": "a2r-product-video",
+  "description": "Genera vídeos de demostración de producto con el formato estándar de A2R: graba un módulo con Playwright (viewport limpio, sin navegador, con cursor) y lo monta en Remotion con la marca A2R (intro, rótulos por paso, interstitial de proceso, scroll de documentos, cierre), 1920x1080 y sin audio.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "dependencies": ["a2r-brand-design-system", "a2r-brand-voice"],
+  "keywords": ["a2r", "video", "demo", "playwright", "remotion", "screencast", "producto", "marca"]
+}
