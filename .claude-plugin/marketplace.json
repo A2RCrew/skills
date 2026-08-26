@@ -78,6 +78,13 @@
       "description": "Staff/Principal-level code review of PRs, diffs, and changesets for correctness, security, performance, and design.",
       "category": "development",
       "tags": ["code-review", "senior", "pull-request", "quality"]
+    },
+    {
+      "name": "unslop",
+      "source": "./skills/unslop",
+      "description": "Revisa prosa en castellano de España para quitar clichés, relleno, calcos y tics de IA sin alterar el contenido ni la voz.",
+      "category": "writing",
+      "tags": ["espanol", "castellano", "edicion", "reescritura", "estilo", "ia"]
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "unslop",
+  "description": "Revisa prosa en castellano de España para quitar clichés, relleno, calcos y tics de IA sin alterar el contenido ni la voz.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["espanol", "castellano", "edicion", "reescritura", "estilo", "ia"]
+}
