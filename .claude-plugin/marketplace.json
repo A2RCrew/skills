@@ -85,6 +85,13 @@
       "description": "Revisa prosa en castellano de España para quitar clichés, relleno, calcos y tics de IA sin alterar el contenido ni la voz.",
       "category": "writing",
       "tags": ["espanol", "castellano", "edicion", "reescritura", "estilo", "ia"]
+    },
+    {
+      "name": "a2r-release-review",
+      "source": "./skills/a2r-release-review",
+      "description": "Revisión de release verificada antes de subir a producción (main/releases): gates deterministas, revisores por área, verificador adversario, checklist del repo y nota 1-5 con techo calculado. Solo lectura.",
+      "category": "development",
+      "tags": ["a2r", "release", "code-review", "verificacion", "calidad"]
     }
   ]
 }
