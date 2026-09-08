@@ -1,59 +1,87 @@
-# Release review · {{REPO}} · v{{VERSION}}
+# Release review · {{FECHA}} · {{REPOS_RESUMEN}}
 
 | Campo | Valor |
 |---|---|
-| Rango | `{{RANGE}}` ({{MERGE_BASE_SHORT}} → {{HEAD_SHA_SHORT}}) |
-| Último tag en base | {{LAST_TAG}} |
-| Commits / merges | {{COMMITS}} / {{MERGES}} |
-| Ficheros / líneas añadidas | {{FILES}} / {{ADDED_LINES}} |
-| Cobertura de revisión | {{COVERAGE_PCT}} % de ficheros leídos por un revisor |
-| Modelo · fecha | {{MODEL}} · {{DATE}} |
-| Árbol de trabajo | {{DIRTY_NOTE}} |
+| Repos revisados | {{REPOS_TABLA_CORTA}} (repo · versión · rango · commits/ficheros) |
+| Casos de uso tocados | {{CASOS_LISTA}} |
+| Migraciones pendientes | {{N_MIGRACIONES}} ({{MIGRACIONES_MODO}}) |
+| Profundidad · tests | {{PROFUNDIDAD}} · {{TESTS_MODO}} |
+| Cobertura de revisión | {{COBERTURA_PCT}} % de ficheros leídos por un revisor |
+| Modelo · generado | {{MODELO}} · {{TIMESTAMP}} |
+| Supuestos | {{SUPUESTOS}} |
 
-## Nota
+## Nota global
 
-**{{SCORE}} / 5** · techo calculado {{CAP}} · confianza **{{CONFIDENCE}}**
+**{{NOTA}} / 5** · techo calculado {{TECHO}} · confianza **{{CONFIANZA}}**
 
-{{VERDICT_JUSTIFICATION}}
+{{JUSTIFICACION_DOS_LINEAS}}
 
-## 1. Gates deterministas (sin modelo)
+## Qué se sube, por caso de uso
 
-| Check | Resultado | Log |
-|---|---|---|
-| lint (ficheros del rango / repo) | {{LINT_CHANGED}} / {{LINT}} | `{{OUT}}/lint-changed.log` · `{{OUT}}/lint.log` |
-| i18n parity (claves del rango / repo) | {{I18N_RANGE}} / {{I18N_REPO}} | `{{OUT}}/i18n-parity-range.log` · `{{OUT}}/i18n-parity-repo.log` |
-| tsc | {{TSC}} | `{{OUT}}/tsc.log` |
-| circular deps | {{CIRC}} | `{{OUT}}/circular-deps.log` |
-| vitest | {{VITEST}} | `{{OUT}}/vitest.log` |
-| migration grants / placement / bench / tests | {{MIG_CHECKS}} | `{{OUT}}/migration-*.log` |
+| Caso de uso | Owner | Repos | Issues | Qué cambia (una frase) | Techo | Nota | Bloqueantes |
+|---|---|---|---|---|---|---|---|
+{{FILAS_CASOS}}
 
-## 2. Checklist del repositorio
+## Secuencia de despliegue recomendada
 
+{{SECUENCIA}}
+
+## Bloqueantes y mayores confirmados
+
+{{CONFIRMADOS_CRITICOS_MAYORES}}
+
+<!-- ===== A partir de aquí solo en el informe DETALLADO ===== -->
+
+## Migraciones pendientes
+
+| Migración | Crea/cambia | Aditiva | Permisos Default | Consumidores | Orden requerido | Riesgo |
+|---|---|---|---|---|---|---|
+{{FILAS_MIGRACIONES}}
+
+{{MIGRACIONES_AJENAS_EN_INDEX}}
+
+## Detalle por caso de uso
+
+### {{CASO}} · {{OWNER}} · techo {{TECHO_CASO}} · nota {{NOTA_CASO}}
+
+**Qué se sube**: commits e issues ({{COMMITS_CASO}}), ficheros por repo.
+
+**Hallazgos confirmados**
+{{CONFIRMADOS_CASO}}
+
+**Plausibles (no refutados ni confirmados)**
+{{PLAUSIBLES_CASO}}
+
+**Checklist aplicable**
 | ID | Regla | Resultado | Evidencia |
 |---|---|---|---|
-{{CHECKLIST_ROWS}}
+{{CHECKLIST_CASO}}
 
-## 3. Hallazgos confirmados
+## Gates deterministas por repo
 
-{{CONFIRMED_FINDINGS}}
+| Repo | lint (rango / repo) | typecheck | circular | tests | extra | migraciones | i18n |
+|---|---|---|---|---|---|---|---|
+{{FILAS_GATES}}
 
-## 4. Hallazgos plausibles (no refutados ni confirmados)
+## Checklist común y de repo (resto)
 
-{{PLAUSIBLE_FINDINGS}}
+| Repo | ID | Regla | Resultado | Evidencia |
+|---|---|---|---|---|
+{{FILAS_CHECKLIST_RESTO}}
 
-## 5. Refutados por el verificador
+## Refutados por el verificador
 
-{{REFUTED_FINDINGS}}
+{{REFUTADOS}}
 
-## 6. No verificable en local
+## No verificable en local
 
-{{UNVERIFIABLE}}
+{{NO_VERIFICABLE}}
 
-## 7. Cobertura por área
+## Cobertura
 
-| Área | Ficheros | Revisados | Revisor |
-|---|---|---|---|
-{{COVERAGE_ROWS}}
+| Repo | Caso de uso | Ficheros | Leídos | Revisor |
+|---|---|---|---|---|
+{{FILAS_COBERTURA}}
 
 ---
-Generado por `a2r-release-review`. Artefactos de fase 0 en `{{OUT}}`. JSON en `{{JSON_PATH}}`.
+Generado por `a2r-release-review`. Artefactos de fase 0 en `{{OUT}}` (`<repo>/meta.json`, logs). JSON en `{{JSON_PATH}}`.

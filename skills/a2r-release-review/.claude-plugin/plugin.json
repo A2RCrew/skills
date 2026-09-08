@@ -1,9 +1,18 @@
 {
   "name": "a2r-release-review",
-  "description": "Revisión de release verificada para repos A2R antes de subir a producción: gates deterministas (lint, tsc, circular-deps, vitest, checks de migraciones e i18n), revisores por área en paralelo, verificador adversario que confirma o refuta cada hallazgo, checklist de reglas del repo con evidencia y nota 1-5 con techo calculado y confianza. Solo lectura.",
-  "version": "1.0.0",
+  "description": "Revisión de release conversacional y verificada para los repos de despliegue de A2R: entrevista (repos, migraciones, breve/detallado), gates por repo, revisión por caso de uso cruzando front/API/workers, verificador adversario y nota 1-5 con techo calculado. Solo lectura.",
+  "version": "1.1.0",
   "author": {
     "name": "A2RCrew"
   },
-  "keywords": ["a2r", "release", "code-review", "verificacion", "nimrod", "ci", "calidad"]
+  "keywords": [
+    "a2r",
+    "release",
+    "code-review",
+    "casos-de-uso",
+    "migraciones",
+    "directus",
+    "verificacion",
+    "ci"
+  ]
 }

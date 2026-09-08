@@ -1,131 +1,131 @@
 ---
 name: a2r-release-review
 description: >-
-  Revisión de release para repositorios A2R (nimrod-multitenant y afines) antes de subir a
-  producción (main / releases). Ejecuta gates deterministas (lint, tsc, circular-deps, vitest,
-  checks de migraciones), revisa el diff por áreas con subagentes en paralelo, pasa cada
-  hallazgo por un verificador adversario que lo CONFIRMA, REFUTA o deja PLAUSIBLE, evalúa la
-  checklist de reglas del repo con evidencia, y emite un informe con nota 1-5 (techo calculado
-  + veredicto del revisor ≤ techo) y nivel de confianza. Úsala cuando el usuario escriba
-  "/a2r-release-review", pida "revisar la release", "review de lo pendiente de subir a main",
-  "qué riesgo tiene subir esto a producción", "code review de la versión X" o "nota de la
-  release". Solo lectura: no edita, no commitea, no ejecuta migraciones ni toca Directus.
-argument-hint: "[rango-git | tag | rama]  p.ej. origin/main..HEAD · v2.54.0..HEAD · --skip-tests · --quick"
+  Revisión de release conversacional y verificada para los repos de despliegue de A2R
+  (nimrod-multitenant, nimrod-api, semantic-pdf-serverless, pdf-remediation, translate-documents,
+  bulk-url-process). Entrevista al usuario recomendando en cada pregunta (qué repos, revisión
+  profunda de migraciones Directus, informe breve o detallado), ejecuta gates por repo, reparte la
+  revisión por CASO DE USO de la plataforma con subagentes que cruzan front, API y workers, pasa cada
+  hallazgo por un verificador adversario y emite un informe por caso de uso con qué se sube, nota 1-5
+  (techo calculado + veredicto), confianza y secuencia de despliegue. Úsala con "/a2r-release-review",
+  "revisar la release", "qué se sube a producción", "riesgo del despliegue" o "revisar las migraciones
+  pendientes". Solo lectura: no edita, no commitea, no ejecuta migraciones ni toca Directus.
+argument-hint: "[--repos a,b] [--range repo=A..B] [--migrations|--no-migrations] [--depth breve|detallado] [--skip-tests] [--yes]"
 ---
 
 # a2r-release-review
 
-Objetivo: un informe **verificado** del rango de commits pendiente de producción. Todo lo que
-aparezca como hallazgo lleva fichero:línea y un comando ejecutado. Lo que no se pueda comprobar
-se declara como tal. La nota es un veredicto acotado por una fórmula, y así se presenta.
+Objetivo: un informe **verificado y orientado a casos de uso** de lo que está pendiente de
+producción en uno o varios repos de A2R. Todo hallazgo lleva repo, fichero:línea y un comando
+ejecutado. Lo que no se puede comprobar se declara. La nota es un veredicto acotado por fórmula.
 
 Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
-- `assets/collect.sh` — fase 0 determinista
-- `references/checklist.md` — reglas del repo como comprobaciones con evidencia
-- `references/rubric.md` — severidades, techo, confianza
-- `references/prompts/reviewer.md`, `references/prompts/verifier.md` — prompts de subagentes
-- `assets/report.template.md` — plantilla del informe
 
-## Argumentos
-
-| Forma | Rango revisado |
+| Fichero | Para qué |
 |---|---|
-| (vacío) | `origin/main..HEAD` — lo pendiente de subir a producción |
-| `A..B` | ese rango literal |
-| `vX.Y.Z` | `vX.Y.Z..HEAD` |
-| `rama` | `origin/rama..HEAD` |
-| `--skip-tests` | fase 0 sin vitest (G4 queda NO VERIFICABLE, techo ≤4) |
-| `--quick` | equivale a `--skip-tests` y sin `pnpm install` |
-| `--out <dir>` | dónde dejar informe y artefactos |
-
-Salida por defecto: `~/.claude/a2r-release-review/reports/<repo>/<version>-<fecha>-<head7>/`
-con `report.md`, `report.json` y los artefactos de fase 0. Nada se escribe dentro del repo.
+| `assets/prescan.sh` | pre-escaneo de todos los repos para la entrevista |
+| `assets/collect.sh` | fase 0 determinista de un repo (gates, señales, casos de uso) |
+| `assets/usecases.mjs` | clasifica ficheros y commits por caso de uso |
+| `assets/report.template.md` | plantilla del informe (breve = hasta la marca; detallado = todo) |
+| `references/repos.json` | configuración por repo: rango por defecto, comandos, features |
+| `references/use-cases.json` | los 14 casos de uso de Linear con globs por repo |
+| `references/checklist.md` | reglas comunes, por repo y cruzadas, con evidencia y severidad |
+| `references/rubric.md` | severidades, techo por caso y global, confianza |
+| `references/migrations-review.md` | procedimiento de revisión profunda de migraciones |
+| `references/interview.md` | preguntas, opciones y regla de recomendación |
+| `references/prompts/*.md` | prompts de revisor por caso, verificador y revisor de migraciones |
 
 ## Reglas absolutas
 
-1. **Solo lectura**. Sin `Edit`/`Write` sobre el repo, sin `git commit/push/checkout`, sin
-   `pnpm run migrate`, sin llamadas a ningún Directus. Si un subagente necesita probar algo, lo hace
-   con `tsc`, `vitest run <fichero>`, `node -e`, `git grep`, `git show`.
-2. **Sin evidencia no hay hallazgo**. Un hallazgo sin `evidence_cmd` ejecutado se descarta en la
-   fase de verificación, no se degrada a "menor".
-3. **El modelo no elige el techo**. El techo sale de `references/rubric.md`; el veredicto es ≤ techo.
-4. **No preguntar al usuario** durante la ejecución. Si falta algo, se anota en "No verificable".
-5. **Idioma del informe**: español de España. Rutas y comandos literales.
+1. **Solo lectura** en todos los repos. Sin `Edit`/`Write` sobre ellos, sin `git commit/push/checkout`,
+   sin `pnpm run migrate`, sin llamadas a ningún Directus. Las pruebas se hacen con `tsc`, `vitest run`,
+   `node --test`, `node -e`, `git grep`, `git show`.
+2. **Sin evidencia no hay hallazgo.** Un hallazgo sin `evidence_cmd` ejecutado se descarta en verificación.
+3. **El modelo no elige el techo.** Sale de `references/rubric.md`; el veredicto es ≤ techo.
+4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
+   las dudas se resuelven con la opción recomendada y se anotan en «Supuestos».
+5. **El informe habla de casos de uso**, no de repos. Los repos aparecen como columna, no como capítulo.
+6. Idioma: español de España. Rutas y comandos literales.
+
+## Argumentos
+
+| Forma | Efecto |
+|---|---|
+| (vacío) | pre-escaneo + entrevista completa |
+| `--repos nimrod-multitenant,nimrod-api` | salta la pregunta de repos |
+| `--range nimrod-api=v1.46.0..origin/main` | rango explícito para un repo (repetible) |
+| `--migrations` / `--no-migrations` | salta la pregunta de migraciones |
+| `--depth breve|detallado` | salta la pregunta de profundidad |
+| `--skip-tests` | fase 0 sin suites (G4 NO VERIFICABLE, techo ≤4) |
+| `--yes` | sin entrevista: recomendaciones del pre-escaneo (modo CI) |
+| `--out <dir>` | dónde dejar informe y artefactos |
+
+`REPOS_ROOT` = directorio padre del repo desde el que se invoca (o variable de entorno). Salida por
+defecto: `~/.claude/a2r-release-review/reports/<fecha>-<head7s>/` con `report.md`, `report.json` y una
+carpeta por repo con los artefactos de fase 0. Nada se escribe dentro de ningún repo.
 
 ## Procedimiento
 
-### Fase 0 · Recolección determinista
+### Fase 0 · Pre-escaneo
 ```bash
 OUT=<dir-salida>; mkdir -p "$OUT"
-SKIP_TESTS=<0|1> SKIP_INSTALL=<0|1> bash "$SKILL_DIR/assets/collect.sh" "<rango>" "$OUT"
+bash "$SKILL_DIR/assets/prescan.sh" "$REPOS_ROOT" "$OUT"
 ```
-Lee `meta.json`. Si `worktree_dirty_files > 0`, anótalo: la revisión es del rango de commits,
-no de los cambios sin commitear. Si el rango tiene 0 commits, informa y termina.
-Si `counts.files > 400`, avisa en la cabecera y prioriza áreas `migrations`, `tts-v2`, `api`,
-`auth`, `data`, `actions`; el resto se revisa por muestreo y la cobertura lo refleja.
+Lee `$OUT/prescan.json`. Si ningún repo tiene cambios pendientes, dilo y termina.
 
-### Fase 1 · Partición
-`areas.tsv` ya agrupa los ficheros. Un revisor por área con ≥1 fichero. Si un área supera
-~25 ficheros, divídela en lotes (`migrations-a`, `migrations-b`) manteniendo juntos los ficheros
-de una misma carpeta de migración. Áreas `docs` y `tests` se revisan en un único agente ligero
-(D1, D2, y que los tests nuevos prueben lo que dicen).
+### Fase 1 · Entrevista
+Sigue `references/interview.md`: llamada 1 (repos, dos preguntas multiselección con los datos del
+pre-escaneo), llamada 2 (migraciones si procede, profundidad con recomendación razonada, rango si
+algún repo lo necesita, tests). Resume lo acordado en tres líneas y arranca.
 
-Asignación de ítems de checklist por área:
-- migrations → M1–M8, W3
-- tts-v2 → T1–T6 (además de lo que aplique de data/actions)
-- api → S3, S4 · auth → S3 · actions → S5 · data → M8, T4
-- components / app → Q3, D1 · lib → Q1, D1 · scripts-ci → S2, W3, G5 · i18n → I1 (orquestador) + revisor ligero
-- Los G*, W1, W2, S1, Q2, D2 los evalúa el orquestador desde `meta.json` y ficheros de fase 0.
+### Fase 2 · Recolección por repo (paralelo)
+Para cada repo seleccionado, en paralelo (Bash en background o una sola llamada encadenada):
+```bash
+SKIP_TESTS=<0|1> bash "$SKILL_DIR/assets/collect.sh" <repo-key> "<rango>" "$OUT/<repo-key>"
+```
+Lee cada `meta.json`. Si `worktree_dirty_files > 0`, anótalo. Si `range_note` aplica, anótalo en Supuestos.
 
-### Fase 2 · Revisores (paralelo)
-Lanza los revisores **en una sola respuesta** con `Agent` (`subagent_type: general-purpose`),
-uno por área/lote, con `references/prompts/reviewer.md` rellenado. Espera todos. Guarda cada JSON en
-`$OUT/review-<area>.json`. Si un agente devuelve texto no-JSON, extrae el bloque JSON; si no hay,
-la área cuenta como no revisada.
+### Fase 3 · Partición por caso de uso
+Une los `usecases.json` de todos los repos: por cada caso con ≥1 fichero, un lote con sus ficheros
+de todos los repos. Si un lote supera ~30 ficheros, divídelo por repo manteniendo un mismo
+revisor para la parte cruzada (`src/model/directus.ts`, rutas `api/v0`, `fetchApi`). El caso
+`plataforma` se divide por repo. Asigna a cada lote los ítems de checklist de `checklist.md` cuyo
+repo esté en el lote (sección común + secciones de `checklist_sections`), más X1–X3 si cruza repos.
 
-### Fase 3 · Verificación adversaria (paralelo)
-Reúne todos los `findings`. Lotes de ≤6 hallazgos, mezclando áreas, y **nunca el mismo agente que
-los propuso**. Lanza los verificadores en paralelo con `references/prompts/verifier.md`. Los `new_findings`
-que aparezcan se verifican en una segunda ronda (una sola; lo que quede sin verificar es PLAUSIBLE).
-Guarda en `$OUT/verify-<n>.json`.
+### Fase 4 · Revisores (paralelo)
+Lanza **en una sola respuesta** un `Agent` (`general-purpose`) por lote con
+`references/prompts/reviewer.md` rellenado. Si se acordó revisión profunda de migraciones, lanza
+además el revisor de `references/prompts/migration-reviewer.md` con los repos consumidores
+seleccionados. Guarda cada JSON en `$OUT/review-<caso>[-repo].json` y `$OUT/review-migrations.json`.
 
-### Fase 4 · Checklist del orquestador
-Evalúa desde fase 0, sin modelo:
-- G1, G1b, G2–G5, I1, I1b desde `meta.checks` y `counts`.
-- W1: `commits-without-issue.tsv`; si contiene `feat`/`fix` → FALLA mayor, si solo otros → menor.
-- W2: `commits-nonconventional.tsv`.
-- S1: `signal-secrets.txt`; cada línea se verifica leyendo el contexto (fixture vs real).
-- S2: `env-new-undefined.txt`.
-- Q2: `signal-console-log.txt` filtrado a `src/`.
-- D2: rutas `.claude/` en `areas.tsv`.
-Fusiona con los `checklist` de los revisores. Si dos revisores discrepan en un ítem, gana FALLA
-si tiene evidencia; si no, NO VERIFICABLE.
+### Fase 5 · Verificación adversaria (paralelo)
+Reúne todos los `findings` (incluidos los de migraciones con riesgo ≠ libre, convertidos a hallazgos).
+Lotes de ≤6 mezclando casos, nunca el agente que los propuso. `references/prompts/verifier.md`.
+Segunda ronda solo para `new_findings`; lo que quede sin verificar es PLAUSIBLE. Guarda `$OUT/verify-<n>.json`.
 
-### Fase 5 · Nota
-Aplica `references/rubric.md` literalmente:
-1. Cuenta CONFIRMED por severidad final, PLAUSIBLE mayor/crítico, FALLAs por ítem, cobertura
-   (= ficheros en `files_reviewed` ∪ / total).
-2. Techo por la primera regla que se cumple.
-3. Confianza por la tabla.
-4. Veredicto: elige nota ≤ techo. Si bajas del techo, di por qué en una frase. Dos líneas de
-   justificación máximo.
+### Fase 6 · Checklist del orquestador
+Desde `meta.json` de cada repo, sin modelo: G1–G5, W1–W3, S1–S2, Q1–Q2, D2, I1/I1b, K1, K7, K8, M6/M6b/M7.
+Fusiona con los `checklist` de los revisores. Discrepancia: gana FALLA con evidencia; si no, NO VERIFICABLE.
 
-### Fase 6 · Informe
-Rellena `assets/report.template.md` → `$OUT/report.md` y escribe `$OUT/report.json`:
+### Fase 7 · Nota
+`references/rubric.md` literal: techo por caso (hallazgos y fallos cuyos ficheros pertenecen al caso,
+más gates de sus repos), techo global = mínimo con los ajustes de migraciones y dependencias, confianza,
+veredicto ≤ techo con dos líneas.
+
+### Fase 8 · Informe
+Rellena `assets/report.template.md` hasta la marca si es **breve**, completo si es **detallado**.
+Escribe `report.json`:
 ```json
-{ "repo", "range", "head_sha", "version", "score", "cap", "confidence",
-  "gates": {...}, "checklist": [...], "findings": {"confirmed": [], "plausible": [], "refuted": []},
-  "unverifiable": [], "coverage": {"files_total", "files_reviewed", "by_area": {}} }
+{"date","repos":{"<key>":{"range","head_sha","version","gates":{}}},"depth","score","cap","confidence",
+ "use_cases":{"<slug>":{"what_ships","owner","repos":[],"issues":[],"cap","score","findings":{"confirmed":[],"plausible":[]}}},
+ "migrations":{"reviewed":true,"items":[],"sequence":[]},"checklist":[],"refuted":[],"unverifiable":[],"coverage":{}}
 ```
-Cada hallazgo en el markdown: `**[severidad] título** — ruta:línea`, claim, comando y salida en
-bloque de código, veredicto del verificador. Ordena por severidad.
-
-Respuesta al usuario (concisa): nota, techo, confianza, ruta del informe, los hallazgos
-CONFIRMADOS críticos/mayores en una línea cada uno. Nada más; el detalle está en el informe.
+Respuesta al usuario, concisa: nota global, techo, confianza, ruta del informe, tabla de una línea
+por caso de uso (qué se sube · nota · bloqueantes) y la secuencia de despliegue. Nada más.
 
 ## Camino a CI
 
-El contrato de entrada (rango) y salida (`report.json`) es el que usará una GitHub Action con
-`claude -p` sobre PR a `main` y tag `v*`. Mientras la skill viva fuera del repo, cualquier cambio
-de reglas va a `references/checklist.md`/`references/rubric.md`, nunca al prompt suelto: son los ficheros que se
-copiarán tal cual al repo cuando se promocione.
+Con `--yes` la skill no pregunta y aplica las recomendaciones; el contrato es repos+rangos de entrada
+y `report.json` de salida. Es lo que ejecutará una GitHub Action con `claude -p` sobre PR a `main` y
+tag `v*`. Los cambios de reglas van a `references/checklist.md`, `references/rubric.md`,
+`references/repos.json` y `references/use-cases.json`, nunca al prompt suelto.

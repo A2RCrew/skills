@@ -1,0 +1,91 @@
+{
+  "_doc": "Configuración por repositorio para a2r-release-review. 'dir' es relativo a REPOS_ROOT (por defecto, el directorio padre del repo desde el que se invoca). Los comandos se ejecutan desde la raíz de cada repo. 'default_range' es lo pendiente de producción; 'prod_trigger' explica cómo llega a producción. null = el repo no tiene ese check.",
+  "repos": {
+    "nimrod-multitenant": {
+      "dir": "nimrod-multitenant",
+      "role": "Frontend Next.js y dueño del esquema Directus (migraciones)",
+      "default_range": "origin/main..origin/develop",
+      "prod_trigger": "merge develop→main (A2R) y main→releases (clientes); IE por tag v* en el remote ie",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": "pnpm lint --max-warnings=0",
+      "lint_files": "pnpm exec eslint --max-warnings=0",
+      "typecheck": "pnpm exec tsc --noEmit --pretty false",
+      "test": "pnpm exec vitest run --reporter=dot",
+      "extra_checks": { "circular-deps": "pnpm detect-circular-deps" },
+      "features": ["migrations", "i18n"],
+      "checklist_sections": ["nimrod-multitenant"]
+    },
+    "nimrod-api": {
+      "dir": "nimrod-api",
+      "role": "Servicio de tareas (Next.js) que orquesta workers y escribe en Directus",
+      "default_range": "origin/main..origin/develop",
+      "prod_trigger": "merge develop→main → CodePipeline → ECS Fargate; releases para clientes; IE por tag",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": "pnpm lint --max-warnings=0",
+      "lint_files": "pnpm exec eslint --max-warnings=0",
+      "typecheck": "pnpm type-check",
+      "test": "pnpm exec vitest run --reporter=dot",
+      "extra_checks": { "circular-deps": "pnpm detect-circular-deps", "astgrep": "pnpm astgrep:scan" },
+      "features": ["directus-model"],
+      "checklist_sections": ["nimrod-api"]
+    },
+    "semantic-pdf-serverless": {
+      "dir": "semantic-pdf-serverless",
+      "role": "Worker de ingesta semántica (ECS/Batch, una ejecución por sourceFile)",
+      "default_range": "origin/main..origin/develop",
+      "prod_trigger": "Azure Pipelines: main → DEV; tag v* → PRO (CFN ai-tutor-ingestor-pro). Sin tags en el clon: confirmar ritual de tagging",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": "pnpm lint",
+      "lint_files": "pnpm exec eslint",
+      "typecheck": "pnpm run type-check",
+      "test": "pnpm test",
+      "extra_checks": {},
+      "features": ["directus-model", "deploy-templates", "committed-dist"],
+      "checklist_sections": ["semantic-pdf-serverless", "workers"]
+    },
+    "pdf-remediation": {
+      "dir": "pdf-remediation",
+      "role": "Worker de remediación PDF/UA (AWS Batch, lanzado por nimrod-api)",
+      "default_range": "origin/main..origin/develop",
+      "prod_trigger": "imagen Docker construida fuera del repo; nimrod-api la lanza vía Batch SubmitJob",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": null,
+      "lint_files": null,
+      "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit --pretty false",
+      "test": "pnpm test",
+      "extra_checks": {},
+      "features": ["directus-model"],
+      "checklist_sections": ["pdf-remediation", "workers"]
+    },
+    "translate-documents": {
+      "dir": "translate-documents",
+      "role": "Worker de traducción de documentos IDML/DOCX/PPTX/XLSX (ECS Fargate)",
+      "default_range": "origin/main..origin/develop",
+      "range_note": "develop y main suelen estar alineados y releases va por detrás; la última etiqueta es v2.0.0 sin tagging automático. Si el rango sale vacío, proponer v2.0.0..origin/main o origin/releases..origin/main.",
+      "prod_trigger": "imagen a ECR y Task Definition ECS; sin pipeline en el repo",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": "pnpm run lint",
+      "lint_files": "pnpm exec eslint",
+      "typecheck": "pnpm run type-check",
+      "test": "pnpm exec vitest run --reporter=dot",
+      "extra_checks": {},
+      "features": ["directus-model"],
+      "checklist_sections": ["translate-documents", "workers"]
+    },
+    "bulk-url-process": {
+      "dir": "bulk-url-process",
+      "role": "Worker de ingesta masiva de URLs / Confluence / Jira (AWS Batch)",
+      "default_range": "origin/main..origin/develop",
+      "prod_trigger": "Azure Pipelines: main → DEV; tag v* → PRO (Batch AITutorBulkUrlPro)",
+      "install": "pnpm install --frozen-lockfile --prefer-offline",
+      "lint": "pnpm exec eslint src --ext .ts",
+      "lint_files": "pnpm exec eslint",
+      "typecheck": "pnpm exec tsc -p tsconfig.json --noEmit --pretty false",
+      "test": null,
+      "test_note": "Sin suite unitaria. Si el diff toca src/tools/httpTimeout.ts o *_TIMEOUT_MS: pnpm build && pnpm test:timeouts && pnpm test:timeouts:extra (~2 min).",
+      "extra_checks": {},
+      "features": ["directus-model", "deploy-templates"],
+      "checklist_sections": ["bulk-url-process", "workers"]
+    }
+  }
+}

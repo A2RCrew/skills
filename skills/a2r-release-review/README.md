@@ -1,55 +1,59 @@
 # a2r-release-review
 
-Revisión de release **verificada** para los repositorios de A2R antes de subir a producción
-(`main` / `releases`). Sustituye al bot externo de code review: sin coste por uso, sin límite de
-ficheros, y con conocimiento de las reglas propias del repo (migraciones Directus, TTS V2,
-issues Linear, i18n).
+Revisión de release **conversacional, verificada y orientada a casos de uso** para los seis repos
+que A2R despliega: `nimrod-multitenant`, `nimrod-api`, `semantic-pdf-serverless`, `pdf-remediation`,
+`translate-documents` y `bulk-url-process`. Sustituye al bot externo de code review: sin coste por
+uso, sin límite de ficheros, y con las reglas propias de cada repo (migraciones Directus, TTS V2,
+timeouts de workers, contratos cruzados entre front, API y workers).
 
 ```
-/a2r-release-review                  # origin/main..HEAD (lo pendiente de producción)
-/a2r-release-review v2.54.0          # desde ese tag hasta HEAD
-/a2r-release-review origin/main..origin/develop --skip-tests
+/a2r-release-review                                  # pre-escaneo + entrevista
+/a2r-release-review --repos nimrod-multitenant,nimrod-api --migrations --depth detallado
+/a2r-release-review --yes                            # modo CI: sin preguntas, recomendaciones del pre-escaneo
 ```
 
 ## Principio
 
 > Nada entra en el informe sin evidencia ejecutada. Lo que no se puede comprobar se declara.
 
-La nota 1-5 tiene dos partes: un **techo calculado** por fórmula a partir de gates, checklist y
-hallazgos confirmados, y un **veredicto del revisor** que siempre es ≤ techo. El modelo puede
-bajar la nota, nunca subirla.
+La nota 1-5 se calcula por caso de uso y global: un **techo** por fórmula (gates, checklist,
+hallazgos confirmados) y un **veredicto** del revisor siempre ≤ techo.
 
 ## Flujo
 
 ```mermaid
 flowchart TD
-    A[/"Rango git<br/>origin/main..HEAD"/] --> F0
+    P["Pre-escaneo<br/>6 repos · rangos · casos de uso · migraciones pendientes"] --> E
 
-    subgraph F0["Fase 0 · Recolección determinista (sin modelo)"]
+    subgraph E["Entrevista (recomienda en cada pregunta)"]
         direction LR
-        F0a["diff · commits · áreas"] --> F0b["lint · tsc · circular · vitest"] --> F0c["checks migraciones · i18n"] --> F0d["señales grep<br/>secretos · accessLevel · env · migrate"]
+        E1["¿Qué repos?"] --> E2["¿Migraciones en profundidad?"] --> E3["¿Informe breve o detallado?"] --> E4["¿Rango / tests?"]
     end
 
-    F0 --> F1["Fase 1 · Partición por áreas<br/>migrations · tts-v2 · api · auth · data · actions · components · lib · i18n · scripts-ci"]
+    E --> C
+    subgraph C["Fase 0 por repo (determinista, paralelo)"]
+        direction LR
+        C1["diff · commits · issues"] --> C2["lint · typecheck · tests · extra"] --> C3["checks migraciones · i18n · señales grep"]
+    end
 
-    F1 --> R1["Revisor<br/>migrations"] & R2["Revisor<br/>tts-v2"] & R3["Revisor<br/>api / auth"] & R4["Revisor<br/>…"]
+    C --> U["Partición por CASO DE USO<br/>(une front + API + workers)"]
+    U --> R1["Revisor<br/>acciones personalizadas"] & R2["Revisor<br/>ingesta"] & R3["Revisor<br/>pdf"] & R4["Revisor<br/>…"]
+    C --> M["Revisor de migraciones<br/>consumidores · orden de despliegue"]
 
-    R1 & R2 & R3 & R4 --> P["Hallazgos propuestos<br/>fichero:línea + comando"]
+    R1 & R2 & R3 & R4 & M --> H["Hallazgos<br/>repo:fichero:línea + comando"]
+    H --> V1["Verificador A"] & V2["Verificador B"] & V3["Verificador …"]
+    V1 & V2 & V3 --> D{Veredicto}
+    D -->|CONFIRMED| OK["Confirmados"]
+    D -->|PLAUSIBLE| PL["Plausibles"]
+    D -->|REFUTED| RF["Refutados"]
 
-    P --> V1["Verificador A"] & V2["Verificador B"] & V3["Verificador …"]
-
-    V1 & V2 & V3 --> C{Veredicto}
-    C -->|CONFIRMED| OK["Hallazgos confirmados"]
-    C -->|PLAUSIBLE| PL["Plausibles<br/>(no refutados)"]
-    C -->|REFUTED| RF["Refutados"]
-
-    F0 --> CL["Fase 4 · Checklist del repo<br/>34 reglas · PASA / FALLA / N.A. / NO VERIFICABLE"]
+    C --> CL["Checklist común · por repo · cruzada"]
     R1 & R2 & R3 & R4 --> CL
 
-    OK & PL & CL --> S["Fase 5 · Techo por fórmula<br/>+ veredicto ≤ techo + confianza"]
-    S --> REP[/"report.md + report.json"/]
+    OK & PL & CL & M --> S["Techo por caso y global<br/>veredicto ≤ techo · confianza"]
+    S --> REP[/"Informe por caso de uso<br/>qué se sube · nota · secuencia de despliegue"/]
 
-    style F0 fill:#eef3f8,stroke:#5b7a9d
+    style C fill:#eef3f8,stroke:#5b7a9d
     style OK fill:#e6f4ea,stroke:#2e7d32
     style PL fill:#fff8e1,stroke:#f9a825
     style RF fill:#f5f5f5,stroke:#9e9e9e
@@ -60,34 +64,43 @@ flowchart TD
 
 | # | Fase | Quién | Qué produce |
 |---|---|---|---|
-| 0 | Recolección | `assets/collect.sh` | `meta.json`, diff, commits sin `A2R-nnn`, resultado de lint/tsc/circular/vitest, checks de migraciones, paridad i18n de claves nuevas, señales por grep |
-| 1 | Partición | orquestador | un lote por área (≤25 ficheros) |
-| 2 | Revisión | subagentes en paralelo, uno por área | hallazgos con `fichero:línea`, `claim` y `evidence_cmd`; checklist de su área |
-| 3 | Verificación adversaria | subagentes distintos de los revisores | `CONFIRMED` / `REFUTED` / `PLAUSIBLE` con los comandos ejecutados |
-| 4 | Checklist | orquestador + revisores | 34 reglas de `references/checklist.md` con evidencia |
-| 5 | Nota | fórmula de `references/rubric.md` + veredicto | techo, nota, confianza |
-| 6 | Informe | plantilla `assets/report.template.md` | `report.md` y `report.json` fuera del repo |
+| 0 | Pre-escaneo | `assets/prescan.sh` | por repo: rango pendiente, commits, ficheros, migraciones, casos de uso; recomendación de profundidad |
+| 1 | Entrevista | `AskUserQuestion` | repos, migraciones sí/no, breve/detallado, rango, tests; cada opción con dato y recomendación |
+| 2 | Recolección | `assets/collect.sh` por repo | `meta.json`, gates, señales, `usecases.tsv`, contratos Directus |
+| 3 | Partición | orquestador | un lote por caso de uso cruzando repos |
+| 4 | Revisión | subagente por caso (+ revisor de migraciones) | hallazgos con evidencia, consistencia cruzada, «qué se sube» |
+| 5 | Verificación | subagentes distintos | CONFIRMED / REFUTED / PLAUSIBLE |
+| 6 | Checklist | orquestador + revisores | reglas comunes, por repo y cruzadas |
+| 7 | Nota | `references/rubric.md` | techo por caso y global, veredicto, confianza |
+| 8 | Informe | `assets/report.template.md` | breve o detallado, por caso de uso; `report.json` |
+
+## Casos de uso
+
+Los 14 de la etiqueta «Caso de uso» de Linear, con owner: TTS-STT, Traducciones, Ingesta,
+Acciones personalizadas, Chatbots, Revisión de estilo, PDF, Evaluaciones, Generación de preguntas,
+Imágenes, Dashboard, Auth, SDC (sin código en estos repos) y Transversal (`plataforma`). Los globs
+por repo viven en `references/use-cases.json`; los workers enteros pertenecen a un caso
+(semantic-pdf y bulk-url → Ingesta, pdf-remediation → PDF, translate-documents → Traducciones).
 
 ## Escala
 
-| Nota | Lectura para el equipo |
+| Nota | Lectura |
 |---|---|
 | 5 | Sube. Nada confirmado, gates verdes, checklist limpia. |
 | 4 | Sube con los menores anotados en la issue de release. |
-| 3 | Sube solo tras corregir o aceptar explícitamente lo mayor. |
+| 3 | Sube tras corregir o aceptar lo mayor, con el orden de despliegue escrito. |
 | 2 | No sube. Bloqueante confirmado o gate rojo. |
-| 1 | No sube. Riesgo de tenant, datos o seguridad. |
+| 1 | No sube. Riesgo de tenant, datos, seguridad o migración peligrosa. |
 
 ## Límites
 
-- Solo lectura: no edita, no commitea, no ejecuta `pnpm run migrate`, no toca ningún Directus.
-- Certifica la ausencia de los fallos que sabemos nombrar, no la ausencia de fallos. No sustituye
-  a los tests.
-- Lo que no se puede verificar en local (permisos reales con rol `Default`, orden de despliegue
-  frente a `nimrod-api`, efecto sobre datos de cada tenant) se lista siempre en «No verificable».
+- Solo lectura en todos los repos. Nunca ejecuta migraciones ni toca Directus.
+- Certifica la ausencia de los fallos que sabemos nombrar, no la ausencia de fallos.
+- No verificable en local, y así se declara: permisos reales con rol `Default`, efecto de una
+  migración sobre datos de cada tenant, que la imagen de un worker se haya publicado.
 
 ## Camino a CI
 
-La entrada (rango) y la salida (`report.json`) son el contrato para una GitHub Action con
-`claude -p` sobre PR a `main` y tag `v*`. Los cambios de reglas van a `references/checklist.md`
-y `references/rubric.md`, nunca al prompt suelto.
+`--yes` desactiva la entrevista y aplica las recomendaciones. El contrato es repos y rangos de
+entrada y `report.json` de salida, para una GitHub Action con `claude -p` sobre PR a `main` y tag
+`v*`. Reglas en `references/`, nunca en el prompt suelto.

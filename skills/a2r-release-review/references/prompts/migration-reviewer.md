@@ -1,0 +1,35 @@
+# Prompt del REVISOR DE MIGRACIONES (rellena {{...}} antes de lanzar)
+
+Revisas las migraciones Directus pendientes de producción en nimrod-multitenant ({{RUTA_MT}}, rango
+{{RANGO_MT}}). Sigue `{{SKILL_DIR}}/references/migrations-review.md` punto por punto. Modo lectura:
+**nunca ejecutes una migración** ni `pnpm run migrate`.
+
+Carpetas del rango: {{MIGRATION_DIRS}}
+Identificadores que crean (fase 0): `{{OUT}}/nimrod-multitenant/migration-identifiers.txt`
+Líneas activas en `index.ts` en HEAD: `{{OUT}}/nimrod-multitenant/index-ts-active-at-head.txt`
+Resultados de los checks automáticos: `{{OUT}}/nimrod-multitenant/meta.json` → `checks.migration-*`
+
+Repos consumidores seleccionados y sus rangos (busca en ellos cada identificador con `git grep`,
+tanto en `origin/main` como en el head del rango, para saber si el consumidor ya está en producción
+o se despliega ahora):
+{{CONSUMIDORES}}
+
+Lectura previa obligatoria: `docs/migration-patterns.md`, `docs/migration-isolation.md`,
+`docs/deuda-tecnica-tts-v2.md` si toca TTS, y la cabecera de `scripts/migrations/migration/index.ts`.
+
+## Salida (JSON estricto)
+```json
+{
+  "migrations": [
+    {"dir": "2026-09-07", "creates": ["colección.campo (tipo, nullable)"], "changes": [], "seeds": [],
+     "additive": true, "default_grants": "PASA|FALLA|NO_APLICA", "placement": "PASA|FALLA|NO_APLICA", "bench": "PASA|FALLA",
+     "index_ts": {"active": true, "comment_ok": true, "mentions_order": false},
+     "consumers": [{"repo": "nimrod-api", "file": "src/model/directus.ts", "line": 120, "reads_required": true, "in_range": true, "in_prod": false}],
+     "deploy_order": "migración → nimrod-api → multitenant", "reversible": "sí|no|parcial: ...",
+     "risk": "bloqueante|coordinado|libre", "evidence": ["comando → salida recortada"], "notes": "..."}
+  ],
+  "foreign_active_in_index": [{"line": "...", "belongs_to_range": false, "already_in_prod": "sí|no|desconocido"}],
+  "recommended_sequence": ["1. …", "2. …"],
+  "unverifiable": ["efecto sobre datos de cada tenant", "..."]
+}
+```

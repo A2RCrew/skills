@@ -89,7 +89,7 @@
     {
       "name": "a2r-release-review",
       "source": "./skills/a2r-release-review",
-      "description": "Revisión de release verificada antes de subir a producción (main/releases): gates deterministas, revisores por área, verificador adversario, checklist del repo y nota 1-5 con techo calculado. Solo lectura.",
+      "description": "Revisión de release conversacional y verificada para los repos de despliegue de A2R: entrevista, gates por repo, revisión por caso de uso cruzando front/API/workers, verificador adversario y nota 1-5 con techo calculado. Solo lectura.",
       "category": "development",
       "tags": ["a2r", "release", "code-review", "verificacion", "calidad"]
     }
