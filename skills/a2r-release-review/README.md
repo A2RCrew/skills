@@ -92,6 +92,27 @@ por repo viven en `references/use-cases.json`; los workers enteros pertenecen a 
 | 2 | No sube. Bloqueante confirmado o gate rojo. |
 | 1 | No sube. Riesgo de tenant, datos, seguridad o migración peligrosa. |
 
+## Dónde acaban los informes
+
+Cada revisión se archiva **en local**, nunca en un repositorio:
+
+```
+<directorio de los repos>/release-reviews/
+  revision-2026-09-08-v2.55.0/
+    revision-2026-09-08-v2.55.0.html   ← el informe, y lo que se publica como artefacto
+    revision-2026-09-08-v2.55.0.md
+    datos/                             ← meta.json y casos de uso por repo, JSON de revisores
+    redaccion.log
+    artifact-url.txt
+```
+
+La versión del nombre sale del `package.json` de **nimrod-multitenant**: es el front principal y su
+número es la versión del producto. Lo hace `assets/archive.sh`, que además pasa el redactor de
+secretos y deja fuera `diff.patch` y `added-lines.txt`, que llevan el diff en crudo.
+
+`A2RCrew/skills` es público, así que los informes no se suben ahí: contienen hallazgos de
+seguridad, nombres de tenants y rutas internas.
+
 ## Secretos
 
 Un informe de release circula por Slack, Linear y a veces por un artefacto compartido, así que
