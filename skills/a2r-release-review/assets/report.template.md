@@ -26,6 +26,13 @@
 
 {{SECUENCIA}}
 
+## Secretos detectados
+
+{{SECRETOS}}
+<!-- Una fila por credencial: fichero:línea · tipo · huella · ¿introducida en este rango o preexistente? ·
+     acción (rotar). NUNCA el valor. Si no hay ninguna: «Ninguno. El escáner no marcó líneas añadidas y
+     el redactor no tuvo que enmascarar nada en este informe.» -->
+
 ## Bloqueantes y mayores confirmados
 
 {{CONFIRMADOS_CRITICOS_MAYORES}}

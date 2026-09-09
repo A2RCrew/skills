@@ -87,7 +87,10 @@ sig() { grep -nE "$2" "$OUT/added-lines.txt" > "$OUT/signal-$1.txt" 2>/dev/null 
 sig destructive-migration '(deleteField|deleteCollection|deleteItems?\(|deleteRelation|dropField|DROP (TABLE|COLUMN)|updateField\([^)]*type)'
 sig accesslevel-no-slash 'accessLevel["'"'"']?\s*[:=]\s*["'"'"'][a-z0-9_-]+["'"'"']'
 sig english-error-match '(includes|match|test|startsWith|indexOf)\(\s*[/"'"'"'][^)]*(does not exist|do not exist|not found|forbidden|permission)'
-sig secrets '(sk-[A-Za-z0-9]{20,}|sk-ant-[A-Za-z0-9-]{20,}|sk-or-[A-Za-z0-9-]{20,}|AKIA[0-9A-Z]{16}|eyJ[A-Za-z0-9_-]{40,}\.[A-Za-z0-9_-]{20,}|xox[bpa]-[A-Za-z0-9-]+|-----BEGIN [A-Z ]*PRIVATE KEY)'
+# Secretos: se registra QUÉ y DÓNDE, nunca el valor. signal-secrets.txt lleva fichero, línea y tipo;
+# el valor solo existe como huella (4 hex de sha256) para poder correlacionar apariciones.
+node "$HERE/scanSecrets.mjs" "$REPO_DIR" "$MERGE_BASE" "$HEAD_SHA" "$OUT" >/dev/null 2>>"$OUT/scan-secrets.log" || true
+echo secrets$'\t'"$(wc -l < "$OUT/signal-secrets.txt" 2>/dev/null | tr -d ' ' || echo 0)" >> "$OUT/signals.tsv"
 grep -nE '(pnpm|npm|yarn)\s+run\s+migrate\b' "$OUT/added-lines.txt" | grep -vE '^[0-9]+:\+\s*(\*|//|#|-|\|)' > "$OUT/signal-run-migrate.txt" || true
 echo run-migrate$'\t'"$(wc -l < "$OUT/signal-run-migrate.txt" | tr -d ' ')" >> "$OUT/signals.tsv"
 sig console-log 'console\.(log|debug|error|warn)\('
@@ -175,4 +178,8 @@ const meta={repo:process.argv[2],repo_dir:process.argv[3],range:process.argv[4],
  use_cases:uc, checks};
 fs.writeFileSync(`${out}/meta.json`, JSON.stringify(meta,null,2)+"\n"); console.log(JSON.stringify(meta.checks));
 ' "$OUT" "$REPO_KEY" "$REPO_DIR" "$RANGE" "$BASE_SHA" "$HEAD_SHA" "$MERGE_BASE" "$VERSION" "$LAST_TAG" "$DIRTY" "${#MIG_FILES[@]}" "${INDEX_CHANGED:-0}" "${PKG_CHANGED:-0}" "${LOCK_CHANGED:-0}" "$DEPS_CHANGED" "${DIST_CHANGED:-0}" "${DEPLOY_CHANGED:-0}" "${DOCKERFILE_CHANGED:-0}"
+if [ -s "$OUT/signal-secrets.txt" ]; then
+  log "⚠ [$REPO_KEY] posibles secretos en el diff: $(wc -l < "$OUT/signal-secrets.txt" | tr -d ' ') (ver signal-secrets.txt: tipo y ubicación, sin valores)"
+fi
 log "✔ [$REPO_KEY] fase 0 completada → $OUT"
+log "  ℹ $OUT/diff.patch y added-lines.txt contienen el diff en crudo: son material de trabajo, NUNCA se copian al informe."

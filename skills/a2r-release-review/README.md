@@ -92,6 +92,28 @@ por repo viven en `references/use-cases.json`; los workers enteros pertenecen a 
 | 2 | No sube. Bloqueante confirmado o gate rojo. |
 | 1 | No sube. Riesgo de tenant, datos, seguridad o migración peligrosa. |
 
+## Secretos
+
+Un informe de release circula por Slack, Linear y a veces por un artefacto compartido, así que
+**nunca lleva el valor de una credencial**. Tres capas lo garantizan:
+
+1. **La recolección no los guarda.** `assets/scanSecrets.mjs` recorre las líneas añadidas y escribe
+   solo `fichero:línea · tipo · huella · longitud`. La huella son cuatro hexadecimales de SHA-256:
+   sirve para ver si la misma credencial aparece en dos sitios, y no revela nada.
+2. **Los revisores no los citan.** Los prompts obligan a demostrar la existencia con `grep -c` o
+   `grep -o` del nombre de la variable, nunca con un comando que imprima la línea.
+3. **El redactor es la última red.** `assets/redact.mjs` pasa por encima de `report.md` y
+   `report.json` y enmascara claves de OpenAI, Anthropic, OpenRouter, ElevenLabs, GitHub, Slack,
+   Google y AWS, JWT, cabeceras `Bearer`, claves privadas, URL con contraseña y asignaciones a
+   variables cuyo nombre contiene token, secret, password o api key. Distingue marcadores de ejemplo
+   (`your-token-here`, `changeme`) e identificadores (`x-ratelimit-remaining-tokens`). Sale con
+   código 3 si tuvo que enmascarar algo, y eso se trata como un fallo de la revisión, no como una
+   salvaguarda que funcionó.
+
+El informe reporta la credencial por lo que es: «clave de OpenAI en claro en
+`deploy/config/template_pro.json:48`, huella #7dfb, preexistente, rotar». Los artefactos de fase 0
+(`diff.patch`, `added-lines.txt`) contienen el diff en crudo, se quedan en local y no se publican.
+
 ## Límites
 
 - Solo lectura en todos los repos. Nunca ejecuta migraciones ni toca Directus.

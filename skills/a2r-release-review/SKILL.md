@@ -45,7 +45,12 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
    las dudas se resuelven con la opción recomendada y se anotan en «Supuestos».
 5. **El informe habla de casos de uso**, no de repos. Los repos aparecen como columna, no como capítulo.
-6. Idioma: español de España. Rutas y comandos literales.
+6. **Ningún secreto sale en el informe, nunca.** Un hallazgo de credencial dice **qué** es y **dónde**
+   está (fichero:línea, tipo, y la huella corta que da la fase 0), jamás el valor, ni entero ni
+   truncado ni ofuscado a mano. Tampoco se pegan valores en `evidence_output`: se pega el comando y
+   el recuento (`grep -c`), no la línea. Antes de escribir `report.md` y `report.json` se pasa
+   `assets/redact.mjs`, que es la última red, no la primera.
+7. Idioma: español de España. Rutas y comandos literales.
 
 ## Argumentos
 
@@ -114,6 +119,15 @@ veredicto ≤ techo con dos líneas.
 
 ### Fase 8 · Informe
 Rellena `assets/report.template.md` hasta la marca si es **breve**, completo si es **detallado**.
+**Antes de dar el informe por bueno**, pásalo por el redactor y adjunta su inventario:
+```bash
+node "$SKILL_DIR/assets/redact.mjs" "$OUT/report.md"   --in-place
+node "$SKILL_DIR/assets/redact.mjs" "$OUT/report.json" --in-place
+```
+Sale con código 3 si redactó algo. Si redacta, **es un fallo de la revisión, no una salvaguarda que
+funcionó**: localiza qué agente pegó el valor, corrígelo en el texto y deja constancia en el informe
+(sección «Secretos detectados»). Los artefactos de fase 0 (`diff.patch`, `added-lines.txt`) contienen
+el diff en crudo y nunca se copian al informe, ni se adjuntan, ni se publican.
 Escribe `report.json`:
 ```json
 {"date","repos":{"<key>":{"range","head_sha","version","gates":{}}},"depth","score","cap","confidence",
