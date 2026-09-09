@@ -5,8 +5,9 @@
 // y escribe en stderr un inventario de qué se redactó (tipo, huella, cuántas veces).
 // La huella son 4 hex de sha256 del valor: permite correlacionar apariciones sin revelar nada.
 // Código de salida: 0 sin secretos, 3 si redactó algo (para poder usarlo como puerta).
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, realpathSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 const file = args[0];
@@ -72,7 +73,15 @@ export function redact(input) {
   return { text, inventory: Object.values(inventory) };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+// ¿Se ha invocado como programa? Comparar rutas reales: si la skill se usa por un symlink
+// (~/.claude/skills/... → el repo), process.argv[1] e import.meta.url NO coinciden y el bloque
+// se saltaba en silencio, dejando el informe sin redactar.
+const invokedAsScript = (() => {
+  if (!process.argv[1]) return false;
+  try { return realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url)); }
+  catch { return false; }
+})();
+if (invokedAsScript) {
   const input = file === '-' ? readFileSync(0, 'utf8') : readFileSync(file, 'utf8');
   const { text, inventory } = redact(input);
   if (inPlace && file !== '-') writeFileSync(file, text); else if (!asJson) process.stdout.write(text);
