@@ -26,7 +26,9 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `assets/prescan.sh` | pre-escaneo de todos los repos para la entrevista |
 | `assets/collect.sh` | fase 0 determinista de un repo (gates, señales, casos de uso) |
 | `assets/usecases.mjs` | clasifica ficheros y commits por caso de uso |
-| `assets/report.template.md` | plantilla del informe (breve = hasta la marca; detallado = todo) |
+| `assets/report.template.html` | **plantilla del informe: es el entregable**, se publica como artefacto |
+| `assets/report.template.md` | misma información en markdown, para diffs y para CI |
+| `assets/archive.sh` | archiva la revisión en `<repos-root>/release-reviews/` |
 | `references/repos.json` | configuración por repo: rango por defecto, comandos, features |
 | `references/use-cases.json` | los 14 casos de uso de Linear con globs por repo |
 | `references/checklist.md` | reglas comunes, por repo y cruzadas, con evidencia y severidad |
@@ -63,7 +65,8 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `--depth breve|detallado` | salta la pregunta de profundidad |
 | `--skip-tests` | fase 0 sin suites (G4 NO VERIFICABLE, techo ≤4) |
 | `--yes` | sin entrevista: recomendaciones del pre-escaneo (modo CI) |
-| `--out <dir>` | dónde dejar informe y artefactos |
+| `--out <dir>` | directorio de trabajo (por defecto `~/.claude/a2r-release-review/reports/<fecha>/`) |
+| `--no-archive` | no archivar en `release-reviews/` ni publicar artefacto |
 
 `REPOS_ROOT` = directorio padre del repo desde el que se invoca (o variable de entorno). Salida por
 defecto: `~/.claude/a2r-release-review/reports/<fecha>-<head7s>/` con `report.md`, `report.json` y una
@@ -118,7 +121,12 @@ más gates de sus repos), techo global = mínimo con los ajustes de migraciones 
 veredicto ≤ techo con dos líneas.
 
 ### Fase 8 · Informe
-Rellena `assets/report.template.md` hasta la marca si es **breve**, completo si es **detallado**.
+**El entregable es el artefacto**: rellena `assets/report.template.html`, que ya trae el diseño y las
+instrucciones de cada bloque en comentarios. No rediseñes la página; sustituye los `{{...}}` y borra
+los comentarios. Guarda el resultado como `$OUT/report.html`. Un informe **breve** deja fuera los
+menores, los refutados y los gates; uno **detallado** los incluye todos.
+Escribe además `$OUT/report.md` (misma información, para diffs y CI) a partir de
+`assets/report.template.md`.
 **Antes de dar el informe por bueno**, pásalo por el redactor y adjunta su inventario:
 ```bash
 node "$SKILL_DIR/assets/redact.mjs" "$OUT/report.md"   --in-place
@@ -134,8 +142,22 @@ Escribe `report.json`:
  "use_cases":{"<slug>":{"what_ships","owner","repos":[],"issues":[],"cap","score","findings":{"confirmed":[],"plausible":[]}}},
  "migrations":{"reviewed":true,"items":[],"sequence":[]},"checklist":[],"refuted":[],"unverifiable":[],"coverage":{}}
 ```
-Respuesta al usuario, concisa: nota global, techo, confianza, ruta del informe, tabla de una línea
-por caso de uso (qué se sube · nota · bloqueantes) y la secuencia de despliegue. Nada más.
+### Fase 9 · Archivo y publicación
+```bash
+DEST=$(bash "$SKILL_DIR/assets/archive.sh" "$OUT" "$REPOS_ROOT")
+```
+Archiva en `<repos-root>/release-reviews/revision-<fecha>-v<versión>/`. La versión sale **siempre**
+del `package.json` de nimrod-multitenant: es el front principal y su número es la versión del
+producto. El script pasa el redactor como puerta y no copia `diff.patch` ni `added-lines.txt`.
+Después publica `report.html` como artefacto con la herramienta Artifact (título estable
+«Veredicto de Release», favicon 🚦) y guarda la URL en `$DEST/artifact-url.txt`.
+
+Nada de esto se sube a ningún repositorio: `A2RCrew/skills` es público y estos informes llevan
+hallazgos de seguridad, nombres de tenants y rutas internas.
+
+Respuesta al usuario, concisa: nota global, techo, confianza, enlace del artefacto y ruta del
+archivo, tabla de una línea por caso de uso (qué se sube · nota · bloqueantes) y la secuencia de
+despliegue. Nada más.
 
 ## Camino a CI
 
