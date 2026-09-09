@@ -19,7 +19,8 @@ Severidad si falla: **C** crítica · **M** mayor · **m** menor (definiciones e
 | W1 | Todo commit cita `A2R-nnn` (él o el merge que lo trajo) | `commits-without-issue.tsv` vacío; `feat`/`fix` sin issue → M, otros → m | m/M |
 | W2 | Commits siguen Conventional Commits (release-please los necesita para no perder cambios) | `commits-nonconventional.tsv` vacío | m |
 | W3 | Nada añade `pnpm run migrate` a pelo en scripts o CI | `signal-run-migrate.txt` vacío | M |
-| S1 | Sin secretos en el diff | `signal-secrets.txt` vacío o cada match refutado (fixture, ejemplo) | C |
+| S1 | Sin secretos en el diff | `signal-secrets.txt` vacío, o cada fila refutada por el verificador leyendo el contexto (fixture, ejemplo, placeholder). El fichero trae `fichero:línea`, tipo y huella: **nunca el valor**, y así se reporta | C |
+| S1b | El informe no contiene ningún valor de credencial | `node assets/redact.mjs report.md --in-place` sale 0. Si sale 3, el informe traía un valor: FALLA, se corrige el texto y se anota | C |
 | S2 | Variables de entorno nuevas definidas en `.env*` o en `deploy/` | `env-new-undefined.txt` vacío | M |
 | S3 | Sin uso nuevo de token admin / `admin_access` en rutas de usuario | `signal-admin-token.txt`; verificador lee contexto | C |
 | Q1 | Sin `@ts-ignore` / `as any` / `: any` / `eslint-disable` nuevos sin justificación | `signal-ts-ignore.txt`, `signal-any-type.txt` | m |
@@ -80,7 +81,7 @@ Severidad si falla: **C** crítica · **M** mayor · **m** menor (definiciones e
 | K6 | Escrituras de estado Directus vía helpers del repo (`setSourceFileStatus`, lease de ingesta, `updateItem` con condición de ownership) | revisor | M |
 | K7 | `dist/` no cambia salvo build intencional (semantic-pdf lo versiona) | `counts.dist_changed` con `committed-dist`; si cambia sin cambio en `src/` → FALLA | m |
 | K8 | Dockerfile duplicado (raíz y `deploy/docker/`) cambian juntos cuando uno cambia | `counts.dockerfile_changed` es 0 o 2 en repos con duplicado | M |
-| K9 | Ficheros de parámetros en `deploy/config/` no introducen secretos en claro | `signal-secrets.txt` sobre `deploy/`; si el fichero ya los contiene, anotar como deuda crítica preexistente | C |
+| K9 | Ficheros de parámetros en `deploy/config/` no introducen secretos en claro | filas de `signal-secrets.txt` cuyo fichero empieza por `deploy/`; si ya los contenía, anotar como deuda crítica preexistente **nombrando el fichero y el tipo de credencial, nunca el valor**, y recomendar rotación | C |
 
 ## semantic-pdf-serverless
 

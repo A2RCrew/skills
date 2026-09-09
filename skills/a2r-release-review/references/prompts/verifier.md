@@ -35,3 +35,19 @@ Hallazgos propuestos por revisores (nunca eres el agente que los propuso):
   "new_findings": []
 }
 ```
+
+## Secretos (regla dura, sin excepciones)
+
+Si te cruzas con una credencial (clave de API, token, contraseña, clave privada, URL con
+usuario y contraseña), **no la copies a ningún sitio**: ni al JSON, ni a `evidence_output`, ni al
+comando de evidencia, ni al resumen. Repórtala por lo que es y dónde está:
+
+- `title`: «Clave de OpenAI en claro en deploy/config/template_pro.json»
+- `evidence_cmd`: usa `grep -c` o `grep -n -o '"OPENAI_API_KEY"'` — algo que demuestre la existencia
+  sin imprimir el valor. Nunca `cat` ni `grep` que devuelva la línea entera.
+- `evidence_output`: el recuento o el nombre de la variable, más la huella que da la fase 0
+  (`signal-secrets.txt`, columna `#xxxx`). Nunca el valor, ni truncado ni con asteriscos puestos a mano.
+- Añade siempre al `fix_hint` que la credencial debe considerarse comprometida y rotarse.
+
+Si necesitas comprobar que dos apariciones son la misma credencial, compara las huellas de
+`signal-secrets.txt`; no compares valores.
