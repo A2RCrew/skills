@@ -51,3 +51,26 @@ comando de evidencia, ni al resumen. Repórtala por lo que es y dónde está:
 
 Si necesitas comprobar que dos apariciones son la misma credencial, compara las huellas de
 `signal-secrets.txt`; no compares valores.
+
+## Antes de confirmar una crítica: ¿es de esta release o es un patrón del repositorio?
+
+Un hallazgo grave que resulta ser **cómo se hacen las cosas aquí desde hace tiempo** no es un
+defecto de esta release. Antes de dejar una severidad crítica o mayor, **cuenta las ocurrencias
+previas al rango** con un comando y pégalo:
+
+```bash
+# ejemplo: el patrón del catch que no relanza
+git grep -l 'return {' <ruta> | wc -l
+git log --diff-filter=A --format=%ad --date=short -1 -- <primer fichero con el patrón>
+```
+
+Si hay **≥5 ocurrencias anteriores al rango**, marca el hallazgo así y baja la severidad a menor:
+
+```json
+"patron_sistemico": {"ocurrencias_previas": 92, "desde": "2024-12",
+  "comando": "git grep -lE 'ok:\\s*false' scripts/migrations/migration/*/*.ts | wc -l",
+  "riesgo_especifico_aqui": "esta migración concreta crea el permiso de sesión: si queda a medias, el tenant se queda sin login"}
+```
+
+Va a «Deuda técnica», no a bloqueantes. **El riesgo se informa igual**, incluida la consecuencia
+propia de este caso si la tiene; lo que no hace es secuestrar la nota de la release.

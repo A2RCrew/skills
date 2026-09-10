@@ -18,6 +18,20 @@ paso 2, antes de todo el código (ver `references/deployment-procedure.md`). Por
 - **La deuda heredada no puntúa.** Un hallazgo cuyo fichero no cambia en el rango se reporta en su
   sección y no baja la nota: se puntúa lo que se sube hoy. Los secretos son la excepción, se
   reportan siempre con la misma urgencia.
+- **Un patrón sistémico tampoco puntúa como si fuera nuevo.** Si el fichero sí cambia en el rango
+  pero reproduce una forma de hacer las cosas **que ya existe en el repositorio desde antes**, no es
+  un defecto de esta release: es deuda técnica. Baja a **menor** y va a la sección «Deuda técnica»
+  con su riesgo, no a bloqueantes. El umbral es mecánico: **≥5 ocurrencias previas al rango**,
+  contadas con un comando que se pega como evidencia.
+
+  El caso que motivó la regla: la migración 2026-09-08 devuelve `{ok:false}` en vez de relanzar,
+  y eso mismo lo hacen 92 ficheros de migración desde 2024-12. Puntuarlo como crítico convertía en
+  bloqueante de release cada vez que alguien tocase una migración, y una nota que siempre sale 1
+  deja de leerse.
+
+  La excepción: si el patrón, **en este caso concreto**, tiene una consecuencia que no tiene en los
+  otros 92 sitios (aquí deja un tenant sin login), eso se dice en la ficha de deuda técnica, en la
+  columna «qué puede provocar». Se informa del riesgo sin secuestrar la nota.
 
 ## Severidades
 
@@ -26,6 +40,9 @@ paso 2, antes de todo el código (ver `references/deployment-procedure.md`). Por
 | crítica | Puede tumbar un tenant o un worker en producción, perder o corromper datos, exponer secretos o saltarse permisos. Migración no aditiva o sin concesión a `Default`. Campo hecho a mano. Variable requerida sin definir en el despliegue. Contrato Directus/HTTP roto entre repos. |
 | mayor | Rompe una funcionalidad para usuarios; gate determinista rojo; ruta o worker sin validación; dependencia entre repos sin orden declarado; `feat`/`fix` sin issue Linear. |
 | menor | Deuda, estilo, logs, `as any`, commit sin formato, límite duplicado, doc desactualizada. |
+
+**Antes de asignar crítica o mayor, cuenta las ocurrencias previas.** Si el mismo patrón ya está en
+≥5 sitios anteriores al rango, no es de esta release: baja a menor y va a «Deuda técnica».
 
 ## Techo por caso de uso
 

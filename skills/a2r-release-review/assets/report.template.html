@@ -196,7 +196,21 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 <!-- Opcional. Mismo formato de .find con <span class="tag info">plausible</span> y un .fix que empiece
      por «Qué falta para decidirlo:». Omite la sección entera si no hay plausibles. -->
 
-{{SECCION_DEUDA_HEREDADA}}
+<section>
+  <h2>Deuda técnica</h2>
+  <p style="font-size:14px;color:var(--ink-2)">Lo que se arrastra desde antes de esta release. No baja la nota, porque no es lo que se sube hoy, pero sigue siendo un riesgo y por eso está aquí con lo que puede provocar.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Qué</th><th>Dónde y desde cuándo</th><th class="num">Sitios</th><th>Qué puede provocar</th><th>Recomendación</th></tr></thead>
+    <tbody>
+      {{FILAS_DEUDA_TECNICA}}
+      <!-- Dos clases de deuda, en la misma tabla:
+           · patrón sistémico: el fichero cambia en el rango pero la forma ya existía en ≥5 sitios previos
+           · deuda heredada: el fichero no cambia en el rango
+           Columna «Qué puede provocar»: la consecuencia concreta, incluida la propia de este caso si difiere
+           del resto de ocurrencias. Columna «Recomendación»: issue a abrir, o decisión a tomar por escrito. -->
+    </tbody>
+  </table></div>
+</section>
 
 <section>
   <h2>Menores confirmados</h2>

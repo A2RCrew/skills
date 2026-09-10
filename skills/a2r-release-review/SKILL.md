@@ -59,6 +59,9 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
    Los componentes generales **no tienen dueño**: no les pongas owner en el informe. Se nombra a
    quien firmó el cambio y de qué caso de uso salió. Un cambio que los degrade se reporta aunque
    su caso vaya limpio.
+5 ter. **Lo que se arrastra no es catastrófico.** Antes de confirmar una crítica, cuenta las
+   ocurrencias previas del mismo patrón: con ≥5 anteriores al rango es deuda técnica, baja a menor
+   y va a «Deuda técnica» con su riesgo. Se informa, no secuestra la nota.
 5 bis. **Este informe se lee ANTES de desplegar.** Una migración pendiente es la precondición
    normal, no un defecto: el procedimiento las ejecuta en el paso 2, antes de todo el código. Va a
    «Requisitos previos» y **no toca la nota**. Solo puntúa si el orden contradice el canónico, si

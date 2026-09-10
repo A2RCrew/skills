@@ -48,6 +48,12 @@
 |---|---|---|---|---|
 {{FILAS_PRECONDICIONES}}
 
+## Deuda técnica (no baja la nota)
+
+| Qué | Dónde y desde cuándo | Sitios | Qué puede provocar | Recomendación |
+|---|---|---|---|---|
+{{FILAS_DEUDA_TECNICA}}
+
 ## Bloqueantes y mayores confirmados
 
 {{CONFIRMADOS_CRITICOS_MAYORES}}
