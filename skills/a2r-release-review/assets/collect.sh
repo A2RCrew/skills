@@ -7,6 +7,10 @@
 #            SKIP_INSTALL=1, SKIP_TESTS=1, SKIP_LINT=1
 # Solo lee el repo y ejecuta checks. Nunca escribe en el árbol de trabajo ni en git.
 set -uo pipefail
+# pnpm en modo no interactivo: sin esto, tras un pull que cambie el lockfile pide confirmación para
+# purgar node_modules, aborta por no tener terminal (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY) y
+# tumba en cadena install, lint, typecheck y tests. Cualquier orden pnpm hace ese chequeo antes.
+export CI="${CI:-true}"
 REPO_KEY="${1:?repo-key}"; RANGE="${2:?rango git}"; OUT="${3:?dir salida}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CFG="${4:-$HERE/../references/repos.json}"
