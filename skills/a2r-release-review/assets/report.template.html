@@ -137,6 +137,17 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 </section>
 
 <section>
+  <h2>Requisitos previos</h2>
+  <p style="font-size:14px;color:var(--ink-2)">Esto no son problemas: es lo que el procedimiento de despliegue ya contempla. Se listan para que nadie se salte un paso, no para bajar la nota.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Qué</th><th>Lo necesita</th><th class="num">Paso</th><th>Orden declarado</th><th>Cómo verificarlo</th></tr></thead>
+    <tbody>
+      {{FILAS_PRECONDICIONES}}
+    </tbody>
+  </table></div>
+</section>
+
+<section>
   <h2>Lo que hay que arreglar antes de subir</h2>
   <div class="stack">
     {{HALLAZGOS_BLOQUEANTES}}
@@ -163,6 +174,8 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 {{SECCION_PLAUSIBLES}}
 <!-- Opcional. Mismo formato de .find con <span class="tag info">plausible</span> y un .fix que empiece
      por «Qué falta para decidirlo:». Omite la sección entera si no hay plausibles. -->
+
+{{SECCION_DEUDA_HEREDADA}}
 
 <section>
   <h2>Menores confirmados</h2>

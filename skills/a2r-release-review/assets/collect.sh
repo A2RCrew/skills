@@ -143,7 +143,15 @@ if has directus-model; then
 fi
 
 # ── Checks deterministas ────────────────────────────────────────────────────
-[ "${SKIP_INSTALL:-0}" = 1 ] || run install "$(cfg install)"
+# Dos `pnpm install` simultáneos contra el mismo almacén se pisan: uno decide purgar node_modules
+# mientras el otro escribe y el proceso muere sin dejar meta.json. Cerrojo por mkdir (atómico).
+if [ "${SKIP_INSTALL:-0}" != 1 ]; then
+  LOCK="${TMPDIR:-/tmp}/a2r-release-review-pnpm.lock"
+  for _ in $(seq 1 600); do mkdir "$LOCK" 2>/dev/null && break; sleep 1; done
+  trap 'rmdir "$LOCK" 2>/dev/null' EXIT INT TERM
+  run install "$(cfg install)"
+  rmdir "$LOCK" 2>/dev/null; trap - EXIT INT TERM
+fi
 if [ "${SKIP_LINT:-0}" != 1 ]; then
   run lint "$(cfg lint)"
   CHANGED_TS=(); while read -r p; do [ -f "$p" ] && CHANGED_TS+=("$p"); done < <(awk -F'\t' '$2!="D" {print $3}' "$OUT/areas.tsv" | grep -E '\.(ts|tsx|js|jsx|mjs)$' | grep -vE '^dist/' || true)

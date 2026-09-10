@@ -6,6 +6,19 @@ La nota se calcula **por caso de uso** y luego **global**. En ambos niveles hay 
 2. **Veredicto del revisor**: valor **≤ techo**, con dos líneas de justificación y confianza.
    Puede bajar, nunca subir.
 
+## Antes de puntuar: qué no es un hallazgo
+
+Este informe se lee **antes** de desplegar, y el procedimiento de A2R ejecuta las migraciones en el
+paso 2, antes de todo el código (ver `references/deployment-procedure.md`). Por tanto:
+
+- **Una migración pendiente no es un defecto.** Que una tarea pida un campo cuya migración aún no
+  ha corrido es la precondición normal. Va a «Requisitos previos», no a hallazgos, y **no toca la nota**.
+- **Sí es hallazgo** si el orden necesario contradice el canónico, si nadie lo declaró, si la
+  migración está mal hecha, o si retira algo que ya usa producción.
+- **La deuda heredada no puntúa.** Un hallazgo cuyo fichero no cambia en el rango se reporta en su
+  sección y no baja la nota: se puntúa lo que se sube hoy. Los secretos son la excepción, se
+  reportan siempre con la misma urgencia.
+
 ## Severidades
 
 | Severidad | Definición |
@@ -33,7 +46,8 @@ Se cuentan solo los hallazgos y fallos de checklist cuyos ficheros pertenecen al
 
 - Migración con riesgo **bloqueante** → 1 si es crítica (permisos, no aditiva), 2 si es mayor.
 - **Superficie compartida rota** (SH1, SH3 o SH6 en FALLA, confirmada) → 1 si arrastra a ≥3 casos de
-  uso o cruza repos; 2 en el resto. Esta regla existe porque el hallazgo vive en el caso de uso del
+  uso o cruza repos; 2 en el resto. **No cuenta** si el único motivo es que su migración está
+  pendiente y el orden canónico ya la cubre: eso es precondición. Esta regla existe porque el hallazgo vive en el caso de uso del
   fichero, pero el daño es de todos: sin ella, un cambio en la sesión o en el modelo de Directus se
   puntúa como si solo afectase a su carpeta.
 - **Superficie compartida declarada tocada y no contrastada** con su `rompedor_si` (SH2 NO VERIFICABLE) → ≤3.

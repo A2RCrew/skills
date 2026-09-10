@@ -37,6 +37,7 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `references/checklist.md` | reglas comunes, por repo y cruzadas, con evidencia y severidad |
 | `references/rubric.md` | severidades, techo por caso y global, confianza |
 | `references/migrations-review.md` | procedimiento de revisión profunda de migraciones |
+| `references/deployment-procedure.md` | **el orden canónico de despliegue y qué NO cuenta como hallazgo** |
 | `references/interview.md` | preguntas, opciones y regla de recomendación |
 | `references/prompts/*.md` | prompts de revisor por caso, de superficies compartidas, verificador y revisor de migraciones |
 
@@ -52,6 +53,12 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
    las dudas se resuelven con la opción recomendada y se anotan en «Supuestos».
 5. **El informe habla de casos de uso**, no de repos. Los repos aparecen como columna, no como capítulo.
+5 bis. **Este informe se lee ANTES de desplegar.** Una migración pendiente es la precondición
+   normal, no un defecto: el procedimiento las ejecuta en el paso 2, antes de todo el código. Va a
+   «Requisitos previos» y **no toca la nota**. Solo puntúa si el orden contradice el canónico, si
+   nadie lo declaró, si la migración está mal, o si retira algo que ya usa producción. Y la deuda
+   heredada (fichero sin cambios en el rango) se reporta sin bajar la nota. Ver
+   `references/deployment-procedure.md`.
 6. **Ningún secreto sale en el informe, nunca.** Un hallazgo de credencial dice **qué** es y **dónde**
    está (fichero:línea, tipo, y la huella corta que da la fase 0), jamás el valor, ni entero ni
    truncado ni ofuscado a mano. Tampoco se pegan valores en `evidence_output`: se pega el comando y

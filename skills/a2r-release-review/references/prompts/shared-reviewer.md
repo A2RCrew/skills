@@ -56,3 +56,31 @@ tiene que estar en el hallazgo, no solo en tu cabeza.
   "unverifiable": [{"topic": "…", "why": "…"}]
 }
 ```
+
+## Precondiciones de despliegue: no son hallazgos
+
+Este informe se lee **antes** de desplegar. El procedimiento de A2R (`references/deployment-procedure.md`)
+ejecuta en este orden: cerrar PRs de promoción → **migraciones de nimrod-multitenant** → workers en
+Fargate (translate-documents, semantic-pdf-serverless, pdf-remediation, bulk-url-process) →
+nimrod-api → el front.
+
+Las migraciones van **antes que todo el código**. Así que «esta tarea pide un campo cuya migración
+está pendiente» **no es un hallazgo**: es la precondición normal, y va al array `preconditions`.
+
+Sí lo anotas como hallazgo cuando:
+- el orden que el código necesita **contradice** el canónico (el código tendría que ir antes que la migración);
+- **nadie declaró** el orden, sobre todo si el consumidor es un worker compartido entre tenants;
+- la migración está **mal hecha**: no relanza errores, no es aditiva, no concede permisos, retipa un campo;
+- retira algo que **ya usa producción** (`origin/main` del otro repo).
+
+Y si el fichero del hallazgo **no cambia en el rango**, es deuda heredada: márcalo con
+`"inherited": true`. Se reportará, pero no baja la nota de esta release. Los secretos son la
+excepción: se reportan siempre igual.
+
+Añade a tu JSON:
+```json
+"preconditions": [
+  {"que": "migración 2026-09-08 crea canAccessCustomActionsV2", "necesaria_para": "nimrod-multitenant src/lib/auth.ts:66",
+   "paso_del_procedimiento": 2, "orden_declarado": true, "donde": "scripts/migrations/migration/index.ts:920", "verificar": "con cuenta Default tras migrar"}
+]
+```

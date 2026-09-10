@@ -42,6 +42,12 @@
      acción (rotar). NUNCA el valor. Si no hay ninguna: «Ninguno. El escáner no marcó líneas añadidas y
      el redactor no tuvo que enmascarar nada en este informe.» -->
 
+## Requisitos previos (los cubre el procedimiento, no bajan la nota)
+
+| Qué | Lo necesita | Paso | Orden declarado | Verificación |
+|---|---|---|---|---|
+{{FILAS_PRECONDICIONES}}
+
 ## Bloqueantes y mayores confirmados
 
 {{CONFIRMADOS_CRITICOS_MAYORES}}

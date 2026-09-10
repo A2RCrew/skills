@@ -29,7 +29,8 @@ Severidad si falla: **C** crítica · **M** mayor · **m** menor (definiciones e
 | D2 | Docs/planes nuevos viven en `docs/`, no en `.claude/` ni `.planning/` sueltos | `areas.tsv` | m |
 | X1 | Contrato Directus cruzado: un campo/colección nuevo que usa este repo existe en una migración de nimrod-multitenant (en el rango revisado o ya en producción) | revisor cruza `directus-model-fields.tsv` con `migration-identifiers.txt` y `git grep` en nimrod-multitenant | C |
 | X2 | Contrato HTTP cruzado: rutas `api/v0/*` que un worker llama existen en nimrod-api (rango o producción) | revisor cruza `fetchApi` paths del worker con `src/app/api/v0/` de nimrod-api | M |
-| X3 | Orden de despliegue declarado cuando hay dependencia entre repos | sección «Migraciones» y hallazgos X1/X2 lo indican; si falta → FALLA | M |
+| X3 | Orden de despliegue **compatible con el procedimiento canónico** (`references/deployment-procedure.md`: PRs → migraciones → workers Fargate → API → front) | si el orden que el código necesita coincide con el canónico, PASA aunque la migración esté pendiente: es precondición. FALLA solo si lo contradice o si nadie lo declaró | M (C si lo contradice) |
+| X4 | Toda migración de la que dependa un worker lo menciona en su cabecera | leer la cabecera de cada migración y cruzarla con los consumidores; un worker compartido entre tenants es el caso peligroso | M |
 
 ## Superficies compartidas (las evalúa el revisor de superficies, no los de caso de uso)
 
@@ -40,7 +41,7 @@ compartida si está declarada, o si su cambio afecta a ≥3 casos de uso y ≥15
 |---|---|---|---|
 | SH1 | Ningún símbolo o campo retirado de una superficie compartida sigue usándose | por cada entrada de `exports_retirados` / `campos_retirados`, `git grep` en todos los repos del alcance, en el head y en `origin/main` | C |
 | SH2 | Todo cambio en una superficie **declarada** se ha contrastado con su lista `rompedor_si` | el revisor devuelve `contraste_rompedor_si` con una fila por regla | M |
-| SH3 | Una proyección obligatoria compartida (`readMe` de sesión, ajustes generales, modelo del worker) no gana campos sin migración desplegada en todos los tenants | diff del fichero + estado de la migración en `index.ts` | C |
+| SH3 | Una proyección obligatoria compartida (`readMe` de sesión, ajustes generales, modelo del worker) que gana campos tiene su migración **en el paso 2 del procedimiento** y declarada | diff del fichero + cabecera de la migración. Con el orden canónico cubierto es precondición, no FALLA; FALLA si el orden se contradice o no consta | C solo si contradice |
 | SH4 | Un esquema de validación compartido no endurece un campo que el cliente antiguo sigue enviando | `campos_ahora_obligatorios` vacío, o refutado con el llamante | M |
 | SH5 | Una clave de idioma retirada ya no se usa en el código | `claves_retiradas` cruzadas con `git grep` de la clave | m |
 | SH6 | Un contrato entre repos (esquema Directus, ruta `api/v0`, nombre de tarea, estados) cambia en los dos lados o declara su orden | sección `cross_repo` del revisor | C |
