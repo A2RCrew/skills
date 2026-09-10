@@ -57,7 +57,8 @@ compartida si está declarada, o si su cambio afecta a ≥3 casos de uso y ≥15
 | M4 | Tests de migraciones pasan | `checks.migration-tests == 0` | M |
 | M5 | Migraciones estrictamente aditivas | `signal-destructive-migration.txt` filtrado a `scripts/migrations/`; verificador confirma | C |
 | M6 | Líneas activas añadidas a `index.ts` son solo migraciones de este rango | `index-ts-added-active.txt` vs `migration-dirs.txt` | M |
-| M6b | `index.ts` en HEAD no tiene activas migraciones ajenas al rango (se ejecutarían en el próximo `migrate`) | `index-ts-active-at-head.txt`; cada línea debe corresponder a `migration-dirs.txt` o estar ya aplicada en prod (commit `chore(migrations): Update index.ts after deployment`) | M |
+| M6b | Ninguna migración descomentada en `index.ts` es de otra persona | `migrations-pending-foreign.txt` vacío. Si no lo está, listarlas: un `migrate` las ejecutaría también (`docs/migration-isolation.md`) | M |
+| M6c | Una migración ya comentada (desplegada) que cambia en el rango no altera lo que hace | `migrations-changed-already-deployed.txt`; leer el diff de cada una. Cambiar el código de algo ya aplicado deja entornos divergentes | M |
 | M7 | Comentarios de `index.ts` ≤500 chars | `checks.migration-index-comments == 0` | m |
 | M8 | Ningún campo nuevo usado en `src/data` / `src/lib/actions` sin migración que lo cree | revisor extrae campos añadidos a proyecciones; `git grep` en `scripts/migrations/` | C |
 | T1 | Ningún campo nuevo en proyección obligatoria del worker TTS V2 | `signal-directus-fields.txt` filtrado a rutas TTS; verificador comprueba consulta aparte con `try/catch` | C |

@@ -4,7 +4,18 @@ Revisas las migraciones Directus pendientes de producción en nimrod-multitenant
 {{RANGO_MT}}). Sigue `{{SKILL_DIR}}/references/migrations-review.md` punto por punto. Modo lectura:
 **nunca ejecutes una migración** ni `pnpm run migrate`.
 
-Carpetas del rango: {{MIGRATION_DIRS}}
+**Revisa las que están DESCOMENTADAS en `index.ts`, no las que toca el diff.** La convención del
+equipo es dejar activa la migración mientras está pendiente y comentarla al desplegarla, anotando
+los entornos. La fase 0 te da las tres listas ya cruzadas:
+
+- Pendientes (revísalas todas): `{{OUT}}/nimrod-multitenant/migrations-pending.txt`
+- Tocadas en el rango pero ya desplegadas: `{{OUT}}/nimrod-multitenant/migrations-changed-already-deployed.txt`
+  — no son pendientes; solo di **por qué** cambia el código de algo ya aplicado y si eso deja
+  entornos divergentes.
+- Pendientes de otra persona (no tocadas en el rango): `{{OUT}}/nimrod-multitenant/migrations-pending-foreign.txt`
+  — lístalas siempre: un `migrate` las ejecutaría también.
+
+Carpetas tocadas por el diff (contexto, no la lista de revisión): {{MIGRATION_DIRS}}
 Identificadores que crean (fase 0): `{{OUT}}/nimrod-multitenant/migration-identifiers.txt`
 Líneas activas en `index.ts` en HEAD: `{{OUT}}/nimrod-multitenant/index-ts-active-at-head.txt`
 Resultados de los checks automáticos: `{{OUT}}/nimrod-multitenant/meta.json` → `checks.migration-*`

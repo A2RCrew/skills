@@ -4,6 +4,22 @@ Objetivo: antes de ejecutar `migrate:prod` / `migrate:releases`, saber qué hace
 pendiente, a quién afecta y en qué orden debe desplegarse respecto a nimrod-api y los workers.
 Solo lectura. **Nunca se ejecuta ninguna migración.**
 
+## Qué migraciones se revisan: las DESCOMENTADAS de `index.ts`
+
+La lista autorizada **no** son las carpetas que toca el diff, son las líneas **descomentadas** de
+`scripts/migrations/migration/index.ts`. La convención del equipo: cada quien deja activa su
+migración mientras está pendiente y **la comenta al desplegarla**, anotando en qué entornos ha
+corrido. Una carpeta puede cambiar en el rango y estar ya desplegada; y al revés, puede estar
+activa sin haberse tocado hoy.
+
+La fase 0 deja tres listas cruzadas:
+
+| Fichero | Qué es | Qué hacer |
+|---|---|---|
+| `migrations-pending.txt` | descomentadas en `index.ts`: **se ejecutarán en el paso 2** | revisarlas todas, una por una |
+| `migrations-changed-already-deployed.txt` | tocadas en el rango pero **ya comentadas** | no revisar como pendientes. Sí mirar **por qué** cambia el código de una migración ya aplicada: si altera lo que hace, los entornos quedan divergentes |
+| `migrations-pending-foreign.txt` | descomentadas y **no tocadas en el rango**: trabajo pendiente de otra persona | listarlas siempre. Un `migrate` las ejecutaría también. Es la regla M6b y el motivo de `docs/migration-isolation.md` |
+
 ## Entrada
 
 De la fase 0 de nimrod-multitenant: `migration-dirs.txt`, `migration-identifiers.txt`,

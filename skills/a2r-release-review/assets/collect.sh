@@ -132,8 +132,19 @@ if has migrations; then
   INDEX_CHANGED=$(grep -cE $'\tscripts/migrations/migration/index\\.ts$' "$OUT/files.tsv" || true)
   git diff "$MERGE_BASE" "$HEAD_SHA" -- scripts/migrations/migration/index.ts > "$OUT/index-ts.diff" 2>/dev/null || true
   grep -E '^\+\s*(await|run[A-Z]|import|[a-zA-Z])' "$OUT/index-ts.diff" | grep -vE '^\+\s*//' > "$OUT/index-ts-added-active.txt" || true
-  git show "$HEAD_SHA:scripts/migrations/migration/index.ts" 2>/dev/null | grep -nE '^\s*(await|run[A-Z])' > "$OUT/index-ts-active-at-head.txt" || true
+  # La lista autorizada de migraciones PENDIENTES son las líneas DESCOMENTADAS de index.ts:
+  # los desarrolladores comentan la suya tras desplegarla, y el comentario dice en qué entornos.
+  # (Antes se buscaba `^\s*(await|run…)`, que no casa con `migrateResult.migration_X = await …`
+  #  y daba una sola línea cuando había seis: la revisión de migraciones miraba el conjunto
+  #  equivocado, las carpetas tocadas por el diff en vez de las que se van a ejecutar.)
   git diff --name-only "$MERGE_BASE" "$HEAD_SHA" -- scripts/migrations/migration | awk -F/ 'NF>4 && $4!="tools" {print $4}' | sort -u > "$OUT/migration-dirs.txt" || true
+  IDX=$(git show "$HEAD_SHA:scripts/migrations/migration/index.ts" 2>/dev/null)
+  printf '%s\n' "$IDX" | grep -nE '^[[:space:]]*migrateResult\.[A-Za-z0-9_]+[[:space:]]*=[[:space:]]*await' > "$OUT/index-ts-active-at-head.txt" || true
+  printf '%s\n' "$IDX" | grep -oE '^[[:space:]]*migrateResult\.(migration_[0-9A-Za-z_]+)' | sed -E 's/.*migrateResult\.migration_//' | tr '_' '-' | sed -E 's/^([0-9]{4})-([0-9]{2})-([0-9]{2})/\1-\2-\3/' | sort -u > "$OUT/migrations-pending.txt" || true
+  printf '%s\n' "$IDX" | grep -oE '^[[:space:]]*//[[:space:]]*migrateResult\.(migration_[0-9A-Za-z_]+)' | sed -E 's/.*migrateResult\.migration_//' | tr '_' '-' | sort -u > "$OUT/migrations-deployed.txt" || true
+  # cruce con las carpetas que toca el diff
+  comm -13 "$OUT/migrations-pending.txt" <(sort -u "$OUT/migration-dirs.txt" 2>/dev/null || true) > "$OUT/migrations-changed-already-deployed.txt" || true
+  comm -23 "$OUT/migrations-pending.txt" <(sort -u "$OUT/migration-dirs.txt" 2>/dev/null || true) > "$OUT/migrations-pending-foreign.txt" || true
   # Colecciones/campos que crean las migraciones del rango (para cruzar con otros repos)
   for f in "${MIG_FILES[@]}"; do git show "$HEAD_SHA:$f" 2>/dev/null; done | grep -oE "(collection|field)\s*:\s*['\"][A-Za-z0-9_]+['\"]" | sed -E "s/.*['\"]([A-Za-z0-9_]+)['\"]/\1/" | sort -u > "$OUT/migration-identifiers.txt" || true
 fi
