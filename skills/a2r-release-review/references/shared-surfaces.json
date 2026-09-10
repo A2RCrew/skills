@@ -1,0 +1,80 @@
+{
+  "_doc": "Superficies compartidas: módulos y contratos que sirven a varios casos de uso o a varios repos. Un cambio aquí no se juzga por el caso de uso donde vive el fichero, sino por a quién arrastra. 'declared' es el inventario conocido; el radio real lo calcula assets/blastRadius.mjs con el grafo de importaciones, y cualquier fichero que supere los umbrales de 'thresholds' se trata como compartido aunque no esté declarado.",
+  "thresholds": {
+    "use_cases_min": 3,
+    "importers_min": 15,
+    "_nota": "Un fichero cambiado que superen ambos umbrales entra en la revisión de superficies compartidas aunque no esté declarado."
+  },
+  "declared": {
+    "nimrod-multitenant": [
+      { "path": "src/model/directus.ts", "nombre": "Modelo TypeScript de Directus", "owner": "marcos",
+        "porque": "Es el espejo del esquema. Un campo retirado o retipado aquí rompe todas las proyecciones que lo pidan, y Directus rechaza la consulta entera, no solo el campo.",
+        "rompedor_si": ["se retira un campo de una interfaz", "un campo opcional pasa a obligatorio", "se renombra una colección o un campo", "cambia el tipo de un campo ya usado en una proyección"] },
+      { "path": "src/lib/auth.ts", "nombre": "Sesión y readMe", "owner": "jordi",
+        "porque": "getSession hace un readMe con proyección fija. Un campo no concedido devuelve FORBIDDEN para la consulta entera y deja sin sesión a todos los usuarios del tenant, no solo a los del caso de uso que lo añadió.",
+        "rompedor_si": ["se añade un campo a la proyección de readMe sin migración desplegada en todos los tenants", "cambia la clasificación de fallos de sesión", "cambia lo que se guarda en la cookie"] },
+      { "path": "src/lib/directus.ts", "nombre": "Cliente Directus y refresco de token", "owner": "jordi",
+        "porque": "Todo acceso a datos pasa por aquí. Un cambio en el refresco de token o en el manejo de 401 afecta a los trece casos.",
+        "rompedor_si": ["cambia la lógica de refresco o de reintento", "cambia el manejo de 401/403", "cambia qué token se usa por defecto"] },
+      { "path": "src/middleware.ts", "nombre": "Middleware de rutas", "owner": "jordi",
+        "porque": "Decide qué rutas exigen sesión y cómo se resuelve el tenant por dominio.", "rompedor_si": ["cambia el matcher", "cambia la resolución de tenant", "una ruta deja de exigir sesión"] },
+      { "path": "src/data/getGeneralSettings.ts", "nombre": "Ajustes generales del tenant", "owner": "marcos",
+        "porque": "Colores, marca, flags y catálogo de modelos salen de aquí. Un campo nuevo en su proyección tiene el mismo riesgo de FORBIDDEN que el de auth.",
+        "rompedor_si": ["se añade un campo a la proyección sin migración en todos los tenants", "cambia un valor por defecto"] },
+      { "path": "src/validation/action-schemas.ts", "nombre": "Esquemas de server actions", "owner": "marcos",
+        "porque": "Contrato de entrada de las acciones de servidor. Endurecer un esquema rechaza payloads que el front antiguo sigue enviando.",
+        "rompedor_si": ["un campo opcional pasa a obligatorio", "se estrecha un enum o un tamaño máximo"] },
+      { "path": "src/validation/form-schemas.ts", "nombre": "Esquemas de formularios", "owner": "marcos", "porque": "Mismo contrato, del lado del formulario.", "rompedor_si": ["un campo opcional pasa a obligatorio", "se estrecha una validación"] },
+      { "path": "messages/", "nombre": "Ficheros de idioma", "owner": "marcos",
+        "porque": "Una clave retirada deja el literal crudo en pantalla en todos los casos que la usen.", "rompedor_si": ["se retira o renombra una clave que siga usándose"] },
+      { "path": "scripts/migrations/migration/tools/", "nombre": "Herramientas de migración", "owner": "marcos",
+        "porque": "Las usan todas las migraciones. Un fallo aquí se replica en cada carpeta que las llame.", "rompedor_si": ["cambia la firma de una herramienta", "cambia cómo se conceden permisos"] },
+      { "path": "src/app/(withLayout)/layout.tsx", "nombre": "Layout del dashboard", "owner": "marcos", "porque": "Puerta de entrada de todas las pantallas; decide la redirección a login.", "rompedor_si": ["cambia la condición de redirección"] }
+    ],
+    "nimrod-api": [
+      { "path": "src/model/directus.ts", "nombre": "Modelo TypeScript de Directus", "owner": "marcos",
+        "porque": "Mismo papel que en el front, y además define la unión Log['taskType'] que usa el alerting.",
+        "rompedor_si": ["se retira o renombra un campo", "un campo opcional pasa a obligatorio", "falta un taskType nuevo en la unión"] },
+      { "path": "src/utils/directusSDK.ts", "nombre": "Cliente Directus del servidor", "owner": "marcos", "porque": "Todas las tareas escriben por aquí.", "rompedor_si": ["cambia el token por defecto", "cambia el manejo de errores"] },
+      { "path": "src/utils/executeQueuedTask.ts", "nombre": "Ejecución de tareas encoladas", "owner": "marcos",
+        "porque": "Es el motor de las 45 tareas. Un cambio en el claim, el estado o el registro de errores afecta a todas.",
+        "rompedor_si": ["cambia la transición de estados", "cambia el claim atómico", "cambia qué se escribe en error o user_error"] },
+      { "path": "src/utils/executeTask.ts", "nombre": "Ejecución de tarea", "owner": "marcos", "porque": "Idem, y decide quién escribe published.", "rompedor_si": ["cambia quién marca published", "cambia el mapeo de UserError a user_error"] },
+      { "path": "src/tasks/index.ts", "nombre": "Registro de tareas", "owner": "marcos",
+        "porque": "Mapea nombre de tarea a implementación. Un nombre que desaparece deja huérfano al flow de Directus que lo llama.",
+        "rompedor_si": ["se retira o renombra una entrada", "cambia el despachador de una familia de tareas"] },
+      { "path": "src/utils/providers/", "nombre": "Proveedores de modelos", "owner": "marcos",
+        "porque": "Toda llamada a LLM pasa por aquí: opciones por proveedor, presupuesto de ritmo, reintentos.",
+        "rompedor_si": ["cambia el comportamiento ante 429", "cambia el reintento", "cambia cómo se mezclan customProviderOptions"] },
+      { "path": "src/utils/providers-v2/", "nombre": "Proveedores v2", "owner": "marcos", "porque": "Idem para la generación nueva.", "rompedor_si": ["cambia el reintento o el manejo de credenciales"] },
+      { "path": "src/utils/alerting/", "nombre": "Alertas a Discord", "owner": "marcos",
+        "porque": "Un cambio en el umbral o en la reentrada puede callar todas las alertas o generar un bucle.",
+        "rompedor_si": ["cambia el umbral", "cambia la guarda de reentrada", "cambia qué taskType alerta"] },
+      { "path": "src/utils/logger.ts", "nombre": "Logger", "owner": "marcos", "porque": "El transporte a Directus alimenta el alerting.", "rompedor_si": ["cambia el nivel por defecto", "cambia el volcado antes de salir"] },
+      { "path": "src/utils/pricing/", "nombre": "Precios y consumo", "owner": "ivan", "porque": "Factura a todos los clientes.", "rompedor_si": ["cambia una fórmula", "cambia el redondeo", "cambia qué se reporta a modelsUsage"] }
+    ],
+    "_workers": [
+      { "path": "src/model/directus.ts", "nombre": "Espejo del esquema en cada worker", "owner": "marcos", "porque": "Copia manual del esquema; deriva en silencio respecto a nimrod-multitenant.", "rompedor_si": ["se pide un campo que la migración no ha creado"] },
+      { "path": "src/config/", "nombre": "Configuración validada con zod", "owner": "marcos", "porque": "Falla al arrancar: una variable requerida nueva mata el contenedor.", "rompedor_si": ["se añade una variable requerida sin default"] },
+      { "path": "src/tools/fetchApi.ts", "nombre": "Cliente de nimrod-api", "owner": "marcos", "porque": "Las rutas son un contrato de cadena: un rename es un 404 en ejecución, no un error de compilación.", "rompedor_si": ["cambia una ruta", "cambia el timeout global"] }
+    ]
+  },
+  "cross_repo": [
+    { "nombre": "Esquema de Directus", "tipo": "contrato de datos",
+      "consumidores": ["nimrod-multitenant/src/model/directus.ts", "nimrod-api/src/model/directus.ts", "semantic-pdf-serverless/src/model/directus.ts", "pdf-remediation/src/infrastructure/directus/schema.ts", "translate-documents/src/model/directus.ts", "bulk-url-process (proyecciones en src/tools/getData.ts)"],
+      "como_buscar": "git grep -n '<colección o campo>' en cada repo, en origin/main (ya en producción) y en el head del rango",
+      "porque": "No hay compilador que valide este contrato entre repos. Un campo retirado o una proyección nueva rompe en ejecución, y Directus rechaza la consulta entera." },
+    { "nombre": "Rutas api/v0 de nimrod-api", "tipo": "contrato HTTP",
+      "consumidores": ["semantic-pdf-serverless/src/tools/fetchApi.ts", "bulk-url-process/src/tools/fetchApi.ts", "translate-documents/src/utils/fetchApi.ts", "pdf-remediation/src/infrastructure/api/report-usage.ts", "flows de Directus creados por migraciones"],
+      "como_buscar": "git grep -n 'api/v0/<ruta>' en los seis repos y en scripts/migrations de nimrod-multitenant",
+      "porque": "Los workers llaman por cadena literal: un rename es un 404 en ejecución." },
+    { "nombre": "Nombres de tarea (taskType)", "tipo": "contrato de orquestación",
+      "consumidores": ["nimrod-api/src/tasks/index.ts", "flows de Directus creados por migraciones de nimrod-multitenant", "nimrod-api/src/model/directus.ts (unión Log['taskType'])"],
+      "como_buscar": "git grep -n '<taskType>' en nimrod-api y en scripts/migrations de nimrod-multitenant",
+      "porque": "El flow de Directus invoca la tarea por nombre; si no existe, la fila se queda en pendent sin error visible." },
+    { "nombre": "Estados de las colecciones de trabajo", "tipo": "contrato de máquina de estados",
+      "consumidores": ["el front que los pinta", "nimrod-api que los transiciona", "el worker que los cierra", "los reconciliadores"],
+      "como_buscar": "git grep -n \"'pendent'\\|'generating'\\|'published'\" en los repos del rango",
+      "porque": "Tres procesos distintos escriben el mismo campo; un estado nuevo o un cambio de quién lo escribe genera filas colgadas." }
+  ]
+}

@@ -31,6 +31,21 @@ Severidad si falla: **C** crítica · **M** mayor · **m** menor (definiciones e
 | X2 | Contrato HTTP cruzado: rutas `api/v0/*` que un worker llama existen en nimrod-api (rango o producción) | revisor cruza `fetchApi` paths del worker con `src/app/api/v0/` de nimrod-api | M |
 | X3 | Orden de despliegue declarado cuando hay dependencia entre repos | sección «Migraciones» y hallazgos X1/X2 lo indican; si falta → FALLA | M |
 
+## Superficies compartidas (las evalúa el revisor de superficies, no los de caso de uso)
+
+Fuente: `blast-radius.json` de cada repo y `references/shared-surfaces.json`. Una superficie es
+compartida si está declarada, o si su cambio afecta a ≥3 casos de uso y ≥15 importadores.
+
+| ID | Regla | Evidencia | Sev |
+|---|---|---|---|
+| SH1 | Ningún símbolo o campo retirado de una superficie compartida sigue usándose | por cada entrada de `exports_retirados` / `campos_retirados`, `git grep` en todos los repos del alcance, en el head y en `origin/main` | C |
+| SH2 | Todo cambio en una superficie **declarada** se ha contrastado con su lista `rompedor_si` | el revisor devuelve `contraste_rompedor_si` con una fila por regla | M |
+| SH3 | Una proyección obligatoria compartida (`readMe` de sesión, ajustes generales, modelo del worker) no gana campos sin migración desplegada en todos los tenants | diff del fichero + estado de la migración en `index.ts` | C |
+| SH4 | Un esquema de validación compartido no endurece un campo que el cliente antiguo sigue enviando | `campos_ahora_obligatorios` vacío, o refutado con el llamante | M |
+| SH5 | Una clave de idioma retirada ya no se usa en el código | `claves_retiradas` cruzadas con `git grep` de la clave | m |
+| SH6 | Un contrato entre repos (esquema Directus, ruta `api/v0`, nombre de tarea, estados) cambia en los dos lados o declara su orden | sección `cross_repo` del revisor | C |
+| SH7 | El caso de uso que introduce el cambio no es el único afectado, y el informe lo dice | cada hallazgo compartido lleva `blast_radius` con casos y repos | M |
+
 ## nimrod-multitenant
 
 | ID | Regla | Evidencia | Sev |

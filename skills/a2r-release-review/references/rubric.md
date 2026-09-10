@@ -32,8 +32,20 @@ Se cuentan solo los hallazgos y fallos de checklist cuyos ficheros pertenecen al
 `min(techo de cada caso de uso)`, y además:
 
 - Migración con riesgo **bloqueante** → 1 si es crítica (permisos, no aditiva), 2 si es mayor.
+- **Superficie compartida rota** (SH1, SH3 o SH6 en FALLA, confirmada) → 1 si arrastra a ≥3 casos de
+  uso o cruza repos; 2 en el resto. Esta regla existe porque el hallazgo vive en el caso de uso del
+  fichero, pero el daño es de todos: sin ella, un cambio en la sesión o en el modelo de Directus se
+  puntúa como si solo afectase a su carpeta.
+- **Superficie compartida declarada tocada y no contrastada** con su `rompedor_si` (SH2 NO VERIFICABLE) → ≤3.
 - Dependencia entre repos sin orden declarado (X3) → ≤3.
 - Algún repo seleccionado sin fase 0 completa (install o typecheck no ejecutados) → ≤3.
+
+## Cómo afecta el radio a los casos de uso
+
+Un hallazgo en una superficie compartida **cuenta en todos los casos de uso que arrastra**, no solo
+en aquel donde vive el fichero. `blast-radius.json` da la lista: aplica su severidad al techo de
+cada uno de esos casos. Un cambio en `src/lib/auth.ts`, con 124 importadores en los trece casos,
+baja el techo de los trece, no solo el de «auth».
 
 ## Confianza
 

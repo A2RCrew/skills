@@ -26,6 +26,15 @@
 
 {{SECUENCIA}}
 
+## Superficies compartidas tocadas
+
+| Superficie | Repo | Cambio | Importadores | Casos que arrastra | Veredicto |
+|---|---|---|---|---|---|
+{{FILAS_SUPERFICIES}}
+
+{{SUPERFICIES_SIN_RIESGO}}
+<!-- Una línea con las aditivas: «Sin riesgo: X, Y, Z (aditivas, nadie pierde nada).» -->
+
 ## Secretos detectados
 
 {{SECRETOS}}

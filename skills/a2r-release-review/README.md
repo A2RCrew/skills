@@ -92,6 +92,37 @@ por repo viven en `references/use-cases.json`; los workers enteros pertenecen a 
 | 2 | No sube. Bloqueante confirmado o gate rojo. |
 | 1 | No sube. Riesgo de tenant, datos, seguridad o migración peligrosa. |
 
+## Superficies compartidas
+
+Repartir la revisión por caso de uso tiene un punto ciego: los módulos que sirven a todos. Un
+cambio en la sesión vive en la carpeta de auth y rompe en los trece casos, y el revisor de auth no
+tiene forma de saberlo. `assets/blastRadius.mjs` lo calcula con el grafo de importaciones:
+
+| Módulo de nimrod-multitenant | Lo importan | Casos de uso que arrastra |
+|---|---|---|
+| `src/model/directus.ts` | 744 ficheros | 13 de 13 |
+| `src/lib/auth.ts` | 124 ficheros | 13 |
+| `src/validation/form-schemas.ts` | 21 ficheros | 8 |
+
+Una superficie entra en la revisión si está declarada en `references/shared-surfaces.json` (23
+módulos y 4 contratos entre repos, cada uno con **por qué** es peligroso y **qué lo rompe**) o si
+supera los umbrales: tres casos de uso y quince importadores. Eso último atrapa lo que nadie
+declaró.
+
+El análisis distingue tres cosas, y esa distinción es lo que evita el ruido:
+
+- **Rompedor**: se retira o renombra un símbolo, un campo de interfaz o una clave de idioma; o un
+  campo opcional pasa a obligatorio. Va a hallazgo y el revisor busca quién lo sigue usando en
+  todos los repos, también en `origin/main`, que es lo que hay hoy en producción.
+- **A revisar**: superficie declarada cuyo cambio está en el cuerpo, no en la firma. El análisis
+  estático no lo sabe juzgar, así que se contrasta a mano contra su lista `rompedor_si`. Aquí caen
+  las proyecciones nuevas y los umbrales, que es lo que ha tumbado tenants.
+- **Aditivo**: se añade algo y nadie pierde nada. Una línea de resumen, no un hallazgo.
+
+En la rúbrica, un hallazgo de superficie compartida **cuenta en el techo de todos los casos que
+arrastra**, no solo en el del fichero. Sin esa regla, un cambio en la sesión se puntúa como si solo
+afectase a su carpeta: es exactamente lo que pasó en la revisión del 8 de septiembre.
+
 ## Dónde acaban los informes
 
 Cada revisión se archiva **en local**, nunca en un repositorio:

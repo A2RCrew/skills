@@ -57,6 +57,7 @@ grep -vE $'\t(feat|fix|chore|docs|refactor|perf|test|build|ci|style|revert)(\\([
 
 # ── Casos de uso y áreas ────────────────────────────────────────────────────
 node "$HERE/usecases.mjs" "$REPO_KEY" "$REPO_DIR" "$MERGE_BASE" "$HEAD_SHA" "$OUT" >&2 || log "  ↳ usecases.mjs falló"
+node "$HERE/blastRadius.mjs" "$REPO_KEY" "$REPO_DIR" "$MERGE_BASE" "$HEAD_SHA" "$OUT" >&2 || log "  ↳ blastRadius.mjs falló"
 area_of() {
   case "$1" in
     scripts/migrations/*) echo migrations ;;
@@ -173,9 +174,10 @@ const fs=require("fs"); const out=process.argv[1]; const rc=n=>{try{return fs.re
 const cnt=n=>{try{return fs.readFileSync(`${out}/${n}`,"utf8").split("\n").filter(Boolean).length}catch{return 0}};
 const checks={}; for (const f of fs.readdirSync(out).filter(f=>f.endsWith(".rc"))) checks[f.replace(/\.rc$/,"")]=rc(f.replace(/\.rc$/,""));
 let uc={}; try{uc=Object.fromEntries(Object.entries(JSON.parse(fs.readFileSync(`${out}/usecases.json`,"utf8")).use_cases).map(([k,v])=>[k,{files:v.files,commits:v.commits,issues:v.issues}]))}catch{}
+let blast={}; try{const b=JSON.parse(fs.readFileSync(`${out}/blast-radius.json`,"utf8"));blast={...b.resumen,superficies:b.superficies.map(r=>({path:r.path,riesgo:r.riesgo,cambio:r.cambio,casos_afectados:r.casos_afectados,importadores:r.importadores_directos,declarado:r.declarado}))}}catch{}
 const meta={repo:process.argv[2],repo_dir:process.argv[3],range:process.argv[4],base_sha:process.argv[5],head_sha:process.argv[6],merge_base:process.argv[7],package_version:process.argv[8],last_tag_on_base:process.argv[9],worktree_dirty_files:+process.argv[10],generated_at:new Date().toISOString(),
  counts:{commits:cnt("commits.tsv"),merges:cnt("merges.tsv"),files:cnt("files.tsv"),added_lines:cnt("added-lines.txt"),commits_without_issue:cnt("commits-without-issue.tsv"),commits_nonconventional:cnt("commits-nonconventional.tsv"),migration_files:+process.argv[11],migration_dirs:cnt("migration-dirs.txt"),index_ts_changed:+process.argv[12],index_ts_added_active_lines:cnt("index-ts-added-active.txt"),index_ts_active_at_head:cnt("index-ts-active-at-head.txt"),env_new_undefined:cnt("env-new-undefined.txt"),env_zod_required_added:cnt("env-zod-required-added.txt"),package_json_changed:+process.argv[13],lockfile_changed:+process.argv[14],deps_changed:+process.argv[15],dist_changed:+process.argv[16],deploy_changed:+process.argv[17],dockerfile_changed:+process.argv[18],directus_model_fields_changed:cnt("directus-model-fields.tsv")},
- use_cases:uc, checks};
+ use_cases:uc, superficies_compartidas:blast, checks};
 fs.writeFileSync(`${out}/meta.json`, JSON.stringify(meta,null,2)+"\n"); console.log(JSON.stringify(meta.checks));
 ' "$OUT" "$REPO_KEY" "$REPO_DIR" "$RANGE" "$BASE_SHA" "$HEAD_SHA" "$MERGE_BASE" "$VERSION" "$LAST_TAG" "$DIRTY" "${#MIG_FILES[@]}" "${INDEX_CHANGED:-0}" "${PKG_CHANGED:-0}" "${LOCK_CHANGED:-0}" "$DEPS_CHANGED" "${DIST_CHANGED:-0}" "${DEPLOY_CHANGED:-0}" "${DOCKERFILE_CHANGED:-0}"
 if [ -s "$OUT/signal-secrets.txt" ]; then

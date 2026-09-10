@@ -31,11 +31,13 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `assets/archive.sh` | archiva la revisión en `<repos-root>/release-reviews/` |
 | `references/repos.json` | configuración por repo: rango por defecto, comandos, features |
 | `references/use-cases.json` | los 14 casos de uso de Linear con globs por repo |
+| `references/shared-surfaces.json` | superficies compartidas declaradas y contratos entre repos |
+| `assets/blastRadius.mjs` | radio de impacto: quién importa cada fichero cambiado y a cuántos casos arrastra |
 | `references/checklist.md` | reglas comunes, por repo y cruzadas, con evidencia y severidad |
 | `references/rubric.md` | severidades, techo por caso y global, confianza |
 | `references/migrations-review.md` | procedimiento de revisión profunda de migraciones |
 | `references/interview.md` | preguntas, opciones y regla de recomendación |
-| `references/prompts/*.md` | prompts de revisor por caso, verificador y revisor de migraciones |
+| `references/prompts/*.md` | prompts de revisor por caso, de superficies compartidas, verificador y revisor de migraciones |
 
 ## Reglas absolutas
 
@@ -100,9 +102,20 @@ revisor para la parte cruzada (`src/model/directus.ts`, rutas `api/v0`, `fetchAp
 `plataforma` se divide por repo. Asigna a cada lote los ítems de checklist de `checklist.md` cuyo
 repo esté en el lote (sección común + secciones de `checklist_sections`), más X1–X3 si cruza repos.
 
+### Fase 3 bis · Superficies compartidas
+`collect.sh` ya ha dejado `blast-radius.json` en cada repo: por cada fichero cambiado, quién lo
+importa, a cuántos casos de uso arrastra y qué símbolos o campos pierde. Se marcan las superficies
+**declaradas** en `references/shared-surfaces.json` y, además, cualquier fichero que supere los
+umbrales (≥3 casos de uso y ≥15 importadores) aunque nadie lo declarase.
+
+Esto es un lote propio, no se reparte entre los revisores de caso de uso: **ninguno de ellos ve el
+radio**. Un cambio en la sesión o en el modelo de Directus vive en una carpeta y rompe en trece.
+
 ### Fase 4 · Revisores (paralelo)
 Lanza **en una sola respuesta** un `Agent` (`general-purpose`) por lote con
-`references/prompts/reviewer.md` rellenado. Si se acordó revisión profunda de migraciones, lanza
+`references/prompts/reviewer.md` rellenado, **más el revisor de superficies compartidas** con
+`references/prompts/shared-reviewer.md` si `blast-radius.json` trae alguna fila con riesgo
+`rompedor` o `revisar` (guarda su JSON en `$OUT/review-shared.json`). Si se acordó revisión profunda de migraciones, lanza
 además el revisor de `references/prompts/migration-reviewer.md` con los repos consumidores
 seleccionados. Guarda cada JSON en `$OUT/review-<caso>[-repo].json` y `$OUT/review-migrations.json`.
 
@@ -113,12 +126,15 @@ Segunda ronda solo para `new_findings`; lo que quede sin verificar es PLAUSIBLE.
 
 ### Fase 6 · Checklist del orquestador
 Desde `meta.json` de cada repo, sin modelo: G1–G5, W1–W3, S1–S2, Q1–Q2, D2, I1/I1b, K1, K7, K8, M6/M6b/M7.
+SH1–SH7 las trae el revisor de superficies compartidas.
 Fusiona con los `checklist` de los revisores. Discrepancia: gana FALLA con evidencia; si no, NO VERIFICABLE.
 
 ### Fase 7 · Nota
 `references/rubric.md` literal: techo por caso (hallazgos y fallos cuyos ficheros pertenecen al caso,
-más gates de sus repos), techo global = mínimo con los ajustes de migraciones y dependencias, confianza,
-veredicto ≤ techo con dos líneas.
+más gates de sus repos), techo global = mínimo con los ajustes de migraciones, superficies compartidas
+y dependencias, confianza, veredicto ≤ techo con dos líneas.
+**Un hallazgo de superficie compartida cuenta en el techo de todos los casos que arrastra**, según
+`blast_radius` del hallazgo, no solo en el caso donde vive el fichero.
 
 ### Fase 8 · Informe
 **El entregable es el artefacto**: rellena `assets/report.template.html`, que ya trae el diseño y las
