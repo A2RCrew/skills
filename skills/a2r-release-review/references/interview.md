@@ -28,6 +28,25 @@ que el usuario pueda forzarlas con otro rango.
 
 Si un repo seleccionado tiene rango vacío y `alt_range`, la llamada 2 pregunta por el rango.
 
+## Llamada 1 bis · Árboles de trabajo
+
+Antes de preguntar nada más, compara en cada repo seleccionado `HEAD` con `origin/<rama>` y mira si
+hay cambios sin commitear. Los gates se ejecutan sobre el árbol local: si está atrasado o en otra
+rama, lint, typecheck y tests miden código que no es el que se sube.
+
+Si algún repo está atrasado, en otra rama o sucio, incluye esta pregunta:
+
+- «Los actualizo yo ahora (Recomendado)»: ejecuta `assets/sync.sh`, que hace fetch, guarda en stash
+  lo que haya sin commitear, cambia a la rama y hace `pull --ff-only`. **Es la única parte de la
+  skill que escribe en los repos, y solo con esta autorización explícita.** Nunca hace merge ni
+  rebase: si una rama ha divergido lo dice y sigue con las demás.
+- «Los actualizo yo a mano»: da el comando y espera.
+- «Continuar con el árbol actual»: los gates miden código atrasado; se anota en Supuestos y la
+  confianza baja a media o baja.
+
+Tras ejecutar `sync.sh`, **di siempre qué se guardó en stash y en qué repo**, con el comando para
+recuperarlo (`git -C <ruta> stash pop`). Un stash silencioso es trabajo que el usuario cree perdido.
+
 ## Llamada 2 · Alcance (depende de la 1)
 
 1. **Migraciones** (solo si nimrod-multitenant está seleccionado y `pending_migration_dirs > 0`):

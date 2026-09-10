@@ -28,6 +28,7 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `assets/usecases.mjs` | clasifica ficheros y commits por caso de uso |
 | `assets/report.template.html` | **plantilla del informe: es el entregable**, se publica como artefacto |
 | `assets/report.template.md` | misma información en markdown, para diffs y para CI |
+| `assets/sync.sh` | pone los árboles al día antes de medir (única parte que escribe en los repos) |
 | `assets/archive.sh` | archiva la revisión en `<repos-root>/release-reviews/` |
 | `references/repos.json` | configuración por repo: rango por defecto, comandos, features |
 | `references/use-cases.json` | los 14 casos de uso de Linear con globs por repo |
@@ -41,9 +42,11 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 
 ## Reglas absolutas
 
-1. **Solo lectura** en todos los repos. Sin `Edit`/`Write` sobre ellos, sin `git commit/push/checkout`,
+1. **Solo lectura** en todos los repos. Sin `Edit`/`Write` sobre ellos, sin `git commit/push/merge/rebase`,
    sin `pnpm run migrate`, sin llamadas a ningún Directus. Las pruebas se hacen con `tsc`, `vitest run`,
    `node --test`, `node -e`, `git grep`, `git show`.
+   **Única excepción**: `assets/sync.sh` (stash, checkout y `pull --ff-only`), y solo cuando el
+   usuario lo autoriza en la entrevista. Después hay que decirle qué se guardó en stash y dónde.
 2. **Sin evidencia no hay hallazgo.** Un hallazgo sin `evidence_cmd` ejecutado se descarta en verificación.
 3. **El modelo no elige el techo.** Sale de `references/rubric.md`; el veredicto es ≤ techo.
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
@@ -87,6 +90,15 @@ Lee `$OUT/prescan.json`. Si ningún repo tiene cambios pendientes, dilo y termin
 Sigue `references/interview.md`: llamada 1 (repos, dos preguntas multiselección con los datos del
 pre-escaneo), llamada 2 (migraciones si procede, profundidad con recomendación razonada, rango si
 algún repo lo necesita, tests). Resume lo acordado en tres líneas y arranca.
+
+### Fase 1 bis · Árboles al día
+Si el usuario lo autorizó:
+```bash
+bash "$SKILL_DIR/assets/sync.sh" "$REPOS_ROOT" develop
+```
+Devuelve un JSON por repo con `antes`, `despues`, `rama`, `stash`, `divergida` y `al_dia`. Lleva a
+«Supuestos» cualquier repo con `divergida: sí` o `al_dia: false`, y **di en la respuesta final qué
+se guardó en stash y en qué repo**.
 
 ### Fase 2 · Recolección por repo (paralelo)
 Para cada repo seleccionado, en paralelo (Bash en background o una sola llamada encadenada):
