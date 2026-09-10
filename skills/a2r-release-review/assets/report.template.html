@@ -127,7 +127,9 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   <h2>Cambios en casos de uso</h2>
   <div class="tbl"><table>
     <thead><tr><th>Caso de uso</th><th>Owner</th><th>Repos</th><th class="num">Ficheros</th><th class="num">Issues</th><th style="text-align:center">Nota</th><th>Bloqueantes</th></tr></thead>
-    <!-- Owner: el de use-cases.json. «plataforma» va SIEMPRE con «sin dueño»: no inventes uno.
+    <!-- NO incluyas «plataforma» como fila: no es un caso de uso. Sus componentes comunes van a la
+         tabla siguiente atribuidos a quien los tocó, y sus docs y tests acompañan al caso al que sirven.
+         Owner: el de use-cases.json; si un caso no tiene, escribe «sin dueño», no inventes uno.
          Issues: número de A2R distintas del caso (usecases.json), no un guion.
          Una fila por caso, sin repetir. Ordena por nota ascendente.
          Si un bloqueante es de un componente compartido, remite a la tabla siguiente en vez de duplicarlo. -->

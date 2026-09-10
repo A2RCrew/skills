@@ -53,6 +53,9 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
    las dudas se resuelven con la opción recomendada y se anotan en «Supuestos».
 5. **El informe habla de casos de uso**, no de repos. Los repos aparecen como columna, no como capítulo.
+   **`plataforma` no es un caso de uso** y no sale como fila en «Cambios en casos de uso»: es el
+   cajón de lo transversal. Sus componentes comunes van a la segunda tabla, «Cambios en componentes
+   compartidos entre casos de uso»; sus docs y tests acompañan al caso al que sirven.
    Los componentes generales **no tienen dueño**: no les pongas owner en el informe. Se nombra a
    quien firmó el cambio y de qué caso de uso salió. Un cambio que los degrade se reporta aunque
    su caso vaya limpio.

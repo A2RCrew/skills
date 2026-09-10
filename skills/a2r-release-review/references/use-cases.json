@@ -359,7 +359,8 @@
           "**"
         ]
       },
-      "nota_owner": "Sin dueño asignado. NO inventes uno ni reutilices el de Transversal de Linear: los componentes generales (modelo de Directus, sesión, proveedores, precios, logger) no tienen responsable hoy. Un cambio que los degrade se atribuye a quien lo firmó y al caso de uso cuyo trabajo lo introdujo."
+      "nota_owner": "Sin dueño y NO es un caso de uso: es el cajón de lo transversal. No aparece como fila en «Cambios en casos de uso». Sus componentes comunes van a «Cambios en componentes compartidos entre casos de uso», atribuidos a quien firmó el cambio; su documentación y sus tests acompañan al caso al que sirven.",
+      "no_es_caso_de_uso": true
     }
   ]
 }
