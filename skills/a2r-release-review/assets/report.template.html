@@ -124,9 +124,13 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 </div>
 
 <section>
-  <h2>Qué se sube, por caso de uso</h2>
+  <h2>Cambios en casos de uso</h2>
   <div class="tbl"><table>
     <thead><tr><th>Caso de uso</th><th>Owner</th><th>Repos</th><th class="num">Ficheros</th><th class="num">Issues</th><th style="text-align:center">Nota</th><th>Bloqueantes</th></tr></thead>
+    <!-- Owner: el de use-cases.json. «plataforma» va SIEMPRE con «sin dueño»: no inventes uno.
+         Issues: número de A2R distintas del caso (usecases.json), no un guion.
+         Una fila por caso, sin repetir. Ordena por nota ascendente.
+         Si un bloqueante es de un componente compartido, remite a la tabla siguiente en vez de duplicarlo. -->
     <tbody>
       {{FILAS_CASOS}}
       <!-- <tr><td>Caso</td><td class="who">owner</td><td class="who">mt + api</td><td class="num">N</td><td class="num">N</td><td class="cap c1">1</td><td>resumen o —</td></tr>
@@ -134,6 +138,21 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
     </tbody>
   </table></div>
   <p style="font-size:14px;color:var(--ink-2)">La nota global es el mínimo de los casos. Cada caso cruza front, API y migraciones de la misma funcionalidad, por eso un mismo repo aparece en varias filas.</p>
+</section>
+
+<section>
+  <h2>Cambios en componentes compartidos entre casos de uso</h2>
+  <p style="font-size:14px;color:var(--ink-2)">Módulos y contratos que sirven a varios casos de uso o a varios repos. <b>No tienen dueño asignado</b>, así que la columna nombra a quien firmó el cambio, no a un responsable nominal. Un cambio aquí no se juzga por dónde vive el fichero, sino por a quién arrastra.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Superficie</th><th>Repo</th><th>Quién la tocó</th><th>Cambio</th><th class="num">Importadores</th><th class="num">Casos</th><th>Veredicto</th></tr></thead>
+    <tbody>
+      {{FILAS_SUPERFICIES}}
+      <!-- <tr><td>src/lib/auth.ts · Sesión y readMe</td><td class="who">mt</td><td><span class="tag mayor">revisar</span></td><td class="num">124</td><td class="num">13</td><td>coordinado: la migración va antes que el front</td></tr>
+           tag: critica (rompedor), mayor (revisar), menor (aditivo), ok (seguro) -->
+    </tbody>
+  </table></div>
+  {{SUPERFICIES_SIN_RIESGO}}
+  <!-- <div class="note">Sin riesgo: … (aditivas, nadie pierde nada).</div> -->
 </section>
 
 <section>
@@ -185,20 +204,7 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
   </div>
 </section>
 
-<section>
-  <h2>Superficies compartidas tocadas</h2>
-  <p style="font-size:14px;color:var(--ink-2)">Módulos y contratos que sirven a varios casos de uso o a varios repos. <b>No tienen dueño asignado</b>, así que la columna nombra a quien firmó el cambio, no a un responsable nominal. Un cambio aquí no se juzga por dónde vive el fichero, sino por a quién arrastra.</p>
-  <div class="tbl"><table>
-    <thead><tr><th>Superficie</th><th>Repo</th><th>Quién la tocó</th><th>Cambio</th><th class="num">Importadores</th><th class="num">Casos</th><th>Veredicto</th></tr></thead>
-    <tbody>
-      {{FILAS_SUPERFICIES}}
-      <!-- <tr><td>src/lib/auth.ts · Sesión y readMe</td><td class="who">mt</td><td><span class="tag mayor">revisar</span></td><td class="num">124</td><td class="num">13</td><td>coordinado: la migración va antes que el front</td></tr>
-           tag: critica (rompedor), mayor (revisar), menor (aditivo), ok (seguro) -->
-    </tbody>
-  </table></div>
-  {{SUPERFICIES_SIN_RIESGO}}
-  <!-- <div class="note">Sin riesgo: … (aditivas, nadie pierde nada).</div> -->
-</section>
+
 
 <section>
   <h2>Secretos</h2>

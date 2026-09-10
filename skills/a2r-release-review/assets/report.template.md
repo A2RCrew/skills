@@ -16,17 +16,13 @@
 
 {{JUSTIFICACION_DOS_LINEAS}}
 
-## Qué se sube, por caso de uso
+## Cambios en casos de uso
 
 | Caso de uso | Owner | Repos | Issues | Qué cambia (una frase) | Techo | Nota | Bloqueantes |
 |---|---|---|---|---|---|---|---|
 {{FILAS_CASOS}}
 
-## Secuencia de despliegue recomendada
-
-{{SECUENCIA}}
-
-## Superficies compartidas tocadas
+## Cambios en componentes compartidos entre casos de uso
 
 | Superficie | Repo | Quién la tocó | Cambio | Importadores | Casos que arrastra | Veredicto |
 |---|---|---|---|---|---|---|
@@ -34,6 +30,10 @@
 
 {{SUPERFICIES_SIN_RIESGO}}
 <!-- Una línea con las aditivas: «Sin riesgo: X, Y, Z (aditivas, nadie pierde nada).» -->
+
+## Secuencia de despliegue recomendada
+
+{{SECUENCIA}}
 
 ## Secretos detectados
 
