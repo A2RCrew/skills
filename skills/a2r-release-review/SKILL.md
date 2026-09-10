@@ -30,6 +30,7 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 | `assets/report.template.md` | misma información en markdown, para diffs y para CI |
 | `assets/sync.sh` | pone los árboles al día antes de medir (única parte que escribe en los repos) |
 | `assets/archive.sh` | archiva la revisión en `<repos-root>/release-reviews/` |
+| `assets/metrics.sh` | duración y tokens de la ejecución, para cerrar la respuesta |
 | `references/repos.json` | configuración por repo: rango por defecto, comandos, features |
 | `references/use-cases.json` | los 14 casos de uso de Linear con globs por repo |
 | `references/shared-surfaces.json` | superficies compartidas declaradas y contratos entre repos |
@@ -48,6 +49,10 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
    `node --test`, `node -e`, `git grep`, `git show`.
    **Única excepción**: `assets/sync.sh` (stash, checkout y `pull --ff-only`), y solo cuando el
    usuario lo autoriza en la entrevista. Después hay que decirle qué se guardó en stash y dónde.
+1 bis. **Los subagentes también son solo lectura.** Díselo explícitamente en cada prompt: sin
+   `Edit`/`Write` sobre los repos, sin `git stash`, sin `checkout`, sin tocar ficheros para
+   desbloquear una herramienta. Si comprobar algo exigiría modificar el repo, va a `unverifiable`.
+   Un revisor que hace stash puede dejar trabajo del usuario en un sitio donde no lo busca.
 2. **Sin evidencia no hay hallazgo.** Un hallazgo sin `evidence_cmd` ejecutado se descarta en verificación.
 3. **El modelo no elige el techo.** Sale de `references/rubric.md`; el veredicto es ≤ techo.
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
@@ -199,9 +204,26 @@ Después publica `report.html` como artefacto con la herramienta Artifact (títu
 Nada de esto se sube a ningún repositorio: `A2RCrew/skills` es público y estos informes llevan
 hallazgos de seguridad, nombres de tenants y rutas internas.
 
+### Fase 10 · Métricas de la ejecución
+**Cierra siempre la respuesta con estas dos métricas.** No son opcionales ni dependen de que el
+usuario las pida.
+
+```bash
+bash "$SKILL_DIR/assets/metrics.sh" "$OUT" <tokens-subagentes> <presupuesto-sesion> <restante-sesion>
+```
+
+- **Duración**, en minutos y segundos. Sale del `mtime` de `prescan.json` frente a ahora.
+- **Tokens**: suma los `subagent_tokens` de todos los bloques `<usage>` que devuelven los `Agent`
+  lanzados en esta revisión, y añade aparte el consumo de contexto de la sesión con su porcentaje.
+
+**Sobre el porcentaje del límite del usuario: no lo estimes.** La skill solo ve el contador de
+sesión (`<total_tokens>`), no la cuota del plan de la cuenta. Di el porcentaje del presupuesto de
+sesión y explica en una frase que la cuota del plan no es visible desde aquí. Inventar un
+porcentaje de un límite que no puedes leer es peor que no darlo.
+
 Respuesta al usuario, concisa: nota global, techo, confianza, enlace del artefacto y ruta del
-archivo, tabla de una línea por caso de uso (qué se sube · nota · bloqueantes) y la secuencia de
-despliegue. Nada más.
+archivo, tabla de una línea por caso de uso (qué se sube · nota · bloqueantes), la secuencia de
+despliegue y, al final, las dos métricas.
 
 ## Camino a CI
 

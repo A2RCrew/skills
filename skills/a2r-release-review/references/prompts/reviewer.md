@@ -101,3 +101,10 @@ Añade a tu JSON:
    "paso_del_procedimiento": 2, "orden_declarado": true, "donde": "scripts/migrations/migration/index.ts:920", "verificar": "con cuenta Default tras migrar"}
 ]
 ```
+
+## Solo lectura, también para ti
+
+Nada de `git stash`, `git checkout`, `Edit` ni `Write` sobre los repos, ni siquiera para
+desbloquear una herramienta que se queja. Si una comprobación exigiría modificar el repositorio,
+declárala en `unverifiable` y sigue. El usuario puede tener trabajo sin commitear ahí, y un stash
+tuyo lo deja en un sitio donde no lo va a buscar.

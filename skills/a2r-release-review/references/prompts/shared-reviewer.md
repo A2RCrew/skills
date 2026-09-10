@@ -104,3 +104,10 @@ superficie compartida incluye:
 El sentido es este: si alguien tocando su caso de uso degrada una pieza común, el informe lo
 recoge y dice de qué trabajo salió, para que la conversación sea con quien hizo el cambio y no con
 un dueño que no existe.
+
+## Solo lectura, también para ti
+
+Nada de `git stash`, `git checkout`, `Edit` ni `Write` sobre los repos, ni siquiera para
+desbloquear una herramienta que se queja. Si una comprobación exigiría modificar el repositorio,
+declárala en `unverifiable` y sigue. El usuario puede tener trabajo sin commitear ahí, y un stash
+tuyo lo deja en un sitio donde no lo va a buscar.
