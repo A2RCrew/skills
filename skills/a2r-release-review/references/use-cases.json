@@ -1,71 +1,365 @@
 {
   "_doc": "Casos de uso de la plataforma A2R (= etiquetas 'Caso de uso' de Linear, ver skills/a2r create-issue/references/case-owners.md). Cada caso lista globs por repositorio. El primer glob que casa gana; se evalúan en el orden de este fichero y 'plataforma' actúa como resto. Sintaxis: ** (cualquier profundidad), * (sin /), {a,b}.",
   "use_cases": [
-    { "slug": "tts-stt", "label": "TTS-STT", "name": "Texto a voz y voz a texto", "owner": "jesus",
+    {
+      "slug": "tts-stt",
+      "label": "TTS-STT",
+      "name": "Texto a voz y voz a texto",
+      "owner": "jesus",
       "globs": {
-        "nimrod-multitenant": ["src/components/{text-to-speech,text-to-speech-v2,speech-to-text}/**", "src/app/(withLayout)/(dashboard)/{text-to-speech,text-to-speech-v2,speech-to-text}/**", "src/app/api/{tts-v2,stt}/**", "src/data/{textToSpeechWorks,textToSpeechWorksV2,speech-to-text-works,customTtsVoices}/**", "src/lib/actions/{text-to-speech,text-to-speech-v2,speech-to-text,custom-tts-voices,phonetic-dictionaries,video-transcription}.ts", "**/*[Tt]ext[Tt]o[Ss]peech*", "**/*tts*", "**/*Tts*", "**/*[Vv]oices*", "**/*phonetic*", "**/*speechToText*", "**/*speech-to-text*"],
-        "nimrod-api": ["src/tasks/textToSpeech*.ts", "src/tasks/speechToText.ts", "src/utils/tts/**", "src/app/api/v0/{execute-tts,execute-tts-v2,execute-stt,speech-to-text,video-transcription,preview-sound,generate-custom-voice-sample}/**", "src/app/api/v0/{tts-v2,sound-assets}/**", "**/*[Tt]ext[Tt]o[Ss]peech*", "**/*tts*"]
-      } },
-    { "slug": "traducciones", "label": "Traducciones", "name": "Traducciones", "owner": "miguel",
+        "nimrod-multitenant": [
+          "src/components/{text-to-speech,text-to-speech-v2,speech-to-text}/**",
+          "src/app/(withLayout)/(dashboard)/{text-to-speech,text-to-speech-v2,speech-to-text}/**",
+          "src/app/api/{tts-v2,stt}/**",
+          "src/data/{textToSpeechWorks,textToSpeechWorksV2,speech-to-text-works,customTtsVoices}/**",
+          "src/lib/actions/{text-to-speech,text-to-speech-v2,speech-to-text,custom-tts-voices,phonetic-dictionaries,video-transcription}.ts",
+          "**/*[Tt]ext[Tt]o[Ss]peech*",
+          "**/*tts*",
+          "**/*Tts*",
+          "**/*[Vv]oices*",
+          "**/*phonetic*",
+          "**/*speechToText*",
+          "**/*speech-to-text*"
+        ],
+        "nimrod-api": [
+          "src/tasks/textToSpeech*.ts",
+          "src/tasks/speechToText.ts",
+          "src/utils/tts/**",
+          "src/app/api/v0/{execute-tts,execute-tts-v2,execute-stt,speech-to-text,video-transcription,preview-sound,generate-custom-voice-sample}/**",
+          "src/app/api/v0/{tts-v2,sound-assets}/**",
+          "**/*[Tt]ext[Tt]o[Ss]peech*",
+          "**/*tts*"
+        ]
+      }
+    },
+    {
+      "slug": "traducciones",
+      "label": "Traducciones",
+      "name": "Traducciones",
+      "owner": "miguel",
       "globs": {
-        "nimrod-multitenant": ["src/components/{translations,translation-instructions}/**", "src/app/(withLayout)/(dashboard)/{translations,translation-instructions}/**", "src/app/api/{getIdmlTranslations,languages}/**", "src/data/{docxTranslations,idmlTranslations,pptxTranslations,xlsxTranslations,translationInstructions}/**", "src/data/getLanguages.ts", "src/lib/actions/{translations,translationInstructions}.ts", "**/*[Tt]ranslation*", "**/*dictionar*", "**/valencian*"],
-        "nimrod-api": ["src/tasks/{idmlTranslate,docxTranslate,pptxTranslate,xlsxTranslate,translateMarkdown,importPreviousIDMLTranslations,importTranslationTerms,audioVideoTranslationWork}.ts", "src/utils/idml/**", "src/app/translation/**", "src/app/api/v0/*dictionar*/**", "**/*[Tt]ranslat*", "**/*[Dd]ictionar*"],
-        "translate-documents": ["**"]
-      } },
-    { "slug": "ingesta", "label": "Ingesta", "name": "Ingesta y explorador de ficheros", "owner": "alex",
+        "nimrod-multitenant": [
+          "src/components/{translations,translation-instructions}/**",
+          "src/app/(withLayout)/(dashboard)/{translations,translation-instructions}/**",
+          "src/app/api/{getIdmlTranslations,languages}/**",
+          "src/data/{docxTranslations,idmlTranslations,pptxTranslations,xlsxTranslations,translationInstructions}/**",
+          "src/data/getLanguages.ts",
+          "src/lib/actions/{translations,translationInstructions}.ts",
+          "**/*[Tt]ranslation*",
+          "**/*dictionar*",
+          "**/valencian*"
+        ],
+        "nimrod-api": [
+          "src/tasks/{idmlTranslate,docxTranslate,pptxTranslate,xlsxTranslate,translateMarkdown,importPreviousIDMLTranslations,importTranslationTerms,audioVideoTranslationWork}.ts",
+          "src/utils/idml/**",
+          "src/app/translation/**",
+          "src/app/api/v0/*dictionar*/**",
+          "**/*[Tt]ranslat*",
+          "**/*[Dd]ictionar*"
+        ],
+        "translate-documents": [
+          "**"
+        ]
+      }
+    },
+    {
+      "slug": "ingesta",
+      "label": "Ingesta",
+      "name": "Ingesta y explorador de ficheros",
+      "owner": "alex",
       "globs": {
-        "nimrod-multitenant": ["src/components/{file-explorer,source-files}/**", "src/app/(withLayout)/(dashboard)/{file-explorer,source-file,source-files}/**", "src/app/api/{file-explorer,source-files,source-file-prompts,getContentEmbedding,getAssetInfo,getEMPAssetInfo,assets,directus-asset,chat-asset,cloudfront}/**", "src/data/getSourceFile*.ts", "src/data/getFolderTree.ts", "src/lib/actions/{source-files,sourceFiles,folders}.ts", "**/*sourceFile*", "**/*contentEmbedding*", "**/*ingestion*", "**/folder*"],
-        "nimrod-api": ["src/tasks/{semanticIngestion,semanticIngestionOnDemand,semanticIngestionOnlyRasterize,regenerateSourceFileChunks,bulkUrlProcessingWork}.ts", "src/utils/ingestion/**", "src/utils/docProcessors/**", "src/app/api/v0/{source-files,apply-ingestion-rules,generate-embedding,create-select-sourceFile}/**", "**/*[Ii]ngestion*", "**/*sourceFile*", "**/*[Ee]mbedding*"],
-        "semantic-pdf-serverless": ["**"],
-        "bulk-url-process": ["**"]
-      } },
-    { "slug": "acciones-personalizadas", "label": "Acciones personalizadas", "name": "Acciones personalizadas", "owner": "lguisado",
+        "nimrod-multitenant": [
+          "src/components/{file-explorer,source-files}/**",
+          "src/app/(withLayout)/(dashboard)/{file-explorer,source-file,source-files}/**",
+          "src/app/api/{file-explorer,source-files,source-file-prompts,getContentEmbedding,getAssetInfo,getEMPAssetInfo,assets,directus-asset,chat-asset,cloudfront}/**",
+          "src/data/getSourceFile*.ts",
+          "src/data/getFolderTree.ts",
+          "src/lib/actions/{source-files,sourceFiles,folders}.ts",
+          "**/*sourceFile*",
+          "**/*contentEmbedding*",
+          "**/*ingestion*",
+          "**/folder*"
+        ],
+        "nimrod-api": [
+          "src/tasks/{semanticIngestion,semanticIngestionOnDemand,semanticIngestionOnlyRasterize,regenerateSourceFileChunks,bulkUrlProcessingWork}.ts",
+          "src/utils/ingestion/**",
+          "src/utils/docProcessors/**",
+          "src/app/api/v0/{source-files,apply-ingestion-rules,generate-embedding,create-select-sourceFile}/**",
+          "**/*[Ii]ngestion*",
+          "**/*sourceFile*",
+          "**/*[Ee]mbedding*"
+        ],
+        "semantic-pdf-serverless": [
+          "**"
+        ],
+        "bulk-url-process": [
+          "**"
+        ]
+      }
+    },
+    {
+      "slug": "acciones-personalizadas",
+      "label": "Acciones personalizadas",
+      "name": "Acciones personalizadas",
+      "owner": "lguisado",
       "globs": {
-        "nimrod-multitenant": ["src/components/{custom-actions,custom-actions-v2,customPrompts}/**", "src/app/(withLayout)/(dashboard)/{custom-actions,custom-actions-v2}/**", "src/app/api/{custom-actions,custom-actions-v2}/**", "src/data/{customActionsV2,onDemandArtifacts}/**", "src/data/{getCustomPromptCategories,getTemplateCustomPromptWorks,getReplacementFields}.ts", "src/lib/actions/{custom-actions-v2,custom-prompt-templates,on-demand-artifacts,document-branding-templates}.ts", "**/*customPrompt*", "**/*customAction*", "**/*custom-action*", "**/*onDemandArtifact*", "**/*[Bb]randing[Tt]emplate*"],
-        "nimrod-api": ["src/custom-actions/**", "src/utils/customActions/**", "src/app/api/v0/custom-actions/**", "src/tasks/customPromptWork*", "**/*customPrompt*", "**/*[Bb]randing*"]
-      } },
-    { "slug": "chatbots", "label": "Chatbots", "name": "Chatbots y conversacional", "owner": "ivan",
+        "nimrod-multitenant": [
+          "src/components/{custom-actions,custom-actions-v2,customPrompts}/**",
+          "src/app/(withLayout)/(dashboard)/{custom-actions,custom-actions-v2}/**",
+          "src/app/api/{custom-actions,custom-actions-v2}/**",
+          "src/data/{customActionsV2,onDemandArtifacts}/**",
+          "src/data/{getCustomPromptCategories,getTemplateCustomPromptWorks,getReplacementFields}.ts",
+          "src/lib/actions/{custom-actions-v2,custom-prompt-templates,on-demand-artifacts,document-branding-templates}.ts",
+          "**/*customPrompt*",
+          "**/*customAction*",
+          "**/*custom-action*",
+          "**/*onDemandArtifact*",
+          "**/*[Bb]randing[Tt]emplate*"
+        ],
+        "nimrod-api": [
+          "src/custom-actions/**",
+          "src/utils/customActions/**",
+          "src/app/api/v0/custom-actions/**",
+          "src/tasks/customPromptWork*",
+          "**/*customPrompt*",
+          "**/*[Bb]randing*"
+        ]
+      }
+    },
+    {
+      "slug": "chatbots",
+      "label": "Chatbots",
+      "name": "Chatbots y conversacional",
+      "owner": "ivan",
       "globs": {
-        "nimrod-multitenant": ["src/components/{chat,chatbot,chatbots,chat-settings,chatbot-tests,chatbot-catsalut,agent,agents,ai-mentors,session,system-prompts,prompt-builder,feedback}/**", "src/app/(withLayout)/(dashboard)/{chatbot,chatbots,chatbots-catsalut,chatbot-catsalut,chat-settings,agent,agents,ai-mentor,ai-mentors,system-prompts,prompt-builder}/**", "src/app/chat/**", "src/app/api/{chat,newChat,anonymousChat,new-chat-catsalut,agent,new-agent,mentor,mentor-v2,new-ai-mentor,anonymous-ai-mentor,catsalut,sermas,quality-tests,stages,custom-prompt,discovery}/**", "src/data/{agents,catsalut,sermas}/**", "src/data/{getChatbot*,getChat*,getAIMentor*,getSystemPrompt,getSingleChatbots,getPromptBuilder*,getStage*,getFeedbackByContentEmbedding,sessions,process}.ts", "src/lib/actions/{chatbots,chatSettings,agents,ai-mentors,systemPrompts,quality-tests,prompt-builder,messages,feedback}.ts", "src/utils/vercelAIPlugins/**", "**/*chatbot*", "**/*[Cc]hat[Ss]ession*", "**/*systemPrompt*", "**/*promptBuilder*", "**/*agent*", "**/*mentor*", "**/*testsExecution*"],
-        "nimrod-api": ["src/utils/chat/**", "src/app/chat/**", "src/app/api/v0/{chat,execute-conversational,xatbot-sat,agent-model}/**", "src/tasks/{customerSupportMessage,promptBuilderWork,aiMentorQuestionProcessingWork,testsExecutions}.ts", "src/utils/agents/**", "src/utils/qualityChecks/**", "src/tasks/qualityChecksGenerationWork.ts", "**/*[Cc]hat*", "**/*[Mm]entor*"]
-      } },
-    { "slug": "revision-estilo", "label": "Revisión de estilo", "name": "Revisión de estilo", "owner": "ivan",
+        "nimrod-multitenant": [
+          "src/components/{chat,chatbot,chatbots,chat-settings,chatbot-tests,chatbot-catsalut,agent,agents,ai-mentors,session,system-prompts,prompt-builder,feedback}/**",
+          "src/app/(withLayout)/(dashboard)/{chatbot,chatbots,chatbots-catsalut,chatbot-catsalut,chat-settings,agent,agents,ai-mentor,ai-mentors,system-prompts,prompt-builder}/**",
+          "src/app/chat/**",
+          "src/app/api/{chat,newChat,anonymousChat,new-chat-catsalut,agent,new-agent,mentor,mentor-v2,new-ai-mentor,anonymous-ai-mentor,catsalut,sermas,quality-tests,stages,custom-prompt,discovery}/**",
+          "src/data/{agents,catsalut,sermas}/**",
+          "src/data/{getChatbot*,getChat*,getAIMentor*,getSystemPrompt,getSingleChatbots,getPromptBuilder*,getStage*,getFeedbackByContentEmbedding,sessions,process}.ts",
+          "src/lib/actions/{chatbots,chatSettings,agents,ai-mentors,systemPrompts,quality-tests,prompt-builder,messages,feedback}.ts",
+          "src/utils/vercelAIPlugins/**",
+          "**/*chatbot*",
+          "**/*[Cc]hat[Ss]ession*",
+          "**/*systemPrompt*",
+          "**/*promptBuilder*",
+          "**/*agent*",
+          "**/*mentor*",
+          "**/*testsExecution*"
+        ],
+        "nimrod-api": [
+          "src/utils/chat/**",
+          "src/app/chat/**",
+          "src/app/api/v0/{chat,execute-conversational,xatbot-sat,agent-model}/**",
+          "src/tasks/{customerSupportMessage,promptBuilderWork,aiMentorQuestionProcessingWork,testsExecutions}.ts",
+          "src/utils/agents/**",
+          "src/utils/qualityChecks/**",
+          "src/tasks/qualityChecksGenerationWork.ts",
+          "**/*[Cc]hat*",
+          "**/*[Mm]entor*"
+        ]
+      }
+    },
+    {
+      "slug": "revision-estilo",
+      "label": "Revisión de estilo",
+      "name": "Revisión de estilo",
+      "owner": "ivan",
       "globs": {
-        "nimrod-multitenant": ["src/components/{corrector,style-guides,html-diff}/**", "src/app/(withLayout)/(dashboard)/style-review/**", "src/app/api/{style-guides,style-guides-management}/**", "src/data/{getStyleGuides,getAllStyleGuidesForManagement,getCorrectionWorks,getCorrectionWorkDetails}.ts", "src/lib/actions/{corrector,style-guides}.ts", "**/*styleGuide*", "**/*style-guide*", "**/*correctionWork*"],
-        "nimrod-api": ["src/utils/styleGuides/**", "src/tasks/styleGuideWork.ts", "src/tasks/correctionWork.ts", "**/*styleGuide*"]
-      } },
-    { "slug": "pdf", "label": "PDF", "name": "Remediación y accesibilidad PDF", "owner": "lguisado",
+        "nimrod-multitenant": [
+          "src/components/{corrector,style-guides,html-diff}/**",
+          "src/app/(withLayout)/(dashboard)/style-review/**",
+          "src/app/api/{style-guides,style-guides-management}/**",
+          "src/data/{getStyleGuides,getAllStyleGuidesForManagement,getCorrectionWorks,getCorrectionWorkDetails}.ts",
+          "src/lib/actions/{corrector,style-guides}.ts",
+          "**/*styleGuide*",
+          "**/*style-guide*",
+          "**/*correctionWork*"
+        ],
+        "nimrod-api": [
+          "src/utils/styleGuides/**",
+          "src/tasks/styleGuideWork.ts",
+          "src/tasks/correctionWork.ts",
+          "**/*styleGuide*"
+        ]
+      }
+    },
+    {
+      "slug": "pdf",
+      "label": "PDF",
+      "name": "Remediación y accesibilidad PDF",
+      "owner": "lguisado",
       "globs": {
-        "nimrod-multitenant": ["src/components/{pdf-inspector,pdf-remediation}/**", "src/app/(withLayout)/(dashboard)/{pdf-inspector,pdf-remediation}/**", "src/app/api/convert-to-pdf/**", "src/data/getPdfRemediation*.ts", "src/lib/actions/pdf-remediation.ts", "src/hooks/usePdfRemediationCredits.ts", "**/*pdfRemediation*", "**/*pdf-remediation*"],
-        "nimrod-api": ["src/utils/pdfRemediation/**", "src/tasks/pdfRemediation*.ts", "src/app/api/v0/{pdf-remediation,jobs/pdf-remediations}/**", "**/*pdfRemediation*"],
-        "pdf-remediation": ["**"]
-      } },
-    { "slug": "evaluaciones", "label": "Evaluaciones", "name": "Evaluaciones y corrección", "owner": "luis",
+        "nimrod-multitenant": [
+          "src/components/{pdf-inspector,pdf-remediation}/**",
+          "src/app/(withLayout)/(dashboard)/{pdf-inspector,pdf-remediation}/**",
+          "src/app/api/convert-to-pdf/**",
+          "src/data/getPdfRemediation*.ts",
+          "src/lib/actions/pdf-remediation.ts",
+          "src/hooks/usePdfRemediationCredits.ts",
+          "**/*pdfRemediation*",
+          "**/*pdf-remediation*"
+        ],
+        "nimrod-api": [
+          "src/utils/pdfRemediation/**",
+          "src/tasks/pdfRemediation*.ts",
+          "src/app/api/v0/{pdf-remediation,jobs/pdf-remediations}/**",
+          "**/*pdfRemediation*"
+        ],
+        "pdf-remediation": [
+          "**"
+        ]
+      }
+    },
+    {
+      "slug": "evaluaciones",
+      "label": "Evaluaciones",
+      "name": "Evaluaciones y corrección",
+      "owner": "luis",
       "globs": {
-        "nimrod-multitenant": ["src/components/evaluation/**", "src/app/(withLayout)/(dashboard)/{evaluation,evaluations}/**", "src/app/api/{mentor-student-evaluate,correction-assets}/**", "src/data/evaluations/**", "src/data/{getEvaluation,getCriteriaEvaluation*}.ts", "src/lib/actions/evaluations.ts", "**/*[Ee]valuat*", "**/subjectEvaluator*", "**/criteria*", "**/*activitiesCorrection*"],
-        "nimrod-api": ["src/utils/{activityCorrection,correctionSystem,evaluator}/**", "src/tasks/{activitiesCorrectionWork,evaluationCriteriaExtraction}.ts", "src/tasks/createConvalidation*.ts", "src/app/api/v0/{grading,evaluate,create-evaluator}/**", "src/app/api/v0/jobs/{evaluations,evaluators}/**", "**/*[Ee]valuat*", "**/*[Cc]orrection*"]
-      } },
-    { "slug": "generacion-preguntas", "label": "Generación de preguntas", "name": "Generación de preguntas y contenido", "owner": "luis",
+        "nimrod-multitenant": [
+          "src/components/evaluation/**",
+          "src/app/(withLayout)/(dashboard)/{evaluation,evaluations}/**",
+          "src/app/api/{mentor-student-evaluate,correction-assets}/**",
+          "src/data/evaluations/**",
+          "src/data/{getEvaluation,getCriteriaEvaluation*}.ts",
+          "src/lib/actions/evaluations.ts",
+          "**/*[Ee]valuat*",
+          "**/subjectEvaluator*",
+          "**/criteria*",
+          "**/*activitiesCorrection*"
+        ],
+        "nimrod-api": [
+          "src/utils/{activityCorrection,correctionSystem,evaluator}/**",
+          "src/tasks/{activitiesCorrectionWork,evaluationCriteriaExtraction}.ts",
+          "src/tasks/createConvalidation*.ts",
+          "src/app/api/v0/{grading,evaluate,create-evaluator}/**",
+          "src/app/api/v0/jobs/{evaluations,evaluators}/**",
+          "**/*[Ee]valuat*",
+          "**/*[Cc]orrection*"
+        ]
+      }
+    },
+    {
+      "slug": "generacion-preguntas",
+      "label": "Generación de preguntas",
+      "name": "Generación de preguntas y contenido",
+      "owner": "luis",
       "globs": {
-        "nimrod-multitenant": ["src/components/{questions,activity-generation}/**", "src/app/(withLayout)/(dashboard)/{activity,activity-generation}/**", "src/app/api/export-activities/**", "src/data/activity-generation/**", "src/data/{getActivity,getQuestions,statement}.ts", "src/lib/actions/{activity-generation,questions}.ts", "**/*activit*", "**/*[Aa]ctivit*", "**/*question*"],
-        "nimrod-api": ["src/utils/activitiesGeneration/**", "src/tasks/{activityGenerationWork,newsToActivities,questionGeneration,extractExercisesWork,contentGenerationWork,contentGenerationIndexWork,catalogingWork}.ts", "src/app/{activity,newsToActivities}/**", "src/app/api/v0/{generate-questions,questions-export,activity-export,regenerate-news-section,contentGenerationWorkToWord}/**", "**/*[Aa]ctivit*", "**/*[Qq]uestion*", "**/*contentGeneration*"]
-      } },
-    { "slug": "imagenes", "label": "Imágenes", "name": "Imágenes y vídeo", "owner": "lguisado",
+        "nimrod-multitenant": [
+          "src/components/{questions,activity-generation}/**",
+          "src/app/(withLayout)/(dashboard)/{activity,activity-generation}/**",
+          "src/app/api/export-activities/**",
+          "src/data/activity-generation/**",
+          "src/data/{getActivity,getQuestions,statement}.ts",
+          "src/lib/actions/{activity-generation,questions}.ts",
+          "**/*activit*",
+          "**/*[Aa]ctivit*",
+          "**/*question*"
+        ],
+        "nimrod-api": [
+          "src/utils/activitiesGeneration/**",
+          "src/tasks/{activityGenerationWork,newsToActivities,questionGeneration,extractExercisesWork,contentGenerationWork,contentGenerationIndexWork,catalogingWork}.ts",
+          "src/app/{activity,newsToActivities}/**",
+          "src/app/api/v0/{generate-questions,questions-export,activity-export,regenerate-news-section,contentGenerationWorkToWord}/**",
+          "**/*[Aa]ctivit*",
+          "**/*[Qq]uestion*",
+          "**/*contentGeneration*"
+        ]
+      }
+    },
+    {
+      "slug": "imagenes",
+      "label": "Imágenes",
+      "name": "Imágenes y vídeo",
+      "owner": "lguisado",
       "globs": {
-        "nimrod-multitenant": ["src/components/{advanced-image-generation,advancedGeneratedImages,image-description}/**", "src/app/(withLayout)/(dashboard)/{advanced-image-generation,advanced-image-generations,generate-image-description}/**", "src/app/api/generate-image/**", "src/data/{advancedImageGeneration,generatedImagesDescriptions,image-description}/**", "src/lib/actions/{advanced-image-generation,generate-image-description}.ts", "**/*[Ii]mage*", "**/text-to-video*"],
-        "nimrod-api": ["src/tasks/{generateImage,generateAdvancedImage,imageUpScale,imageDescription,imageToVideo,textToVideo}.ts", "src/app/api/v0/{images,describe-image,upscale-image,generate-advanced-image,generate-video,text-to-video}/**", "**/*[Ii]mage*", "**/*[Vv]ideo*"]
-      } },
-    { "slug": "dashboard", "label": "Dashboard", "name": "Dashboard y analítica", "owner": "ivan",
+        "nimrod-multitenant": [
+          "src/components/{advanced-image-generation,advancedGeneratedImages,image-description}/**",
+          "src/app/(withLayout)/(dashboard)/{advanced-image-generation,advanced-image-generations,generate-image-description}/**",
+          "src/app/api/generate-image/**",
+          "src/data/{advancedImageGeneration,generatedImagesDescriptions,image-description}/**",
+          "src/lib/actions/{advanced-image-generation,generate-image-description}.ts",
+          "**/*[Ii]mage*",
+          "**/text-to-video*"
+        ],
+        "nimrod-api": [
+          "src/tasks/{generateImage,generateAdvancedImage,imageUpScale,imageDescription,imageToVideo,textToVideo}.ts",
+          "src/app/api/v0/{images,describe-image,upscale-image,generate-advanced-image,generate-video,text-to-video}/**",
+          "**/*[Ii]mage*",
+          "**/*[Vv]ideo*"
+        ]
+      }
+    },
+    {
+      "slug": "dashboard",
+      "label": "Dashboard",
+      "name": "Dashboard y analítica",
+      "owner": "ivan",
       "globs": {
-        "nimrod-multitenant": ["src/components/{dashboard,charts}/**", "src/app/(withLayout)/(dashboard)/{chat-analytics,conversations-analytics,credits-consumed-by-chat,messages-consumed-by-chat}/**", "src/app/api/{dashboard,conversation-analytics}/**", "src/app/api/v0/conversation-analytics/**", "src/hooks/useCredits*", "**/*[Aa]nalytics*"],
-        "nimrod-api": ["src/utils/conversationAnalytics*", "src/app/api/v0/conversation-analytics/**", "src/tasks/conversationAnalyticsProcess.ts", "src/utils/pricing/**", "src/app/api/v0/report-usage/**", "**/*[Aa]nalytics*", "**/*[Pp]ricing*", "**/*modelsUsage*"]
-      } },
-    { "slug": "auth", "label": "Auth", "name": "Autenticación y usuarios", "owner": "jordi",
+        "nimrod-multitenant": [
+          "src/components/{dashboard,charts}/**",
+          "src/app/(withLayout)/(dashboard)/{chat-analytics,conversations-analytics,credits-consumed-by-chat,messages-consumed-by-chat}/**",
+          "src/app/api/{dashboard,conversation-analytics}/**",
+          "src/app/api/v0/conversation-analytics/**",
+          "src/hooks/useCredits*",
+          "**/*[Aa]nalytics*"
+        ],
+        "nimrod-api": [
+          "src/utils/conversationAnalytics*",
+          "src/app/api/v0/conversation-analytics/**",
+          "src/tasks/conversationAnalyticsProcess.ts",
+          "src/utils/pricing/**",
+          "src/app/api/v0/report-usage/**",
+          "**/*[Aa]nalytics*",
+          "**/*[Pp]ricing*",
+          "**/*modelsUsage*"
+        ]
+      }
+    },
+    {
+      "slug": "auth",
+      "label": "Auth",
+      "name": "Autenticación y usuarios",
+      "owner": "jordi",
       "globs": {
-        "nimrod-multitenant": ["src/app/(withLayout)/(auth)/**", "src/app/api/auth/**", "src/middleware.ts", "src/components/{manage-users,consent}/**", "src/app/(withLayout)/(dashboard)/manage-users/**", "src/data/users/**", "src/data/{getAccessLevel,getAccessLevels,getLicenseData}.ts", "src/lib/actions/{users,permissions,consent}.ts", "src/lib/directus.ts", "**/directus_users*", "**/accessLevel*", "**/policies*", "**/permissions*", "**/*sso*", "**/*Sso*"],
-        "nimrod-api": ["src/utils/directusSDK.ts", "**/*auth*", "**/*[Tt]oken*"]
-      } },
-    { "slug": "plataforma", "label": "Transversal", "name": "Plataforma y transversal", "owner": "marcos",
-      "globs": { "*": ["**"] } }
+        "nimrod-multitenant": [
+          "src/app/(withLayout)/(auth)/**",
+          "src/app/api/auth/**",
+          "src/middleware.ts",
+          "src/components/{manage-users,consent}/**",
+          "src/app/(withLayout)/(dashboard)/manage-users/**",
+          "src/data/users/**",
+          "src/data/{getAccessLevel,getAccessLevels,getLicenseData}.ts",
+          "src/lib/actions/{users,permissions,consent}.ts",
+          "src/lib/directus.ts",
+          "**/directus_users*",
+          "**/accessLevel*",
+          "**/policies*",
+          "**/permissions*",
+          "**/*sso*",
+          "**/*Sso*"
+        ],
+        "nimrod-api": [
+          "src/utils/directusSDK.ts",
+          "**/*auth*",
+          "**/*[Tt]oken*"
+        ]
+      }
+    },
+    {
+      "slug": "plataforma",
+      "label": "Transversal",
+      "name": "Plataforma y transversal",
+      "owner": null,
+      "globs": {
+        "*": [
+          "**"
+        ]
+      },
+      "nota_owner": "Sin dueño asignado. NO inventes uno ni reutilices el de Transversal de Linear: los componentes generales (modelo de Directus, sesión, proveedores, precios, logger) no tienen responsable hoy. Un cambio que los degrade se atribuye a quien lo firmó y al caso de uso cuyo trabajo lo introdujo."
+    }
   ]
 }

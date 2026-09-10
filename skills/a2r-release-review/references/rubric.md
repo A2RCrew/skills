@@ -54,6 +54,16 @@ Se cuentan solo los hallazgos y fallos de checklist cuyos ficheros pertenecen al
 - Dependencia entre repos sin orden declarado (X3) → ≤3.
 - Algún repo seleccionado sin fase 0 completa (install o typecheck no ejecutados) → ≤3.
 
+## Superficies compartidas: sin dueño, con autor
+
+Los componentes generales no tienen responsable asignado. En el informe **no se les pone owner**:
+ni el del caso de uso «plataforma», ni ningún otro. Lo que se nombra es **quién firmó el cambio**
+(`autores` e `issues` de `blast-radius.json`) y **de qué caso de uso salió ese trabajo**.
+
+Un cambio que degrada una pieza común se reporta siempre, aunque su caso de uso vaya por lo demás
+limpio: es precisamente el escenario que motiva esta sección, alguien tocando lo suyo y rompiendo
+lo de todos.
+
 ## Cómo afecta el radio a los casos de uso
 
 Un hallazgo en una superficie compartida **cuenta en todos los casos de uso que arrastra**, no solo

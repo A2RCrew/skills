@@ -187,9 +187,9 @@ footer{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);paddin
 
 <section>
   <h2>Superficies compartidas tocadas</h2>
-  <p style="font-size:14px;color:var(--ink-2)">Módulos y contratos que sirven a varios casos de uso o a varios repos. Un cambio aquí no se juzga por dónde vive el fichero, sino por a quién arrastra.</p>
+  <p style="font-size:14px;color:var(--ink-2)">Módulos y contratos que sirven a varios casos de uso o a varios repos. <b>No tienen dueño asignado</b>, así que la columna nombra a quien firmó el cambio, no a un responsable nominal. Un cambio aquí no se juzga por dónde vive el fichero, sino por a quién arrastra.</p>
   <div class="tbl"><table>
-    <thead><tr><th>Superficie</th><th>Repo</th><th>Cambio</th><th class="num">Importadores</th><th class="num">Casos</th><th>Veredicto</th></tr></thead>
+    <thead><tr><th>Superficie</th><th>Repo</th><th>Quién la tocó</th><th>Cambio</th><th class="num">Importadores</th><th class="num">Casos</th><th>Veredicto</th></tr></thead>
     <tbody>
       {{FILAS_SUPERFICIES}}
       <!-- <tr><td>src/lib/auth.ts · Sesión y readMe</td><td class="who">mt</td><td><span class="tag mayor">revisar</span></td><td class="num">124</td><td class="num">13</td><td>coordinado: la migración va antes que el front</td></tr>

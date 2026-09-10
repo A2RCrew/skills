@@ -53,6 +53,9 @@ Ficheros de la skill (`SKILL_DIR` = directorio de este fichero):
 4. **La entrevista se hace una vez**, al principio, y siempre recomienda. Después no se pregunta más:
    las dudas se resuelven con la opción recomendada y se anotan en «Supuestos».
 5. **El informe habla de casos de uso**, no de repos. Los repos aparecen como columna, no como capítulo.
+   Los componentes generales **no tienen dueño**: no les pongas owner en el informe. Se nombra a
+   quien firmó el cambio y de qué caso de uso salió. Un cambio que los degrade se reporta aunque
+   su caso vaya limpio.
 5 bis. **Este informe se lee ANTES de desplegar.** Una migración pendiente es la precondición
    normal, no un defecto: el procedimiento las ejecuta en el paso 2, antes de todo el código. Va a
    «Requisitos previos» y **no toca la nota**. Solo puntúa si el orden contradice el canónico, si

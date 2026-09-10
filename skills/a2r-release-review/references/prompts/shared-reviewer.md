@@ -84,3 +84,23 @@ Añade a tu JSON:
    "paso_del_procedimiento": 2, "orden_declarado": true, "donde": "scripts/migrations/migration/index.ts:920", "verificar": "con cuenta Default tras migrar"}
 ]
 ```
+
+## Sin dueño: atribuir a quien lo firmó
+
+Los componentes generales (modelo de Directus, sesión, cliente Directus, proveedores de modelos,
+precios, logger, esquemas de validación) **no tienen responsable asignado hoy**. No inventes uno,
+no reutilices el owner del caso de uso «plataforma» de Linear, y no escribas «marcos» ni ningún
+otro nombre como dueño de estas superficies.
+
+Lo que sí haces: **decir quién tocó cada una**. `blast-radius.json` trae el array `autores` y el
+array `issues` de cada superficie, sacados de los commits del rango. En cada hallazgo sobre una
+superficie compartida incluye:
+
+```json
+"atribucion": {"autores": ["lguisado"], "issues": ["A2R-692", "A2R-688"],
+               "caso_que_lo_introdujo": "acciones-personalizadas"}
+```
+
+El sentido es este: si alguien tocando su caso de uso degrada una pieza común, el informe lo
+recoge y dice de qué trabajo salió, para que la conversación sea con quien hizo el cambio y no con
+un dueño que no existe.

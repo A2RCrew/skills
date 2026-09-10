@@ -175,8 +175,19 @@ for (const { status, path } of changed) {
   // cuerpo (una proyección, un umbral), así que cualquier cambio va a revisión con su lista rompedor_si.
   const riesgo = kind === 'rompedor' ? 'rompedor' : dec ? 'revisar' : kind === 'aditivo' ? 'aditivo' : 'interno';
 
+  // Quién tocó esta superficie en el rango. No hay dueño asignado a los componentes generales,
+  // así que la responsabilidad se atribuye a quien firmó el cambio, no a un owner nominal.
+  let autores = [], issues = [];
+  try {
+    const log = execFileSync('git', ['log', '--no-merges', '--format=%an%x00%s%x00%b%x01', `${base}..${head}`, '--', path],
+      { cwd: repoDir, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+    const commits = log.split('\x01').map((x) => x.trim()).filter(Boolean);
+    autores = [...new Set(commits.map((c) => c.split('\x00')[0]))];
+    issues = [...new Set(commits.flatMap((c) => (c.match(/A2R-\d+/gi) || []).map((x) => x.toUpperCase())))];
+  } catch {}
+
   rows.push({
-    path, status, declarado: !!dec, nombre: dec?.nombre ?? null, owner: dec?.owner ?? null,
+    path, status, declarado: !!dec, nombre: dec?.nombre ?? null, autores, issues, commits_en_rango: autores.length ? undefined : 0,
     porque: dec?.porque ?? null, rompedor_si: dec?.rompedor_si ?? null,
     caso_de_uso_del_fichero: useCaseOf(path),
     importadores_directos: impDirect.length, importadores_con_barriles: impAll.length,
@@ -222,4 +233,4 @@ const out = {
 };
 writeFileSync(join(outDir, 'blast-radius.json'), JSON.stringify(out, null, 2) + '\n');
 console.log(`${repoKey}: ${rows.length} superficie(s) compartida(s) tocada(s) · ${out.resumen.rompedoras} rompedora(s), ${out.resumen.a_revisar} a revisar, ${out.resumen.aditivas} aditiva(s), ${out.resumen.internas} interna(s)`);
-for (const r of rows.slice(0, 14)) console.log(`   [${r.riesgo}/${r.cambio}] ${r.path} · ${r.importadores_directos} importadores (${r.importadores_con_barriles} con barriles) · ${r.casos_afectados} casos${r.declarado ? ' · declarada' : ''}`);
+for (const r of rows.slice(0, 14)) console.log(`   [${r.riesgo}/${r.cambio}] ${r.path} · ${r.importadores_directos} importadores · ${r.casos_afectados} casos${r.declarado ? ' · declarada' : ''}${r.autores?.length ? ' · tocada por ' + r.autores.join(', ') : ''}${r.issues?.length ? ' (' + r.issues.slice(0, 3).join(' ') + ')' : ''}`);

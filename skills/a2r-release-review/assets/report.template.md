@@ -28,8 +28,8 @@
 
 ## Superficies compartidas tocadas
 
-| Superficie | Repo | Cambio | Importadores | Casos que arrastra | Veredicto |
-|---|---|---|---|---|---|
+| Superficie | Repo | Quién la tocó | Cambio | Importadores | Casos que arrastra | Veredicto |
+|---|---|---|---|---|---|---|
 {{FILAS_SUPERFICIES}}
 
 {{SUPERFICIES_SIN_RIESGO}}
