@@ -1,9 +1,16 @@
 {
   "name": "codex-computer-use",
-  "description": "Delegate local app verification that needs computer use (browser automation, simulators, screenshots, app launching) to Codex CLI (gpt-6-astra).",
-  "version": "1.2.0",
+  "description": "Delegate computer use and visual reasoning (apps, browsers, screenshots, images, and rendered documents) from an external CLI to Codex CLI with gpt-6-astra.",
+  "version": "1.3.0",
   "author": {
     "name": "A2RCrew"
   },
-  "keywords": ["codex", "gpt-6-astra", "computer-use", "verification", "automation"]
+  "keywords": [
+    "codex",
+    "gpt-6-astra",
+    "computer-use",
+    "vision",
+    "verification",
+    "automation"
+  ]
 }
