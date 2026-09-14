@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "mode", "backend", "summary", "findings", "artifacts", "limitations", "external_state_changes", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["completed", "partial", "blocked", "failed"]},
+    "mode": {"type": "string", "enum": ["visual_analysis", "computer_use", "mixed"]},
+    "backend": {"type": "string", "description": "Actual tool/library used, image attachments, or unavailable."},
+    "summary": {"type": "string"},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["criterion", "result", "observation", "evidence"],
+        "properties": {
+          "criterion": {"type": "string"},
+          "result": {"type": "string", "enum": ["pass", "fail", "not_checked", "observation"]},
+          "observation": {"type": "string"},
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "kind", "description"],
+              "properties": {
+                "path": {"type": "string", "description": "Absolute local input/artifact path."},
+                "kind": {"type": "string", "enum": ["input_image", "screenshot", "accessibility_tree", "log", "composite"]},
+                "description": {"type": "string", "description": "Region/state/page/frame; for composites identify the source captures and their order."}
+              }
+            }
+          }
+        }
+      }
+    },
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "external_state_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["observation", "cause", "impact"],
+        "properties": {
+          "observation": {"type": "string", "description": "Before/after state and time or action sequence."},
+          "cause": {"type": "string", "description": "Unknown unless supported by evidence."},
+          "impact": {"type": "string", "description": "Affected criteria and whether they were repeated."}
+        }
+      }
+    },
+    "next_action": {"type": "string", "description": "Concrete pending action, or empty string when none."}
+  }
+}
