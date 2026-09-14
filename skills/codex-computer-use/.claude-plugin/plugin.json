@@ -1,7 +1,7 @@
 {
   "name": "codex-computer-use",
-  "description": "Delegate computer use and visual reasoning (apps, browsers, screenshots, images, and rendered documents) from an external CLI to Codex CLI with gpt-6-astra.",
-  "version": "1.3.0",
+  "description": "Delegate computer use and visual reasoning to Codex CLI with gpt-6-astra. Prefer the official cua_repl MCP with connected Chrome, then the built-in browser.",
+  "version": "1.4.0",
   "author": {
     "name": "A2RCrew"
   },
