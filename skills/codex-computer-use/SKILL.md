@@ -4,7 +4,8 @@ description: >
   Delegate computer use and visual reasoning to Codex CLI with gpt-6-astra from an
   external CLI or agent. Use to operate browser or desktop apps, test UI flows,
   inspect screenshots or images, compare visual references, interpret diagrams,
-  or review rendered documents when Astra's visual capabilities are needed.
+  or review rendered documents when Astra's visual capabilities are needed. For web
+  tasks, prefer the official cua_repl MCP with connected Chrome, then its built-in browser.
 ---
 
 # Codex Computer Use
@@ -24,7 +25,8 @@ and tool loop. Do not ask the child to invoke this skill or delegate again.
 | Task | What Codex needs |
 | --- | --- |
 | Inspect or compare images, screenshots, diagrams, or rendered pages | Local images via `-i`; no UI driver required |
-| Operate an app, capture its state, or verify an interactive flow | A working browser, desktop, or simulator backend accessible inside Codex |
+| Operate a website or verify a browser flow | Official `cua_repl` MCP: connected Chrome first, built-in browser second |
+| Operate a desktop app or simulator | Official `cua_repl` native app control, with the required app permissions |
 | Compare a live UI with a design reference | Both the reference image and an interaction backend |
 
 For PDFs, slides, or video, provide rendered page images or selected frames using
@@ -32,6 +34,34 @@ available renderers; identify page numbers or timestamps. Do not pass these file
 `-i` as though they were images. Include original paths when other tools need them.
 Image understanding does not itself generate or edit raster images; that requires
 a suitable image tool if requested.
+
+## Backend priority
+
+For web tasks, carry this explicit policy into the child prompt:
+
+1. Use the app-managed **`cua_repl` MCP with connected Chrome** (the official browser
+   integration/extension). Confirm the intended profile and observe the target page.
+2. If that integration is unavailable or cannot perform the required operation, attempt
+   the **built-in browser (`iab`) through the same MCP**. It has a separate profile;
+   verify the required account and starting state again. Record why Chrome could not
+   be used. Do not silently treat the built-in browser as the user's Chrome session.
+3. If neither can perform the task, report `blocked` with the concrete gap. Native
+   Chrome via `cua.getApp(...)`, another MCP, standalone Playwright, and PyAutoGUI are
+   not automatic third choices. Use an alternative only when explicitly authorized
+   in the task. A task specifically requiring desktop/native controls may use
+   `cua_repl` app control directly.
+
+An explicit task choice of browser, tab, or native surface takes precedence over this
+default. Do not migrate an exact-tab task to another session and claim it was verified.
+Fallback is for capability/connection problems, not for bypassing a denied website,
+app, or action permission. If an action might already have changed data before an
+error, establish its outcome before repeating it in another browser.
+
+Playwright-style APIs **exposed by the official runtime** remain within this policy.
+Follow the runtime's documented accessibility, screenshot, and locator APIs. Importing
+Playwright independently or launching another browser process is a different backend
+and requires the explicit alternative above. Visual criteria still require images,
+even when locators or accessibility are used to perform the actions.
 
 ## Preflight
 
@@ -45,24 +75,32 @@ codex mcp list --json
 codex features list | rg 'computer_use|browser_use'
 ```
 
-Prefer JSON to the wide MCP table. The bundled **`cua_repl`** is a valid computer-use
-backend, as are browser MCP servers and installed code libraries such as Playwright
-or PyAutoGUI. MCP is not mandatory. `Auth Unsupported` alone does not mean a bundled
-server is disabled or unusable: check its enabled state and actual tool availability.
+Prefer JSON to the wide MCP table. Require the bundled **`cua_repl`** for interaction
+unless the task explicitly authorizes another backend. Image-only analysis does not
+need MCP. `Auth Unsupported` alone does not mean a bundled server is disabled or
+unusable: check its enabled state and actual tool availability.
 Feature flags are discovery hints, not proof of a working browser or app approval.
 Do not change them merely because a probe fails.
 
 Use `codex plugin list --json` if plugin discovery is needed and supported. A tool in
 the caller or ChatGPT desktop app may be absent from the child CLI. Have Codex confirm
-its available interface before the first task action. Backend versions differ; read
-its runtime documentation instead of assuming objects or methods exist. OpenAI
-recommends code execution for Astra computer use.
+its available interface before the first task action. Desktop supplies the runtime,
+browser connections, and approval controls; `codex exec` does not guarantee the same
+reachable sessions. `-m gpt-6-astra` selects the model, not the backend. The prompt sets
+the preference, and actual tool calls establish which backend was used.
+
+Backend versions differ; follow the instructions supplied by `cua_repl` instead of
+assuming objects or methods exist. The current runtime supplies its own API guidance;
+do not force-load a legacy Computer Use skill or manually recreate its app-managed
+MCP configuration. OpenAI recommends code execution for Astra computer use; executing
+JavaScript through this MCP is compatible with that recommendation.
 
 For **bundled `cua_repl` on macOS**, read
-[references/cua-repl.md](references/cua-repl.md): browser discovery may be empty while
-native Chrome access works, and app approval is separate from shell permissions.
-For other backends, confirm capture and the required input operations; utilities such
-as `open` or `screencapture` alone do not establish a complete interaction loop.
+[references/cua-repl.md](references/cua-repl.md) for Chrome-first entrypoints, the built-in
+browser fallback, and separate app/site permissions. Only use its native Chrome
+instructions when that route is explicitly authorized. For an authorized alternative,
+confirm capture and the required input operations; launching an app alone does not
+establish a complete interaction loop.
 
 Keep `gpt-6-astra` explicit. If unavailable, report the error instead of silently
 substituting another model. Honor an explicit user model or reasoning override.
@@ -83,6 +121,10 @@ and interaction prompts. Specify:
 - Objective, criteria, and mode: `visual_analysis`, `computer_use`, or `mixed`.
 - Absolute input paths and attachment order; for UI tasks, app/URL, launch instructions,
   target profile/session/device, authentication plan, backend, and initial state.
+- The Chrome-first, built-in-browser-second policy above, unless the task explicitly
+  overrides it. Specify whether the task depends on one exact tab/profile or can use
+  an equivalent authenticated state in the built-in browser. Include only alternatives
+  already authorized by the user.
 - Resolved artifact directory and deliverables. Pass the actual path, not the literal
   shell variable `$CUA_ARTIFACT_DIR`, which Codex may not have in its environment.
 - Authorized actions and boundaries. Verification normally leaves product files
@@ -177,6 +219,14 @@ Distinguish process completion, task coverage, and findings:
    not claim independent visual confirmation. Still images cannot prove an interaction
    occurred; source reading cannot substitute for visual or runtime evidence.
 
+For interaction, also verify that the tool events substantiate use of `cua_repl` and
+the selected surface. Report `backend` as `cua_repl/chrome`, `cua_repl/iab`, or
+`cua_repl/native:<app-id>` as appropriate. Record failed attempts and fallback reasons
+in `limitations`, even when the fallback completed the task. A fallback with full
+coverage can be `completed`; unmet account/tab requirements remain `blocked` or
+`partial`. An unauthorized backend substitution does not satisfy this handoff, even
+if its screenshots look correct. Do not automatically rerun actions with side effects.
+
 For verification, retain `git status --porcelain` as a useful baseline, but use relevant
 file contents/hashes or an isolated copy when preservation must be checked. Status alone
 misses further edits to already-dirty files and cannot attribute concurrent changes.
@@ -222,4 +272,9 @@ CLI examples checked against `codex-cli 0.154.0`. Official references:
 [non-interactive execution](https://developers.openai.com/codex/noninteractive),
 [Astra capabilities](https://developers.openai.com/api/docs/models/gpt-6-astra),
 [computer-use integration](https://developers.openai.com/api/docs/guides/tools-computer-use),
-and [desktop app permissions](https://learn.chatgpt.com/docs/computer-use).
+[desktop app permissions](https://learn.chatgpt.com/docs/computer-use),
+[connected Chrome](https://learn.chatgpt.com/docs/chrome-extension), and
+[built-in browser](https://learn.chatgpt.com/docs/browser?surface=app).
+Chrome-first is this skill's explicit user preference, including for local web apps;
+it overrides the general documentation's recommendation to start localhost tasks in
+the built-in browser.

@@ -5,7 +5,7 @@
   "properties": {
     "status": {"type": "string", "enum": ["completed", "partial", "blocked", "failed"]},
     "mode": {"type": "string", "enum": ["visual_analysis", "computer_use", "mixed"]},
-    "backend": {"type": "string", "description": "Actual tool/library used, image attachments, or unavailable."},
+    "backend": {"type": "string", "description": "Actual backend and surface: cua_repl/chrome, cua_repl/iab, cua_repl/native:<app-id>, image attachments, an explicitly authorized alternative, or unavailable. Must agree with tool evidence."},
     "summary": {"type": "string"},
     "findings": {
       "type": "array",
@@ -34,7 +34,7 @@
       }
     },
     "artifacts": {"type": "array", "items": {"type": "string"}},
-    "limitations": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}, "description": "Unchecked criteria, failed backend attempts and reasons for fallback, including account/session differences."},
     "external_state_changes": {
       "type": "array",
       "items": {
