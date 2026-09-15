@@ -1,13 +1,15 @@
 #!/bin/sh
 # A2R. Lo que se puede comprobar sin criterio, antes de que el commit exista.
 
-rama=$(git rev-parse --abbrev-ref HEAD)
-case "$rama" in
-  main|master|releases)
-    echo "No se commitea directo en $rama. Abre una rama."
-    exit 1
-    ;;
-esac
+conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
+[ -f "$conf" ] && . "$conf"
+
+rama=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+for protegida in ${RAMAS_PROTEGIDAS-main master releases}; do
+  [ "$rama" = "$protegida" ] || continue
+  echo "No se commitea directo en $rama. Abre una rama."
+  exit 1
+done
 
 tocados=$(git diff --cached --name-only --diff-filter=ACM)
 

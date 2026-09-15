@@ -3,11 +3,13 @@
 # Mira la rama de destino, no la local, asi que tambien caza
 # git push origin develop:main.
 
+conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
+[ -f "$conf" ] && . "$conf"
+
 while read -r _local_ref _local_sha remote_ref _remote_sha; do
-  case "$remote_ref" in
-    refs/heads/main|refs/heads/master|refs/heads/releases)
-      echo "No hay push directo a ${remote_ref#refs/heads/}. Abre una pull request."
-      exit 1
-      ;;
-  esac
+  for protegida in ${RAMAS_PROTEGIDAS-main master releases}; do
+    [ "$remote_ref" = "refs/heads/$protegida" ] || continue
+    echo "No hay push directo a $protegida. Abre una pull request."
+    exit 1
+  done
 done
