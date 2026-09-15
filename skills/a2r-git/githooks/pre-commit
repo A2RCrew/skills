@@ -1,0 +1,49 @@
+#!/bin/sh
+# A2R. Lo que se puede comprobar sin criterio, antes de que el commit exista.
+
+rama=$(git rev-parse --abbrev-ref HEAD)
+case "$rama" in
+  main|master|releases)
+    echo "No se commitea directo en $rama. Abre una rama."
+    exit 1
+    ;;
+esac
+
+tocados=$(git diff --cached --name-only --diff-filter=ACM)
+
+# Por el nombre, no por el contenido: un .env vacio hoy se llena manana y para
+# entonces ya esta en el historial.
+sensibles=$(printf '%s\n' "$tocados" \
+  | grep -Ei '(^|/)\.env($|\.)|(^|/)credentials?($|\.)|(^|/)secrets?\.(json|ya?ml|txt)$|(^|/)id_(rsa|dsa|ecdsa|ed25519)$|\.(pem|key|p12|pfx|jks)$' \
+  | grep -Ev '\.(example|sample|template|dist)($|\.)')
+if [ -n "$sensibles" ]; then
+  echo "Estos archivos no se commitean:"
+  printf '%s\n' "$sensibles" | sed 's/^/  /'
+  echo "Si hacen falta en el repositorio, sube la version .example sin valores."
+  exit 1
+fi
+
+if git diff --cached -U0 | grep -q 'BEGIN [A-Z ]*PRIVATE KEY'; then
+  echo "Hay una clave privada en el diff. Sacala del commit y rotala."
+  exit 1
+fi
+
+# Tipos y lint solo si el commit toca codigo.
+printf '%s\n' "$tocados" \
+  | grep -qE '\.(ts|tsx|mts|cts|js|jsx)$|(^|/)tsconfig[^/]*\.json$|(^|/)package\.json$' || exit 0
+
+if [ -f tsconfig.json ]; then
+  echo "tsc --noEmit"
+  if ! pnpm exec tsc --noEmit; then
+    echo "TypeScript no compila. Commit abortado."
+    exit 1
+  fi
+fi
+
+if [ -f package.json ] && grep -q '"lint"' package.json; then
+  echo "pnpm lint"
+  if ! pnpm lint; then
+    echo "ESLint ha encontrado errores. Commit abortado."
+    exit 1
+  fi
+fi

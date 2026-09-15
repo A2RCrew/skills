@@ -1,0 +1,34 @@
+#!/bin/sh
+# A2R. El formato del mensaje: tipo(ambito): descripcion (A2R-nnn)
+
+asunto=$(grep -v '^#' "$1" | sed -n '1p')
+
+case "$asunto" in
+  "Merge "*|"Revert "*|fixup!*|squash!*) exit 0 ;;
+esac
+
+fallos=""
+aviso() { fallos="$fallos
+  - $1"; }
+
+echo "$asunto" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([a-z0-9._/-]+\))?: .' \
+  || aviso "falta el tipo: feat, fix, docs, style, refactor, perf, test, chore, ci, build o revert, con el ambito en minuscula"
+echo "$asunto" | grep -qE '\(A2R-[0-9]+\)$' \
+  || aviso "falta la referencia de Linear al final: (A2R-123), o (A2R-000) si no hay issue"
+echo "$asunto" | grep -qE ': [a-z0-9]' \
+  || aviso "la descripcion empieza en mayuscula"
+case "$asunto" in
+  *.) aviso "la descripcion no acaba en punto" ;;
+esac
+[ "${#asunto}" -le 72 ] \
+  || aviso "el asunto tiene ${#asunto} caracteres y el tope son 72; lo que no quepa va en el cuerpo, tras una linea en blanco"
+
+[ -z "$fallos" ] && exit 0
+
+echo "El mensaje no cumple el formato de A2R."
+echo
+echo "  has escrito: $asunto"
+echo "  tiene que ser: tipo(ambito): descripcion en minuscula y sin punto final (A2R-nnn)"
+echo
+echo "Lo que falla:$fallos"
+exit 1

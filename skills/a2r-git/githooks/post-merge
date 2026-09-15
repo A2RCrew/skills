@@ -1,0 +1,9 @@
+#!/bin/sh
+# A2R. Si lo que te acabas de traer cambia el manifiesto, instala.
+
+git rev-parse -q --verify ORIG_HEAD >/dev/null || exit 0
+git diff --name-only ORIG_HEAD HEAD \
+  | grep -qE '(^|/)(package\.json|pnpm-lock\.yaml)$' || exit 0
+
+echo "El manifiesto ha cambiado, ejecutando pnpm install"
+pnpm install

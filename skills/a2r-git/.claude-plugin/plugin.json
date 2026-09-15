@@ -1,0 +1,9 @@
+{
+  "name": "a2r-git",
+  "description": "Estandar de git de A2R: como se agrupa un commit, el formato del mensaje y cuando se abre una rama, con los hooks de git que lo comprueban.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "git", "commit", "hooks", "pull-request"]
+}
