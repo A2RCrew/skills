@@ -1,0 +1,13 @@
+#!/bin/sh
+# A2R. Las ramas del cliente no reciben push directo.
+# Mira la rama de destino, no la local, asi que tambien caza
+# git push origin develop:main.
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/master|refs/heads/releases)
+      echo "No hay push directo a ${remote_ref#refs/heads/}. Abre una pull request."
+      exit 1
+      ;;
+  esac
+done

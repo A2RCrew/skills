@@ -1,0 +1,7 @@
+#!/bin/sh
+# A2R. git pull --rebase no dispara post-merge, dispara este. Y aqui se
+# actualiza uno con rebase, asi que sin este archivo el pnpm install no
+# llega a correr casi nunca.
+
+[ "$1" = "rebase" ] || exit 0
+exec "$(dirname "$0")/post-merge"

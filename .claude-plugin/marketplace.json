@@ -45,6 +45,13 @@
       "tags": ["a2r", "docx", "word", "plantilla"]
     },
     {
+      "name": "a2r-git",
+      "source": "./skills/a2r-git",
+      "description": "Estandar de git de A2R: como se agrupa un commit, el formato del mensaje y cuando se abre una rama, con los hooks de git que lo comprueban.",
+      "category": "development",
+      "tags": ["a2r", "git", "commit", "hooks", "pull-request"]
+    },
+    {
       "name": "a2r-product-video",
       "source": "./skills/a2r-product-video",
       "description": "Genera videos de demostracion de producto con el formato estandar de A2R: graba un modulo con Playwright (viewport limpio, sin navegador, con cursor) y lo monta en Remotion con la marca A2R (intro, rotulos por paso, interstitial de proceso, scroll de documentos, cierre), 1920x1080 y sin audio.",
