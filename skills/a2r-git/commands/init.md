@@ -3,11 +3,29 @@ description: Monta este repositorio con los hooks de git y la configuracion del 
 allowed-tools: Bash
 ---
 
-Ejecuta `${CLAUDE_PLUGIN_ROOT}/instalar.sh` y ensena su salida.
+Tres cosas cambian de un repositorio a otro. Antes de instalar, mira el
+repositorio y pregunta por las tres, proponiendo lo que encaje:
+
+1. **Que ramas se protegen** de commit y push directo. Si hay `develop`, lo
+   normal es proteger `main` y `releases`. Si el trabajo del dia va a `main`
+   porque no hay `develop`, protegerla dejaria el repositorio sin sitio donde
+   commitear: ahi seguramente no se protege ninguna.
+2. **Si el mensaje lleva referencia de Linear** `(A2R-123)`. En los repos de
+   producto si; en uno interno sin issues, exigirla solo produce `(A2R-000)`.
+3. **Si Claude puede hacer `git push`**. Decir que no anade un hook a
+   `.claude/settings.local.json`: el agente commitea y para, y sube una persona
+   que mira antes lo que sube. Es lo razonable donde el push despliega.
+
+Luego ejecuta `${CLAUDE_PLUGIN_ROOT}/instalar.sh` con las respuestas y ensena su
+salida:
+
+    instalar.sh --ramas "main releases" --issue si --claude-push no
+    instalar.sh --ramas "" --issue no --claude-push si
 
 Si el script dice que algun hook ya existia y es distinto, abrelo, comparalo con
 el de `${CLAUDE_PLUGIN_ROOT}/githooks/` y anade lo que falte sin quitar lo que
-hubiera: puede ser una comprobacion propia del proyecto.
+hubiera: puede ser de husky o del propio proyecto.
 
-Al terminar, recuerda que `.githooks/` hay que commitearlo para que le llegue al
-resto del equipo, y que los rulesets de GitHub se activan a mano.
+Nada de esto se commitea: vive en el `.git` de ese clon. Al terminar, recuerda
+que cada persona lo ejecuta en el suyo, y que proteger `main` de verdad son los
+rulesets de GitHub.

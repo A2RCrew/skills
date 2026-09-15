@@ -1,0 +1,16 @@
+#!/bin/sh
+# A2R. Esto no es un hook de git: es un hook PreToolUse de Claude Code, y se
+# instala junto a los demas. Recibe por stdin el JSON de la llamada a Bash y
+# corta el push hecho por el agente. La persona sigue pudiendo pushear.
+
+conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
+[ -f "$conf" ] && . "$conf"
+[ "${CLAUDE_PUEDE_PUSHEAR-si}" = no ] || exit 0
+
+grep -qE '"command":[[:space:]]*"[^"]*git[^"'"'"']*push' || exit 0
+
+cat >&2 <<'FIN'
+En este repositorio el push lo hace una persona, no Claude.
+Deja el commit hecho, di que esta listo y quien lo suba que mire antes que sube.
+FIN
+exit 2

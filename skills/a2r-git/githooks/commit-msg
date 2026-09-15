@@ -1,6 +1,9 @@
 #!/bin/sh
 # A2R. El formato del mensaje: tipo(ambito): descripcion (A2R-nnn)
 
+conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
+[ -f "$conf" ] && . "$conf"
+
 asunto=$(grep -v '^#' "$1" | sed -n '1p')
 
 case "$asunto" in
@@ -13,8 +16,10 @@ aviso() { fallos="$fallos
 
 echo "$asunto" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\([a-z0-9._/-]+\))?: .' \
   || aviso "falta el tipo: feat, fix, docs, style, refactor, perf, test, chore, ci, build o revert, con el ambito en minuscula"
-echo "$asunto" | grep -qE '\(A2R-[0-9]+\)$' \
-  || aviso "falta la referencia de Linear al final: (A2R-123), o (A2R-000) si no hay issue"
+if [ "${ISSUE_OBLIGATORIA-si}" = si ]; then
+  echo "$asunto" | grep -qE '\(A2R-[0-9]+\)$' \
+    || aviso "falta la referencia de Linear al final: (A2R-123), o (A2R-000) si no hay issue"
+fi
 echo "$asunto" | grep -qE ': [a-z0-9]' \
   || aviso "la descripcion empieza en mayuscula"
 case "$asunto" in
