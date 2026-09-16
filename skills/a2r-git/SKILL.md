@@ -70,18 +70,24 @@ refundelos con `git rebase -i`. Una vez en `develop` ya no se reescriben.
 ## Rama o directo a develop
 
 Por defecto, directo a `develop`. La rama es la excepcion, y se abre por uno de
-estos cuatro motivos, solo por uno de ellos.
+estos tres motivos, solo por uno de ellos.
 
 1. Trabajo largo que no se puede desplegar a medias.
 2. Vista previa que hay que ensenar, aprovechando la URL de la pull request.
-3. Revision de otra persona antes de que el cambio entre.
-4. Refactor amplio que conviene poder revertir de una vez.
+3. Refactor amplio que conviene poder revertir de una vez.
 
 Si no aplica ninguno, va directo a `develop`. Que el cambio sea grande, que
 parezca importante o que en otro sitio se trabajara asi no son motivos. Ante la
 duda, directo: un commit en `develop` se revierte en diez segundos, y una rama
 que nadie fusiona envejece, se llena de conflictos y acaba costando mas que el
 cambio que lleva dentro.
+
+Falta el motivo clasico: abrir una pull request para que otra persona la
+revise. Aqui la revision va antes de subir, no despues, asi que una rama a la
+espera de aprobacion solo retrasa el cambio. Esa pull request se abre cuando
+alguien la ha pedido en esta conversacion o cuando el ruleset no deja entrar de
+otra forma, nunca porque el cambio te parezca delicado. Si crees que merece
+otros ojos, commitea y dilo en una linea.
 
 El nombre es `tipo/a2r-nnn-descripcion-corta` y la rama se borra al fusionar. Si
 la abriste para que alguien la lea, no la fusiones tu.
@@ -96,4 +102,5 @@ ya publicado no se reescribe, se corrige hacia delante con `git revert`.
 - `git commit --no-verify`.
 - `git push --force` sin `--force-with-lease`.
 - Commitear o pushear directo en una rama protegida del repositorio.
+- Abrir una pull request para que la revise alguien que no la ha pedido.
 - Subir `.env`, credenciales, volcados de base de datos o `node_modules`.
