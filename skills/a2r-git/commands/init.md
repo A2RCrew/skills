@@ -3,8 +3,8 @@ description: Monta este repositorio con los hooks de git y la configuracion del 
 allowed-tools: Bash
 ---
 
-Cuatro cosas cambian de un repositorio a otro. Antes de instalar, mira el
-repositorio y pregunta por las cuatro, proponiendo lo que encaje:
+Cinco cosas cambian de un repositorio a otro. Antes de instalar, mira el
+repositorio y pregunta por las cinco, proponiendo lo que encaje:
 
 1. **Que ramas se protegen** de commit y push directo. Si hay `develop`, lo
    normal es proteger `main` y `releases`. Si el trabajo del dia va a `main`
@@ -19,12 +19,17 @@ repositorio y pregunta por las cuatro, proponiendo lo que encaje:
    de `a2r.com` y `binpar.com`: el hook mira el `user.email` del clon antes de
    cada commit. En uno personal se deja vacio. Si dicen que si, mira
    `git log --format=%ae -20` por si algun correo habitual se queda fuera.
+5. **Si el `pre-push` pasa `pnpm build`**. El `pre-commit` ya pasa tsc y lint,
+   y con las reglas que llevan nuestros repos eso adelanta casi todo lo que
+   rompe el build, pero el lint no compila. Di que si donde el push despliega o
+   el build tarde poco; que no donde compilar entero sea lento y se prefiera
+   lanzarlo a mano.
 
 Luego ejecuta `${CLAUDE_PLUGIN_ROOT}/instalar.sh` con las respuestas y ensena su
 salida:
 
-    instalar.sh --ramas "main releases" --issue si --claude-push no --correo "a2r.com binpar.com"
-    instalar.sh --ramas "" --issue no --claude-push si --correo ""
+    instalar.sh --ramas "main releases" --issue si --claude-push no --correo "a2r.com binpar.com" --build si
+    instalar.sh --ramas "" --issue no --claude-push si --correo "" --build no
 
 Si el script dice que algun hook ya existia y es distinto, abrelo, comparalo con
 el de `${CLAUDE_PLUGIN_ROOT}/githooks/` y anade lo que falte sin quitar lo que
