@@ -10,8 +10,9 @@ error y corrigelo; no lo esquives con `--no-verify`. Lo demas, que el commit
 sea una unidad y que el mensaje explique por que, no lo puede mirar un hook.
 
 Si al clonar no saltan, montalos con `/a2r-git:init`: ahi se eligen las ramas
-protegidas, si el mensaje lleva referencia de Linear, si Claude puede pushear y
-con que correo se commitea, que no todos los repositorios trabajan igual. Todo
+protegidas, si el mensaje lleva referencia de Linear, si Claude puede pushear,
+con que correo se commitea y si el push pasa el build, que no todos los
+repositorios trabajan igual. Todo
 queda en el `.git` de tu clon, asi que va por persona y hay que ejecutarlo en
 cada uno. Lo que tiene que valer para todos va en los rulesets de GitHub, no en
 un hook que se salta con una bandera.
@@ -60,9 +61,12 @@ en el diff.
 
 ## Antes de hacer push
 
-`pnpm build` y las pruebas del area que has tocado. Los tipos y el lint ya los
-ha comprobado el hook en cada commit. Si algo falla, no subas: arreglalo o deja
-el commit en local y dilo.
+Las pruebas del area que has tocado. Los tipos y el lint ya los ha comprobado el
+hook en cada commit, y con las reglas que llevan nuestros repos eso adelanta casi
+todo lo que rompe el build; casi, porque el lint no compila. Donde eso importe,
+`/a2r-git:init` deja el `pnpm build` completo en el hook de pre-push, y donde no,
+lanzalo a mano si el cambio toca tipos, configuracion o dependencias. Si algo
+falla, no subas: arreglalo o deja el commit en local y dilo.
 
 Ordena lo que vas a subir. Si hay commits de "wip", "fix del fix" o "cambios",
 refundelos con `git rebase -i`. Una vez en `develop` ya no se reescriben.

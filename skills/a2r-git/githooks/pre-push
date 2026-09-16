@@ -1,7 +1,7 @@
 #!/bin/sh
-# A2R. Las ramas del cliente no reciben push directo.
-# Mira la rama de destino, no la local, asi que tambien caza
-# git push origin develop:main.
+# A2R. Las ramas del cliente no reciben push directo. Mira la rama de destino,
+# no la local, asi que tambien caza git push origin develop:main.
+# Y donde se pida, el build completo antes de subir.
 
 conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
 [ -f "$conf" ] && . "$conf"
@@ -13,3 +13,15 @@ while read -r _local_ref _local_sha remote_ref _remote_sha; do
     exit 1
   done
 done
+
+# El pre-commit ya ha pasado tsc y lint, que con nuestras reglas adelantan casi
+# todo lo que rompe el build. Casi: el lint no compila. Donde eso no baste, aqui
+# se compila de verdad, una vez, antes de subir.
+[ "${BUILD_ANTES_PUSH-no}" = si ] || exit 0
+[ -f package.json ] && grep -q '"build"' package.json || exit 0
+
+echo "pnpm build"
+if ! pnpm build; then
+  echo "El build falla. No se sube: arreglalo o deja el commit en local."
+  exit 1
+fi
