@@ -3,7 +3,9 @@
 
 - Por defecto, directo a la rama de trabajo, sin rama aparte ni pull request.
   Ante la duda, directo.
-- Una rama se abre solo por aislamiento, vista previa, revision o refactor amplio.
+- Una rama se abre solo por aislamiento, vista previa o refactor amplio. La
+  revision va antes de subir, asi que no abras una pull request para que alguien
+  la lea si esa persona no lo ha pedido expresamente.
 - Mensaje: `tipo(ambito): descripcion`, con la referencia de Linear `(A2R-nnn)` si
   el repositorio la exige. Lo que comprueba cada hook esta en `.git/a2r.conf`.
 - Antes de push: `pnpm build` y las pruebas del area que has tocado. Los tipos y
