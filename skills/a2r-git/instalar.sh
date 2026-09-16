@@ -3,25 +3,25 @@
 # ejecutar dos veces sin que pase nada.
 #
 #   instalar.sh [--ramas "main releases"] [--issue si|no] [--claude-push si|no]
-#               [--correo "a2r.com binpar.com"] [--build si|no]
+#               [--correo "a2r.com binpar.com"] [--comprobar si|no]
 #
 # Sin opciones respeta lo que ya hubiera configurado, o pone lo de por defecto
 # si es la primera vez.
 set -euo pipefail
 
 ramas=""; ramas_dada=""; issue=""; claude_push=""; correo=""; correo_dada=""
-build=""
+comprobar=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --ramas) ramas="${2-}"; ramas_dada=si; shift 2 ;;
     --issue) issue="${2-}"; shift 2 ;;
     --claude-push) claude_push="${2-}"; shift 2 ;;
     --correo) correo="${2-}"; correo_dada=si; shift 2 ;;
-    --build) build="${2-}"; shift 2 ;;
+    --comprobar|--build) comprobar="${2-}"; shift 2 ;;
     *) echo "Opcion desconocida: $1"; exit 1 ;;
   esac
 done
-for par in "issue:$issue" "claude-push:$claude_push" "build:$build"; do
+for par in "issue:$issue" "claude-push:$claude_push" "comprobar:$comprobar"; do
   valor="${par#*:}"
   if [ -n "$valor" ] && [ "$valor" != si ] && [ "$valor" != no ]; then
     echo "--${par%%:*} solo admite si o no."
@@ -60,12 +60,13 @@ if [ -f "$conf" ]; then . "$conf"; fi
 : "${ISSUE_OBLIGATORIA=si}"
 : "${CLAUDE_PUEDE_PUSHEAR=si}"
 : "${DOMINIOS_CORREO=}"
-: "${BUILD_ANTES_PUSH=no}"
+# El nombre viejo era BUILD_ANTES_PUSH; quien ya lo tenga puesto no lo pierde.
+: "${COMPROBAR_ANTES_PUSH=${BUILD_ANTES_PUSH-no}}"
 if [ "$ramas_dada" = si ]; then RAMAS_PROTEGIDAS="$ramas"; fi
 if [ -n "$issue" ]; then ISSUE_OBLIGATORIA="$issue"; fi
 if [ -n "$claude_push" ]; then CLAUDE_PUEDE_PUSHEAR="$claude_push"; fi
 if [ "$correo_dada" = si ]; then DOMINIOS_CORREO="$correo"; fi
-if [ -n "$build" ]; then BUILD_ANTES_PUSH="$build"; fi
+if [ -n "$comprobar" ]; then COMPROBAR_ANTES_PUSH="$comprobar"; fi
 
 cat > "$conf" <<CONF
 # Generado por /a2r-git:init. Local a este clon; lo leen los hooks.
@@ -82,10 +83,10 @@ CLAUDE_PUEDE_PUSHEAR=$CLAUDE_PUEDE_PUSHEAR
 # Dominios de correo admitidos para commitear. Vacio, no se comprueba.
 DOMINIOS_CORREO="$DOMINIOS_CORREO"
 
-# Pasar el build completo antes de cada push, ademas del lint de cada commit.
-BUILD_ANTES_PUSH=$BUILD_ANTES_PUSH
+# Pasar pnpm test y pnpm build antes de cada push, ademas del lint de cada commit.
+COMPROBAR_ANTES_PUSH=$COMPROBAR_ANTES_PUSH
 CONF
-echo "reglas     ramas protegidas: ${RAMAS_PROTEGIDAS:-ninguna} | referencia de Linear: $ISSUE_OBLIGATORIA | push de Claude: $CLAUDE_PUEDE_PUSHEAR | correo: ${DOMINIOS_CORREO:-cualquiera} | build antes de push: $BUILD_ANTES_PUSH"
+echo "reglas     ramas protegidas: ${RAMAS_PROTEGIDAS:-ninguna} | referencia de Linear: $ISSUE_OBLIGATORIA | push de Claude: $CLAUDE_PUEDE_PUSHEAR | correo: ${DOMINIOS_CORREO:-cualquiera} | pruebas y build antes de push: $COMPROBAR_ANTES_PUSH"
 
 # Mejor enterarse ahora que en el primer commit rechazado.
 if [ -n "$DOMINIOS_CORREO" ]; then
