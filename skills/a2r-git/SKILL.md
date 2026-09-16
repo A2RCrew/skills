@@ -10,11 +10,11 @@ error y corrigelo; no lo esquives con `--no-verify`. Lo demas, que el commit
 sea una unidad y que el mensaje explique por que, no lo puede mirar un hook.
 
 Si al clonar no saltan, montalos con `/a2r-git:init`: ahi se eligen las ramas
-protegidas, si el mensaje lleva referencia de Linear y si Claude puede pushear,
-que no todos los repositorios trabajan igual. Todo queda en el `.git` de tu
-clon, asi que va por persona y hay que ejecutarlo en cada uno. Lo que tiene que
-valer para todos va en los rulesets de GitHub, no en un hook que se salta con
-una bandera.
+protegidas, si el mensaje lleva referencia de Linear, si Claude puede pushear y
+con que correo se commitea, que no todos los repositorios trabajan igual. Todo
+queda en el `.git` de tu clon, asi que va por persona y hay que ejecutarlo en
+cada uno. Lo que tiene que valer para todos va en los rulesets de GitHub, no en
+un hook que se salta con una bandera.
 
 Donde el push es cosa de una persona, deja el commit hecho y dilo. No es un
 obstaculo que rodear: subir es el momento de mirar lo que sube.

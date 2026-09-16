@@ -11,6 +11,29 @@ for protegida in ${RAMAS_PROTEGIDAS-main master releases}; do
   exit 1
 done
 
+# Quien firma el commit. Vacio en DOMINIOS_CORREO, no se comprueba; si hay
+# dominios, el correo del autor tiene que ser de uno de ellos, para que el
+# historial del cliente no acabe con la cuenta personal de nadie.
+if [ -n "${DOMINIOS_CORREO-}" ]; then
+  correo=$(git config user.email 2>/dev/null)
+  valido=no
+  for dominio in $DOMINIOS_CORREO; do
+    case "$correo" in *"@$dominio") valido=si ;; esac
+  done
+  if [ "$valido" != si ]; then
+    if [ -z "$correo" ]; then
+      echo "No hay correo configurado en este clon."
+    else
+      echo "El correo $correo no es de la organizacion."
+    fi
+    echo "Aqui se commitea con una cuenta de: $DOMINIOS_CORREO"
+    echo
+    echo "Cambialo solo para este repositorio con:"
+    echo "  git config user.email tu.nombre@${DOMINIOS_CORREO%% *}"
+    exit 1
+  fi
+fi
+
 tocados=$(git diff --cached --name-only --diff-filter=ACM)
 
 # Por el nombre, no por el contenido: un .env vacio hoy se llena manana y para
