@@ -19,17 +19,17 @@ repositorio y pregunta por las cinco, proponiendo lo que encaje:
    de `a2r.com` y `binpar.com`: el hook mira el `user.email` del clon antes de
    cada commit. En uno personal se deja vacio. Si dicen que si, mira
    `git log --format=%ae -20` por si algun correo habitual se queda fuera.
-5. **Si el `pre-push` pasa `pnpm build`**. El `pre-commit` ya pasa tsc y lint,
-   y con las reglas que llevan nuestros repos eso adelanta casi todo lo que
-   rompe el build, pero el lint no compila. Di que si donde el push despliega o
-   el build tarde poco; que no donde compilar entero sea lento y se prefiera
-   lanzarlo a mano.
+5. **Si el `pre-push` pasa `pnpm test` y `pnpm build`**. El `pre-commit` ya
+   pasa tsc y lint, y con las reglas que llevan nuestros repos eso adelanta
+   casi todo lo que rompe el build, pero el lint no compila ni ejecuta nada.
+   Di que si donde el push despliega, o donde haya pruebas que merezcan
+   ejecutarse; que no donde la suite tarde tanto que se acabe esquivando.
 
 Luego ejecuta `${CLAUDE_PLUGIN_ROOT}/instalar.sh` con las respuestas y ensena su
 salida:
 
-    instalar.sh --ramas "main releases" --issue si --claude-push no --correo "a2r.com binpar.com" --build si
-    instalar.sh --ramas "" --issue no --claude-push si --correo "" --build no
+    instalar.sh --ramas "main releases" --issue si --claude-push no --correo "a2r.com binpar.com" --comprobar si
+    instalar.sh --ramas "" --issue no --claude-push si --correo "" --comprobar no
 
 Si el script dice que algun hook ya existia y es distinto, abrelo, comparalo con
 el de `${CLAUDE_PLUGIN_ROOT}/githooks/` y anade lo que falte sin quitar lo que

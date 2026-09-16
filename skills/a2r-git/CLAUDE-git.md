@@ -8,9 +8,9 @@
   la lea si esa persona no lo ha pedido expresamente.
 - Mensaje: `tipo(ambito): descripcion`, con la referencia de Linear `(A2R-nnn)` si
   el repositorio la exige. Lo que comprueba cada hook esta en `.git/a2r.conf`.
-- Antes de push: las pruebas del area que has tocado. Los tipos y el lint ya los
-  comprueba el hook de cada commit; el `pnpm build` lo pasa el hook de pre-push
-  si `.git/a2r.conf` lo pide, y si no, lanzalo a mano cuando el cambio toque
+- Antes de push: los tipos y el lint ya los comprueba el hook de cada commit.
+  El `pnpm test` y el `pnpm build` los pasa el hook de pre-push si
+  `.git/a2r.conf` lo pide, y si no, lanzalos a mano cuando el cambio toque
   tipos, configuracion o dependencias.
 - Nunca `commit --no-verify` ni `push --force` sin `--force-with-lease`.
 - Si `.git/a2r.conf` dice que Claude no pushea, el agente commitea y para.
