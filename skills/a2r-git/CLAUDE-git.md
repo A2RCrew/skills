@@ -12,4 +12,6 @@
   el lint ya los comprueba el hook de cada commit.
 - Nunca `commit --no-verify` ni `push --force` sin `--force-with-lease`.
 - Si `.git/a2r.conf` dice que Claude no pushea, el agente commitea y para.
+- Si `.git/a2r.conf` fija `DOMINIOS_CORREO`, el commit va firmado con una cuenta
+  de esos dominios; se ajusta con `git config user.email`, nunca con `--no-verify`.
 - Actualizarse con rebase, nunca con merge.

@@ -3,17 +3,19 @@
 # ejecutar dos veces sin que pase nada.
 #
 #   instalar.sh [--ramas "main releases"] [--issue si|no] [--claude-push si|no]
+#               [--correo "a2r.com binpar.com"]
 #
 # Sin opciones respeta lo que ya hubiera configurado, o pone lo de por defecto
 # si es la primera vez.
 set -euo pipefail
 
-ramas=""; ramas_dada=""; issue=""; claude_push=""
+ramas=""; ramas_dada=""; issue=""; claude_push=""; correo=""; correo_dada=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --ramas) ramas="${2-}"; ramas_dada=si; shift 2 ;;
     --issue) issue="${2-}"; shift 2 ;;
     --claude-push) claude_push="${2-}"; shift 2 ;;
+    --correo) correo="${2-}"; correo_dada=si; shift 2 ;;
     *) echo "Opcion desconocida: $1"; exit 1 ;;
   esac
 done
@@ -55,9 +57,11 @@ if [ -f "$conf" ]; then . "$conf"; fi
 : "${RAMAS_PROTEGIDAS=main master releases}"
 : "${ISSUE_OBLIGATORIA=si}"
 : "${CLAUDE_PUEDE_PUSHEAR=si}"
+: "${DOMINIOS_CORREO=}"
 if [ "$ramas_dada" = si ]; then RAMAS_PROTEGIDAS="$ramas"; fi
 if [ -n "$issue" ]; then ISSUE_OBLIGATORIA="$issue"; fi
 if [ -n "$claude_push" ]; then CLAUDE_PUEDE_PUSHEAR="$claude_push"; fi
+if [ "$correo_dada" = si ]; then DOMINIOS_CORREO="$correo"; fi
 
 cat > "$conf" <<CONF
 # Generado por /a2r-git:init. Local a este clon; lo leen los hooks.
@@ -70,8 +74,24 @@ ISSUE_OBLIGATORIA=$ISSUE_OBLIGATORIA
 
 # Dejar que Claude Code haga git push, o reservarlo a una persona.
 CLAUDE_PUEDE_PUSHEAR=$CLAUDE_PUEDE_PUSHEAR
+
+# Dominios de correo admitidos para commitear. Vacio, no se comprueba.
+DOMINIOS_CORREO="$DOMINIOS_CORREO"
 CONF
-echo "reglas     ramas protegidas: ${RAMAS_PROTEGIDAS:-ninguna} | referencia de Linear: $ISSUE_OBLIGATORIA | push de Claude: $CLAUDE_PUEDE_PUSHEAR"
+echo "reglas     ramas protegidas: ${RAMAS_PROTEGIDAS:-ninguna} | referencia de Linear: $ISSUE_OBLIGATORIA | push de Claude: $CLAUDE_PUEDE_PUSHEAR | correo: ${DOMINIOS_CORREO:-cualquiera}"
+
+# Mejor enterarse ahora que en el primer commit rechazado.
+if [ -n "$DOMINIOS_CORREO" ]; then
+  actual="$(git config user.email 2>/dev/null || true)"
+  encaja=no
+  for dominio in $DOMINIOS_CORREO; do
+    case "$actual" in *"@$dominio") encaja=si ;; esac
+  done
+  if [ "$encaja" = no ]; then
+    echo "correo     ${actual:-sin configurar} no vale aqui, ajustalo antes de commitear:"
+    echo "           git config user.email tu.nombre@${DOMINIOS_CORREO%% *}"
+  fi
+fi
 
 # En settings.local.json, que es el de cada uno y no se commitea: como se porta
 # tu agente es cosa tuya, no del equipo.
