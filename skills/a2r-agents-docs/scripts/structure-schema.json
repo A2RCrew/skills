@@ -1,0 +1,63 @@
+{
+  "$comment": "Fuente de verdad de .agents/. La leen lint-structure.ts y lint-docs.ts, idénticos en todos los repos: lo que cambia entre repos va aquí. domains = una carpeta por dominio con su ficha INDEX.md (índice por palabras clave); el nombre coincide con .claude/rules/<dominio>.md salvo withoutRule. tipos = etiquetas de las entradas de un índice. generated = documentos que escribe un script (sin tope). oversized = trinquete: documentos que ya pasaban de limits.doc, con su tamaño; solo encoge (lint-docs.ts --write-baseline lo estrena). redirects = README.md de una línea que sobreviven porque los cita un fichero congelado. frozen = ficheros que no se editan (migraciones ejecutadas, copias literales entre repos): sus citas docs/… resuelven por un aviso en stubs. deadCitations = citas congeladas que ya estaban muertas. excluded = prefijos que el linter no mira (.agents/skills/ si el repo guarda ahí skills instaladas; docs/ si guarda ahí documentación para personas).",
+  "root": ".agents",
+  "entry": ".agents/AI-INSTRUCTIONS.md",
+  "index": "INDEX.md",
+  "domains": [
+    "comun",
+    "plataforma"
+  ],
+  "withoutRule": [
+    "comun"
+  ],
+  "subfolders": {
+    "plans": "planes",
+    "records": "registros",
+    "external": "para-clientes"
+  },
+  "tools": "scripts",
+  "scratch": ".scratch",
+  "rulesDir": ".claude/rules",
+  "limits": {
+    "entry": 1000,
+    "ficha": 250,
+    "subIndex": 200,
+    "doc": 500,
+    "summaryMax": 80
+  },
+  "tipos": [
+    "reglas",
+    "receta",
+    "diseño",
+    "referencia",
+    "integración"
+  ],
+  "generated": [],
+  "oversized": {},
+  "redirects": {},
+  "stubs": [],
+  "frozen": [],
+  "migrations": "",
+  "deadCitations": [],
+  "forbidden": [
+    {
+      "pattern": "\\.claude/planes",
+      "why": "plan en .claude/ (gitignored): los planes viven en .agents/<dominio>/planes/"
+    },
+    {
+      "pattern": "\\.agents/[a-z0-9-]+/README\\.md",
+      "why": "la ficha de un dominio es su INDEX.md"
+    },
+    {
+      "pattern": "\\]\\(mdc:",
+      "why": "enlace mdc: de Cursor que ningún editor del equipo resuelve"
+    }
+  ],
+  "excluded": [
+    "node_modules/"
+  ],
+  "router": {
+    "file": "AGENTS.md",
+    "maxLines": 60
+  }
+}
