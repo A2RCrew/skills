@@ -24,6 +24,13 @@
       "tags": ["a2r", "brand", "design-system", "ui"]
     },
     {
+      "name": "a2r-agents-docs",
+      "source": "./skills/a2r-agents-docs",
+      "description": "Crea y mantiene la documentación para agentes de un repo en .agents/: AGENTS.md de router, un dominio por carpeta con su ficha INDEX.md por palabras clave, documentos atómicos de 500 tokens con trinquete y los linters que lo comprueban.",
+      "category": "development",
+      "tags": ["a2r", "docs", "agents", "agents-md", "jit"]
+    },
+    {
       "name": "a2r-brand-voice",
       "source": "./skills/a2r-brand-voice",
       "description": "A2R brand voice and writing style guide (English and Spanish): tone rules, personality pillars, CTA patterns, and voice compliance checks for any customer-facing copy.",

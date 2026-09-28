@@ -1,0 +1,9 @@
+{
+  "name": "a2r-agents-docs",
+  "description": "Crea y mantiene la documentación para agentes de un repo en .agents/: AGENTS.md de router, un dominio por carpeta con su ficha INDEX.md por palabras clave, documentos atómicos de 500 tokens con trinquete y los linters que lo comprueban.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["a2r", "docs", "agents", "agents-md", "jit", "documentacion"]
+}
