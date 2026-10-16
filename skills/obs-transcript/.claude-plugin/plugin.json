@@ -1,0 +1,9 @@
+{
+  "name": "obs-transcript",
+  "description": "Notas de reunion en Markdown a partir de grabaciones de OBS (Teams, Discord, Zoom): resumen, integrantes, proximos pasos por persona y transcripcion completa por hablante. Todo en local.",
+  "version": "1.0.0",
+  "author": {
+    "name": "A2RCrew"
+  },
+  "keywords": ["obs", "reuniones", "transcripcion", "whisper", "notas", "diarizacion"]
+}
