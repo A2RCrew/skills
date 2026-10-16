@@ -99,6 +99,13 @@
       "description": "Revisión de release conversacional y verificada para los repos de despliegue de A2R: entrevista, gates por repo, revisión por caso de uso cruzando front/API/workers, verificador adversario y nota 1-5 con techo calculado. Solo lectura.",
       "category": "development",
       "tags": ["a2r", "release", "code-review", "verificacion", "calidad"]
+    },
+    {
+      "name": "obs-transcript",
+      "source": "./skills/obs-transcript",
+      "description": "Notas de reunion en Markdown a partir de grabaciones de OBS (Teams, Discord, Zoom): resumen, integrantes, proximos pasos por persona y transcripcion completa por hablante, identificando quien habla por video y huella de voz. Todo en local (macOS Apple Silicon).",
+      "category": "productivity",
+      "tags": ["obs", "reuniones", "transcripcion", "whisper", "diarizacion", "notas"]
     }
   ]
 }
