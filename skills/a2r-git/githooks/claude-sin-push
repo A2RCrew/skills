@@ -1,16 +1,69 @@
 #!/bin/sh
 # A2R. Esto no es un hook de git: es un hook PreToolUse de Claude Code, y se
 # instala junto a los demas. Recibe por stdin el JSON de la llamada a Bash y
-# corta el push hecho por el agente. La persona sigue pudiendo pushear.
+# corta el push del agente a develop y main. `git stash push` y los push a
+# otras ramas o tags no se cortan. La persona sigue pudiendo pushear.
 
 conf="$(git rev-parse --git-dir 2>/dev/null)/a2r.conf"
 [ -f "$conf" ] && . "$conf"
 [ "${CLAUDE_PUEDE_PUSHEAR-si}" = no ] || exit 0
 
-grep -qE '"command":[[:space:]]*"[^"]*git[^"'"'"']*push' || exit 0
+python3 -c '
+import json, re, shlex, subprocess, sys
+PROTEGIDAS = {"develop", "main"}
+try:
+    cmd = json.load(sys.stdin).get("tool_input", {}).get("command", "")
+except Exception:
+    sys.exit(0)
+
+def rama_actual(cwd):
+    try:
+        return subprocess.run(["git", "-C", cwd, "rev-parse", "--abbrev-ref", "HEAD"],
+                              capture_output=True, text=True).stdout.strip()
+    except Exception:
+        return ""
+
+def corta(seg):
+    try:
+        t = shlex.split(seg)
+    except ValueError:
+        t = seg.split()
+    # localiza `git [opciones] push`
+    for i, tok in enumerate(t):
+        if tok != "git" and not tok.endswith("/git"):
+            continue
+        j, cwd = i + 1, "."
+        while j < len(t) and t[j].startswith("-"):
+            if t[j] in ("-C", "-c", "--git-dir", "--work-tree") and j + 1 < len(t):
+                if t[j] == "-C":
+                    cwd = t[j + 1]
+                j += 2
+            else:
+                j += 1
+        if j >= len(t) or t[j] != "push":
+            continue  # p. ej. `git stash push`: el subcomando es stash
+        args = t[j + 1:]
+        if any(a in ("--all", "--mirror") for a in args):
+            return True
+        pos = [a for a in args if not a.startswith("-")]
+        refspecs = pos[1:]  # el primero es el remoto
+        if not refspecs:
+            return rama_actual(cwd) in PROTEGIDAS
+        for r in refspecs:
+            dst = r.split(":", 1)[-1].lstrip("+")
+            if dst.startswith("refs/tags/"):
+                continue
+            nombre = dst[len("refs/heads/"):] if dst.startswith("refs/heads/") else dst
+            if nombre in PROTEGIDAS or (dst in ("HEAD", "") and rama_actual(cwd) in PROTEGIDAS):
+                return True
+    return False
+
+segmentos = re.split(r"&&|\|\||;|\||\n", cmd)
+sys.exit(2 if any(corta(s) for s in segmentos) else 0)
+' && exit 0
 
 cat >&2 <<'FIN'
-En este repositorio el push lo hace una persona, no Claude.
+En este repositorio el push a develop y main lo hace una persona, no Claude.
 Deja el commit hecho, di que esta listo y quien lo suba que mire antes que sube.
 FIN
 exit 2
