@@ -28,20 +28,26 @@ antes, resuelvelo antes de anadir nada encima.
 ## Que entra en un commit
 
 Un commit es una unidad que vale por si sola: se puede desplegar, se puede
-revertir entera y se entiende leyendo su mensaje.
+revertir entera y se entiende leyendo su mensaje. Y se suben los menos
+posibles: una tarea, un commit.
 
-Cuando has escrito mucho codigo de golpe, agrupa por unidad que aporta valor
-completa, no por archivo ni por orden de escritura.
-
-- El endpoint nuevo con su validacion, su tipo y su prueba: un commit.
-- Un arreglo, un refactor y un cambio de formato: tres commits.
+- El endpoint nuevo con su validacion, su tipo, su prueba y su migracion: un
+  commit.
+- Un arreglo que de paso ordena el codigo que toca: un commit; el cuerpo
+  cuenta el retoque.
 - Renombrar algo en cuarenta archivos: un commit, aunque sean cuarenta.
+- Dos tareas sin relacion, o de dos issues distintas: dos commits.
 
-Si al escribir el mensaje aparece una conjuncion ("y", "ademas", "tambien"),
-casi siempre son dos commits.
+Se parte solo cuando una parte tiene que poder desplegarse o revertirse sin la
+otra. No se parte por archivo, por tipo de cambio ni por orden de escritura, y
+las correcciones a algo que aun no has subido se refunden en su commit, no se
+apilan detras.
 
-Un cambio de comportamiento y un reformateo automatico nunca van en el mismo
-commit: el diff deja de ser legible.
+Si el asunto pide una conjuncion ("y", "ademas"), describe el resultado de la
+tarea en vez de enumerar los cambios; la lista va en el cuerpo.
+
+La unica excepcion es el reformateo automatico masivo: va en su propio commit,
+porque mezclado con un cambio de comportamiento el diff deja de ser legible.
 
 Cada commit deja `develop` desplegable. Si el cambio necesita una migracion, la
 migracion va en el mismo commit. Si el trabajo no cabe en una sesion, commitea
@@ -59,6 +65,18 @@ El asunto no pasa de 72 caracteres. Lo que no quepa va en el cuerpo, tras una
 linea en blanco, y ahi se explica por que se hizo, no que se hizo: el que esta
 en el diff.
 
+## La issue de Linear
+
+Antes de cerrar el trabajo, mira con que issue sale el commit.
+
+- Si la tarea ya tiene issue, el commit la cita.
+- Si no la tiene y no esta claro si la merece (un arreglo que salio de paso,
+  un ajuste pequeno, una tarea de alcance difuso), para y pregunta a la persona
+  antes de commitear: crear la issue o salir con `(A2R-000)`.
+- No crees la issue por tu cuenta ni pongas `(A2R-000)` sin preguntar cuando
+  haya duda. `(A2R-000)` directo solo en lo que claramente no es una tarea:
+  mantenimiento del propio repositorio, un despliegue, una errata.
+
 ## Antes de hacer push
 
 Los tipos y el lint ya los ha comprobado el hook en cada commit, y con las reglas
@@ -69,8 +87,11 @@ no, lanza a mano `pnpm test` y `pnpm build` si el cambio toca tipos,
 configuracion o dependencias. Si algo falla, no subas: arreglalo o deja el commit
 en local y dilo.
 
-Ordena lo que vas a subir. Si hay commits de "wip", "fix del fix" o "cambios",
-refundelos con `git rebase -i`. Una vez en `develop` ya no se reescriben.
+Ordena lo que vas a subir: mira `git log origin/<rama>..HEAD` y deja un commit
+por tarea. Si hay varios de la misma tarea, o commits de "wip", "fix del fix" o
+"cambios", refundelos antes de subir (`git commit --fixup` y
+`git rebase --autosquash`, o `git reset --soft` y un commit nuevo). Una vez en
+`develop` ya no se reescriben.
 
 ## Rama o directo a develop
 
