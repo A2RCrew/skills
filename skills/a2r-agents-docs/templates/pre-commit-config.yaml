@@ -1,0 +1,14 @@
+# Se instala por máquina con `pre-commit install`. Si ya hay un .git/hooks/pre-commit (el de
+# a2r-git), pre-commit lo conserva como pre-commit.legacy y lo sigue ejecutando.
+default_install_hook_types:
+  - pre-commit
+
+repos:
+  - repo: local
+    hooks:
+      - id: docs-index
+        name: La documentación de .agents/ se mantiene sola
+        entry: pnpm run lint:docs
+        language: system
+        files: (\.md|structure-schema\.json|\.agents/scripts/.*\.ts)$
+        pass_filenames: false
