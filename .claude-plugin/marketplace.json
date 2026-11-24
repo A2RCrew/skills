@@ -54,9 +54,9 @@
     {
       "name": "a2r-product-video",
       "source": "./skills/a2r-product-video",
-      "description": "Genera videos de demostracion de producto con el formato estandar de A2R: graba un modulo con Playwright (viewport limpio, sin navegador, con cursor) y lo monta en Remotion con la marca A2R (intro, rotulos por paso, interstitial de proceso, scroll de documentos, cierre), 1920x1080 y sin audio.",
+      "description": "Genera videos de demostracion de producto con el formato estandar de A2R: graba un modulo con Playwright (viewport limpio, sin navegador, con cursor) y lo monta en Remotion con la marca A2R (intro, rotulos por paso, interstitial de proceso, scroll de documentos, cierre), 1920x1080 y sin audio. Tambien hace el walkthrough de producto para clientes, con narracion (Gemini TTS, voz Sulafat) y musica opcional.",
       "category": "design",
-      "tags": ["a2r", "video", "demo", "playwright", "remotion", "screencast"]
+      "tags": ["a2r", "video", "demo", "walkthrough", "playwright", "remotion", "screencast"]
     },
     {
       "name": "codex-computer-use",

@@ -5,12 +5,16 @@ description: >
   graba un módulo/caso de uso de la plataforma con Playwright (solo el viewport,
   sin navegador, con cursor y sesión ya iniciada) y lo monta en Remotion con la
   marca A2R (intro, rótulos por paso, interstitial de proceso, scroll de
-  documentos y cierre), en 1920×1080 y por defecto sin audio. Es CONFIGURABLE:
-  arranca con una entrevista (audio, entorno, fichero, idioma, formato…) y tiene
-  cuidado especial en Producción. Úsala SIEMPRE que el usuario escriba
-  "/a2r-product-video" o pida "grabar/crear un vídeo de la plataforma", "un vídeo
-  demo de este módulo", "un vídeo con el estilo/formato de A2R", "grabar la app
-  con Playwright y Remotion" o quiera estandarizar un vídeo de producto. Es una
+  documentos y cierre), en 1920×1080 y por defecto sin audio. También hace el
+  walkthrough de producto para clientes: fondo oscuro, narración con Gemini TTS
+  (voz Sulafat), puntos sincronizados con la voz y música opcional. Es
+  CONFIGURABLE: arranca con una entrevista (tipo de vídeo, música y narración,
+  entorno, fichero, idioma, formato…) y tiene cuidado especial en Producción.
+  Úsala SIEMPRE que el usuario escriba "/a2r-product-video" o pida "grabar/crear
+  un vídeo de la plataforma", "un vídeo demo de este módulo", "un walkthrough de
+  producto", "un vídeo con narración", "un vídeo con el estilo/formato de A2R",
+  "grabar la app con Playwright y Remotion" o quiera estandarizar un vídeo de
+  producto. Es una
   ESTRATEGIA reutilizable, no un guion fijo: adáptala a cada módulo (con o sin
   ficheros, con o sin espera asíncrona, con o sin documento visualizable).
 # user-invocable: true
@@ -53,6 +57,10 @@ herramientas del sistema **no** son dependencias de plugin — se comprueban con
 **Google Chrome**, **ffmpeg**, y (solo para escenas de documento) **LibreOffice**
 y **poppler**.
 
+Para la **narración** hacen falta además una clave de Gemini
+(`GOOGLE_GENERATIVE_AI_API_KEY`) y otra de OpenAI para Whisper
+(`OPENAI_API_KEY`). Para comprobar nombres en el vídeo final, **Tesseract**.
+
 ## La estrategia (qué hace "A2R" a un vídeo)
 
 1. **Producto real, navegador invisible.** Solo el contenido de la página (nunca
@@ -63,7 +71,8 @@ y **poppler**.
    Plus Jakarta Sans, transiciones calmadas sobre lienzo silver.
 4. **Escenas opcionales según el módulo.** Documento fuente, interstitial de
    "procesando", scroll del documento resultado.
-5. **Entrega 1920×1080 (o 9:16), 30 fps, por defecto SIN audio.**
+5. **Entrega 1920×1080 (o 9:16), 30 fps, por defecto SIN audio.** El walkthrough
+   de producto lleva narración.
 
 Escenas y reglas de ritmo: **[references/scene-taxonomy.md](references/scene-taxonomy.md)**.
 
@@ -74,10 +83,17 @@ Escenas y reglas de ritmo: **[references/scene-taxonomy.md](references/scene-tax
 Antes de tocar nada, lanza una **entrevista con `AskUserQuestion`** para
 configurar el vídeo. Preguntas mínimas:
 
+- **Tipo de vídeo** → `Demo de producto` (por pasos, sobre lienzo claro) /
+  `Walkthrough de producto` (recorrido completo para clientes: fondo oscuro,
+  título y puntos a la izquierda, la toma en un marco y narración). El
+  walkthrough sigue [references/narrated-walkthrough.md](references/narrated-walkthrough.md).
+- **Música y narración** (se pueden marcar las dos) → `Música de fondo` (SOLO con
+  una pista que aporte/apruebe el usuario; nunca descargues música con derechos)
+  y/o `Narración` (locución con Gemini TTS, voz Sulafat en es-ES). La narración
+  va solo con el walkthrough, porque la voz marca el ritmo de las escenas. Sin
+  ninguna de las dos, el vídeo va sin audio (lo normal en la demo).
 - **Entorno de grabación** → `Producción` / `Pre (staging)` / `Local`. Si es
   **Producción**, activa el *modo cuidado* (ver abajo).
-- **Audio** → `Sin audio` (por defecto) o `Música de fondo` (SOLO con una pista
-  que aporte/apruebe el usuario; nunca descargues música con derechos).
 - **Fichero de entrada** → ¿el módulo necesita subir un documento/archivo? Pide la
   ruta y (si aplica) idioma/descripción del contenido.
 - **Idioma de los rótulos** → ES / EN (redáctalos con `a2r-brand-voice`).
@@ -122,7 +138,20 @@ manual una sola vez** hecho por el usuario (**Claude nunca teclea
 credenciales**), explora el DOM para selectores robustos, y
 graba con `assets/playwright/record-lib.mjs` (viewport-only + cursor + hitos).
 
+Si grabas **A2R Studio** desde el repo del front con su e2e configurada, usa
+`assets/playwright/walk-lib.ts`: toma la sesión de la cuenta de la e2e, renombra
+a DEMO en el navegador y oculta filas. Lee antes
+**[references/a2r-platform.md](references/a2r-platform.md)**, que recoge los datos
+DEMO, los renombres y las trampas conocidas. Revisa cada toma con
+`assets/checks/sheet.sh` antes de montar.
+
 ### Paso 3 — Montar el vídeo (Remotion)
+
+Si es un **walkthrough**, sigue
+**[references/narrated-walkthrough.md](references/narrated-walkthrough.md)**:
+guion, locución (`assets/narrated/tts.mjs`), tiempos por palabra (`whisper.mjs`),
+timeline (`build-timeline.mjs`) y el proyecto `assets/remotion-narrated/`. Lo que
+sigue es para la demo.
 
 Sigue **[references/remotion.md](references/remotion.md)**. Copia los componentes
 de `assets/remotion/` a un proyecto Remotion, prepara `data.json` con
@@ -135,8 +164,11 @@ elimina la pista AAC con `ffmpeg -c:v copy -an`. Para **9:16**, ajusta
 
 ### Paso 4 — Entregar
 
-Entrega el `.mp4` (SendUserFile, `display:"render"`), deja copia accesible y
-ofrece ajustes de ritmo (los controla `data.json`) u otro formato.
+Antes de entregar, pasa `assets/checks/ocr-nombres.sh` por el vídeo final con los
+nombres que no pueden salir (clientes, compañeros). Entrega el `.mp4`
+(SendUserFile, `display:"render"`), deja copia accesible y ofrece ajustes de ritmo
+u otro formato. El ritmo lo controla `data.json` en la demo, y `plan.json` y
+`guion.json` en el walkthrough.
 
 ## Modo Producción (cuidado especial)
 
@@ -167,6 +199,17 @@ assets/remotion/helpers.tsx        — FadeScene, GridBg, CornerMarks
 assets/remotion/scenes/            — Intro, Outro, SceneVideo, Interstitial, DocScroll
 assets/remotion/*.example.*        — Video/Root/timeline/build-data a adaptar
 assets/remotion/remotion.config.ts — config de render
+
+Walkthrough de producto:
+assets/playwright/walk-lib.ts      — grabación de A2R Studio con la sesión de la e2e
+assets/playwright/walk-example.ts  — guion de tomas de ejemplo
+assets/narrated/tts.mjs            — narración con Gemini TTS (voz Sulafat)
+assets/narrated/whisper.mjs        — tiempos por palabra con Whisper
+assets/narrated/build-timeline.mjs — recorta las tomas y escribe src/timeline.json
+assets/narrated/*.example.json     — guion y plan de escenas de ejemplo
+assets/remotion-narrated/          — proyecto Remotion del walkthrough (con fuentes y logo)
+assets/checks/sheet.sh             — hoja de 6 fotogramas de una toma
+assets/checks/ocr-nombres.sh       — OCR del vídeo final contra una lista de nombres
 ```
 
 Los componentes son el "design system" del vídeo: reutilízalos y cambia solo
@@ -191,3 +234,9 @@ interstitial "procesando" → resultado "Publicado" → scroll del documento res
 ### Módulo sin fichero ni espera (p. ej. un generador instantáneo)
 Intro → pasos de la app (entrada + acción) → resultado en pantalla → cierre. Sin
 documento fuente ni interstitial.
+
+### Walkthrough de producto con narración (p. ej. Generación de actividades)
+Intro con voz → crear desde la plantilla → subir el contexto → elegir los tipos →
+generación con la píldora "En segundo plano" → apartado inicial, vista previa y
+edición de la clave → marca y estilos de Word → exportar → PDF, solucionario y
+Word → paquete QTI → cierre. Unos 4-5 minutos; la narración marca el ritmo.

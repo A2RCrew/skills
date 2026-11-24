@@ -1,0 +1,20 @@
+{
+ "module": "Generación de actividades",
+ "introTitle": "Del tema del libro a la ficha",
+ "introSub": "18 tipos de actividad, tu marca, PDF con postext, Word y QTI",
+ "intro": "v00",
+ "outroTitle": "Del tema del libro a la ficha, en papel y en digital",
+ "music": null,
+ "scenes": [
+  {"n": "01", "label": "Paso 1 · Crear", "title": "Desde tu plantilla de trabajo", "voice": "v01", "clip": "t_crear", "seg": [[0, 28]], "maxRate": 1.8, "nuevo": true,
+   "points": [["plantilla", "Desde una plantilla"], ["curso", "Curso y asignatura"], ["indicaciones", "Tus indicaciones"], ["resto", "Instrucciones, apartado y lista, ya puestos"]]},
+  {"n": "02", "label": "Paso 2 · Contexto", "title": "Tu material, la fuente", "voice": "v02", "clip": "t_contexto", "seg": [[0, 9]],
+   "points": [["tema", "El tema en PDF"], ["biblioteca", "O desde tu biblioteca"]]},
+  {"n": "04", "label": "Generando", "title": "Con clave y solución", "voice": "v04", "clip": "t_generar", "seg": [[0, 16]], "wait": true,
+   "points": [["apartado", "Primero, el apartado inicial"], ["clave", "Clave y solución"], ["retroalimentación", "Y retroalimentación"]]},
+  {"n": "13", "label": "Resultado · PDF", "title": "Maquetado con postext", "voice": "v13", "clip": "doc", "seg": [], "doc": ["st-1.png", "st-3.png", "st-8.png", "st-9.png"],
+   "points": [["cabecera", "Tu cabecera y tu logotipo"], ["colores", "Tus colores"], ["apartado", "El apartado inicial"], ["resolver", "Listo para resolver"]]},
+  {"n": "19", "label": "Plantillas de trabajo", "title": "Tu método, para todo el equipo", "voice": "v19", "clip": "t_tpl", "seg": [[0, 26]], "outro": true, "nuevo": true,
+   "points": [["marca", "La marca según la etapa"], ["preguntas", "Sus preguntas"], ["condiciones", "Condiciones por asignatura"], ["apartado", "Apartado inicial y lista"]]}
+ ]
+}
