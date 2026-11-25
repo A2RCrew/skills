@@ -4,7 +4,7 @@
  "introSub": "18 tipos de actividad, tu marca, PDF con postext, Word y QTI",
  "intro": "v00",
  "outroTitle": "Del tema del libro a la ficha, en papel y en digital",
- "music": null,
+ "music": "music/bushido.mp3",
  "scenes": [
   {"n": "01", "label": "Paso 1 · Crear", "title": "Desde tu plantilla de trabajo", "voice": "v01", "clip": "t_crear", "seg": [[0, 28]], "maxRate": 1.8, "nuevo": true,
    "points": [["plantilla", "Desde una plantilla"], ["curso", "Curso y asignatura"], ["indicaciones", "Tus indicaciones"], ["resto", "Instrucciones, apartado y lista, ya puestos"]]},

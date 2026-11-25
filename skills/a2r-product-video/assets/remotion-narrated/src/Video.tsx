@@ -27,7 +27,7 @@ type T = {
   introSub: string;
   outroTitle: string;
   intro: { voice: string; voiceDur: number };
-  music: { file: string; dur: number } | null;
+  music: { file: string; dur: number; gain?: number } | null;
   scenes: Scene[];
 };
 const TL = timeline as unknown as T;
@@ -69,6 +69,8 @@ const VOICES = [
 const MUSIC = TL.music;
 const MUSIC_LEN = MUSIC ? Math.floor(MUSIC.dur * FPS) : 0;
 const MUSIC_XFADE = f(3);
+// build-timeline.mjs mide los LUFS de la pista y deja aquí la ganancia que la iguala a la de referencia.
+const MUSIC_GAIN = MUSIC?.gain ?? 1;
 
 const musicVolume = (fr: number) => {
   const duck = VOICES.reduce((m, v) => {
@@ -77,7 +79,7 @@ const musicVolume = (fr: number) => {
   }, 0);
   const base = interpolate(duck, [0, 1], [0.32, 0.1]);
   const fade = interpolate(fr, [0, f(1.5), TOTAL - f(3.5), TOTAL], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  return base * fade;
+  return base * fade * MUSIC_GAIN;
 };
 
 // ── Piezas ──

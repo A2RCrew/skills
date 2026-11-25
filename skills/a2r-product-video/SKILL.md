@@ -87,9 +87,11 @@ configurar el vídeo. Preguntas mínimas:
   `Walkthrough de producto` (recorrido completo para clientes: fondo oscuro,
   título y puntos a la izquierda, la toma en un marco y narración). El
   walkthrough sigue [references/narrated-walkthrough.md](references/narrated-walkthrough.md).
-- **Música y narración** (se pueden marcar las dos) → `Música de fondo` (SOLO con
-  una pista que aporte/apruebe el usuario; nunca descargues música con derechos)
-  y/o `Narración` (locución con Gemini TTS, voz Sulafat en es-ES). La narración
+- **Música y narración** (se pueden marcar las dos) → `Música de fondo` (por
+  defecto, la pista de A2R: «Bushido» de DJ Gamik, en la carpeta interna de Drive
+  que indica narrated-walkthrough.md; otra, SOLO si la aporta/aprueba el usuario y
+  tiene licencia; nunca descargues música con derechos) y/o `Narración` (locución
+  con Gemini TTS, voz Sulafat en es-ES). La narración
   va solo con el walkthrough, porque la voz marca el ritmo de las escenas. Sin
   ninguna de las dos, el vídeo va sin audio (lo normal en la demo).
 - **Entorno de grabación** → `Producción` / `Pre (staging)` / `Local`. Si es

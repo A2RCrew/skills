@@ -86,11 +86,17 @@ acelera hasta un tope, y si es más corta, se queda quieta en su último fotogra
 
 ## Música
 
-- Solo una pista con licencia: libre de derechos o comprada para uso comercial, aportada o
-  aprobada por el usuario. Nunca descargues música con derechos.
-- Va en `remotion/public/music/` y se indica en `plan.music`. Suena a 0,32 y baja a 0,10
-  mientras habla la voz. Si es más corta que el vídeo, se repite con un fundido cruzado de
-  3 s.
+- **La pista por defecto de A2R es «Bushido», de DJ Gamik** (3:57). Está en la carpeta de
+  Drive [A2R · Música para vídeos](https://drive.google.com/drive/folders/17yUTICDYgapgJCrvxhrN4ruIXgm6AkNK),
+  que solo ve la organización. Descárgala a `remotion/public/music/bushido.mp3` y pon
+  `"music": "music/bushido.mp3"` en el plan. No la subas a ningún repo ni la compartas fuera
+  de A2R.
+- Otra pista, solo si el usuario la aporta o la aprueba y tiene licencia (libre de derechos o
+  comprada para uso comercial). Nunca descargues música con derechos.
+- **El volumen se iguala solo.** `build-timeline.mjs` mide los LUFS de la pista y calcula una
+  ganancia para que suene como la de referencia (−18,8 LUFS). Bushido, por ejemplo, sale a
+  0,525. Con esa ganancia aplicada, la música suena a 0,32 y baja a 0,10 mientras habla la voz.
+- Si es más corta que el vídeo, se repite con un fundido cruzado de 3 s.
 
 ## Ritmo y montaje (constantes de `Video.tsx`)
 

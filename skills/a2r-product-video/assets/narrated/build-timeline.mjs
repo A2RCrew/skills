@@ -7,7 +7,7 @@
 // si lo cambias, ajusta también SRC_W y SRC_H en src/Video.tsx.
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const CLIPS = path.join(HERE, 'clips');
@@ -55,11 +55,29 @@ const points = (s) => {
     return [Number(((total * (i + 0.5)) / all.length).toFixed(2)), text];
   });
 };
+// La música se iguala a la pista con la que se ajustaron los volúmenes de Video.tsx (−18,8 LUFS):
+// cualquier pista suena igual de alta bajo la voz, sin tocar Video.tsx.
+const MUSIC_REF_LUFS = -18.8;
+const lufs = (f) => {
+  const { stderr } = spawnSync('ffmpeg', ['-hide_banner', '-nostats', '-i', f, '-af', 'loudnorm=print_format=json', '-f', 'null', '-'], { encoding: 'utf8' });
+  const m = stderr?.match(/"input_i"\s*:\s*"(-?[\d.]+)"/);
+  return m ? Number(m[1]) : null;
+};
+const music = (rel) => {
+  const file = path.join(PUB, rel);
+  if (!fs.existsSync(file)) {
+    throw new Error(`Falta la pista ${file}: descárgala de la carpeta de música (references/narrated-walkthrough.md)`);
+  }
+  const l = lufs(file);
+  const gain = l === null ? 1 : Number((10 ** ((MUSIC_REF_LUFS - l) / 20)).toFixed(3));
+  console.log('música', rel, l === null ? 'sin medir' : `${l} LUFS`, '→ ganancia', gain);
+  return { file: rel, dur: dur(file), gain };
+};
 const timeline = {
   module: plan.module, introTitle: plan.introTitle, introSub: plan.introSub, outroTitle: plan.outroTitle,
   intro: { voice: plan.intro, voiceDur: voiceDur(plan.intro) },
   // Música opcional: plan.music = "music/<pista>.mp3", dentro de remotion/public. Solo pistas con licencia.
-  music: plan.music ? { file: plan.music, dur: dur(path.join(PUB, plan.music)) } : null,
+  music: plan.music ? music(plan.music) : null,
   scenes: plan.scenes.map((s) => ({
     n: s.n, label: s.label, title: s.title, voice: s.voice, voiceDur: voiceDur(s.voice), points: points(s),
     clip: s.seg.length ? `s${s.n}` : null, clipDur: s.seg.length ? dur(path.join(PUB, 'clips', `s${s.n}.mp4`)) : 0,
