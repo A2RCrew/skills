@@ -3,6 +3,12 @@
 Goal: capture the **viewport only** (no browser chrome), already logged in, with a
 visible cursor, so the raw footage drops straight into Remotion.
 
+> **Recording A2R Studio from the front-end repo?** Use `assets/playwright/walk-lib.ts`
+> instead. It takes the session from the repo's e2e account (role Default, no
+> credentials typed), renames real names to DEMO in the browser and hides rows from
+> earlier recordings. Read [a2r-platform.md](a2r-platform.md) first. This page covers
+> the generic path for any app: `login-once.mjs` + `record-lib.mjs`.
+
 ## Project setup (throwaway, outside this repo)
 
 ```bash
